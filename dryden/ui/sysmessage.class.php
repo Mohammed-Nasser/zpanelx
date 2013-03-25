@@ -22,7 +22,7 @@ class ui_sysmessage {
      */
     static function shout($message, $class = "zannounce", $id = "zannounce") {
         runtime_hook::Execute('OnBeforeSysMessageShout');
-        $line = "<div class=\"" . $class . "\" id=\"" . $id . "\"><a href=\"#\" class=\"zannounce_a\" id=\"zannounce_a\"></a>" . $message . "</div>";
+        $line = "<div class=\"alert " . $class . " fade\" id=\"" . $id . "\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" . $message . "</div>";
         runtime_hook::Execute('OnAfterSysMessageShout');
         return $line;
     }
