@@ -3,7 +3,7 @@
 /**
  *
  * ZPanel - A Cross-Platform Open-Source Web Hosting Control panel.
- *
+ * 
  * @package ZPanel
  * @version $Id$
  * @author Bobby Allen - ballen@zpanelcp.com
@@ -109,9 +109,10 @@ class module_controller {
 
     static function ExecuteDeleteSubDomain($id) {
         global $zdbh;
+        $retval = FALSE;
         runtime_hook::Execute('OnBeforeDeleteSubDomain');
-        $sql = $zdbh->prepare("UPDATE x_vhosts
-							   SET vh_deleted_ts=:time
+        $sql = $zdbh->prepare("UPDATE x_vhosts 
+							   SET vh_deleted_ts=:time 
 							   WHERE vh_id_pk=:id");
         $time = time();
         $sql->bindParam(':time', $time);
@@ -125,6 +126,7 @@ class module_controller {
 
     public function ExecuteAddSubDomain($uid, $domain, $destination, $autohome) {
         global $zdbh;
+        global $controller;
         $retval = FALSE;
         runtime_hook::Execute('OnBeforeAddSubDomain');
         $currentuser = ctrl_users::GetUserDetail($uid);
@@ -216,7 +218,7 @@ class module_controller {
         $sql = "SELECT COUNT(*) FROM x_vhosts WHERE vh_name_vc=:domain AND vh_deleted_ts IS NULL";
         $numrows = $zdbh->prepare($sql);
         $numrows->bindParam(':domain', $domain);
-
+        
         if ($numrows->execute()) {
             if ($numrows->fetchColumn() > 0) {
                 self::$alreadyexists = TRUE;
@@ -233,7 +235,11 @@ class module_controller {
             414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424,
             425, 426, 500, 501, 502, 503, 504, 505, 506, 507, 508,
             509, 510);
-        return in_array($error, $errordocs);
+        if (in_array($error, $errordocs)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     static function IsValidDomainName($a) {
@@ -251,7 +257,10 @@ class module_controller {
     }
 
     static function IsValidEmail($email) {
-        return preg_match('/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i', $email) == 1;
+        if (!preg_match('/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i', $email)) {
+            return false;
+        }
+        return true;
     }
 
     static function SetWriteApacheConfigTrue() {
@@ -270,17 +279,18 @@ class module_controller {
      * Webinterface sudo methods.
      */
     static function getSubDomainList() {
+        global $controller;
         $currentuser = ctrl_users::GetUserDetail();
         $res = array();
         $subdomains = self::ListSubDomains($currentuser['userid']);
         if (!fs_director::CheckForEmptyValue($subdomains)) {
             foreach ($subdomains as $row) {
                 $status = self::getSubDomainStatusHTML($row['subactive'], $row['subid']);
-                $res[] = array('subname' => $row['subname'],
-                               'subdirectory' => $row['subdirectory'],
-                               'subactive' => $row['subactive'],
-                               'substatus' => $status,
-                               'subid' => $row['subid']);
+                array_push($res, array('subname' => $row['subname'],
+                    'subdirectory' => $row['subdirectory'],
+                    'subactive' => $row['subactive'],
+                    'substatus' => $status,
+                    'subid' => $row['subid']));
             }
             return $res;
         } else {
@@ -289,6 +299,7 @@ class module_controller {
     }
 
     static function getDomainList() {
+        global $controller;
         $currentuser = ctrl_users::GetUserDetail();
         $domains = self::ListDomains($currentuser['userid']);
         if (!fs_director::CheckForEmptyValue($domains)) {
@@ -299,9 +310,14 @@ class module_controller {
     }
 
     static function getCreateSubDomain() {
+        global $zdbh;
+        global $controller;
         $currentuser = ctrl_users::GetUserDetail();
-        return ($currentuser['subdomainquota'] < 0) or //-1 = unlimited
-               ($currentuser['subdomainquota'] > ctrl_users::GetQuotaUsages('subdomains', $currentuser['userid']));
+        if ($currentuser['subdomainquota'] > ctrl_users::GetQuotaUsages('subdomains', $currentuser['userid'])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     static function getSubDomainDirsList() {
@@ -333,7 +349,7 @@ class module_controller {
     static function doDeleteSubDomain() {
         global $controller;
         runtime_csfr::Protect();
-//PP      $currentuser = ctrl_users::GetUserDetail();  assignment never used
+        $currentuser = ctrl_users::GetUserDetail();
         $formvars = $controller->GetAllControllerRequests('FORM');
         if (isset($formvars['inDelete'])) {
             if (self::ExecuteDeleteSubDomain($formvars['inDelete'])) {
@@ -351,7 +367,7 @@ class module_controller {
         $formvars = $controller->GetAllControllerRequests('FORM');
         foreach (self::ListSubDomains($currentuser['userid']) as $row) {
             if (isset($formvars['inDelete_' . $row['subid'] . ''])) {
-                header('location: ./?module=' . $controller->GetCurrentModule() . '&show=Delete&id=' . $row['subid'] . '&domain=' . $row['subname']);
+                header("location: ./?module=" . $controller->GetCurrentModule() . "&show=Delete&id=" . $row['subid'] . "&domain=" . $row['subname'] . "");
                 exit;
             }
         }
@@ -361,19 +377,27 @@ class module_controller {
     static function getisDeleteDomain() {
         global $controller;
         $urlvars = $controller->GetAllControllerRequests('URL');
-        return (isset($urlvars['show'])) && ($urlvars['show'] == 'Delete');
+        if ((isset($urlvars['show'])) && ($urlvars['show'] == "Delete"))
+            return true;
+        return false;
     }
 
     static function getCurrentID() {
         global $controller;
-        $id = $controller->GetControllerRequest('URL', 'id');
-        return ($id) ? $id : '';
+        if ($controller->GetControllerRequest('URL', 'id')) {
+            return $controller->GetControllerRequest('URL', 'id');
+        } else {
+            return "";
+        }
     }
 
     static function getCurrentDomain() {
         global $controller;
-        $domain = $controller->GetControllerRequest('URL', 'domain');
-        return ($domain) ? $domain : '';
+        if ($controller->GetControllerRequest('URL', 'domain')) {
+            return $controller->GetControllerRequest('URL', 'domain');
+        } else {
+            return "";
+        }
     }
 
     static function getModuleName() {
@@ -383,59 +407,53 @@ class module_controller {
 
     static function getModuleIcon() {
         global $controller;
-        return '/modules/' . $controller->GetControllerRequest('URL', 'module') . '/assets/icon.png';
+        $module_icon = "/modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/icon.png";
+        return $module_icon;
     }
 
     static function getModuleDesc() {
-        return ui_language::translate(ui_module::GetModuleDescription());
+        $message = ui_language::translate(ui_module::GetModuleDescription());
+        return $message;
     }
 
     static function getSubDomainUsagepChart() {
+        global $controller;
         $currentuser = ctrl_users::GetUserDetail();
-        $maximum = $currentuser['subdomainquota'];
-        if ($maximum < 0) { //-1 = unlimited
-           return '<img src="'. ui_tpl_assetfolderpath::Template().'images/unlimited.png" alt="'.ui_language::translate('Unlimited').'"/>';
-        } else {
-            $used = ctrl_users::GetQuotaUsages('subdomains', $currentuser['userid']);
-            $free = max($maximum - $used, 0);
-            return  '<img src="etc/lib/pChart2/zpanel/z3DPie.php?score=' . $free . '::' . $used
-                  . '&labels=Free: ' . $free . '::Used: ' . $used
-                  . '&legendfont=verdana&legendfontsize=8&imagesize=240::190&chartsize=120::90&radius=100&legendsize=150::160"'
-                  . ' alt="'.ui_language::translate('Pie chart').'"/>';
-        }
+        $line = "";
+        $total = $currentuser['subdomainquota'];
+        $used = ctrl_users::GetQuotaUsages('subdomains', $currentuser['userid']);
+        $free = $total - $used;
+        $line .= "<img src=\"etc/lib/pChart2/zpanel/z3DPie.php?score=" . $free . "::" . $used . "&labels=Free: " . $free . "::Used: " . $used . "&legendfont=verdana&legendfontsize=8&imagesize=240::190&chartsize=120::90&radius=100&legendsize=150::160\"/>";
+        return $line;
     }
 
     static function getSubDomainStatusHTML($int, $id) {
         global $controller;
         if ($int == 1) {
-            return '<td><font color="green">' . ui_language::translate('Live') . '</font></td>'
-                 . '<td></td>';
+            return "<font color=\"green\">" . ui_language::translate("Live") . "</font>";
         } else {
-            return '<td><font color="orange">' . ui_language::translate("Pending") . '</font></td>'
-                 . '<td><a href="#" class="help_small" id="help_small_' . $id . '_a"'
-                 . 'title="' . ui_language::translate('Your domain will become active at the next scheduled update.  This can take up to one hour.') . '">'
-                 . '<img src="/modules/' . $controller->GetControllerRequest('URL', 'module') . '/assets/help_small.png" border="0" /></a></td>';
+            return "<font color=\"orange\">" . ui_language::translate("Pending") . "</font>&nbsp;&nbsp;<a href=\"#\" class=\"tooltipme\" title=\"" . ui_language::translate("Your domain will become active at the next scheduled update.  This can take up to one hour.") . "\"><img src=\"/modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/help_small.png\" border=\"0\" /></a>";
         }
     }
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$blank)) {
-            return ui_sysmessage::shout(ui_language::translate("Your Domain can not be empty. Please enter a valid Domain Name and try again."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your Subdomain can not be empty. Please enter a valid Subdomain Name and try again."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$badname)) {
-            return ui_sysmessage::shout(ui_language::translate("Your Domain name is not valid. Please enter a valid Domain Name: i.e. 'domain.com'"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your Subdomain name is not valid. Please enter a valid Subdomain Name: i.e. 'subdomain.domain.com'"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$alreadyexists)) {
-            return ui_sysmessage::shout(ui_language::translate("The domain already appears to exist on this server."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("The subdomain already appears to exsist on this server."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$error)) {
-            return ui_sysmessage::shout(ui_language::translate("Please remove 'www'. The 'www' will automatically work with all Domains / Subdomains."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Please remove 'www'. The 'www' will automatically work with all Domains / Subdomains."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$writeerror)) {
-            return ui_sysmessage::shout(ui_language::translate("There was a problem writting to the virtual host container file. Please contact your administrator and report this error. Your domain will not function until this error is corrected."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("There was a problem writting to the virtual host container file. Please contact your administrator and report this error. Your domain will not function until this error is corrected."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your domain web hosting has been saved successfully."), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your subdomain have been updated successfully."), "alert-success");
         }
         return;
     }

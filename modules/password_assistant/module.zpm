@@ -1,31 +1,64 @@
-<div class="zmodule_header" id="zmodule_header_<@ ModuleName @>"><img src="<@ ModuleIcon @>" border="0"><@ ModuleName @></div>
-<div class="zmodule_content" id="zmodule_header_<@ ModuleName @>">
+<div class="module-header">
+  <h1 class="module-title">
+    <img src="<@ ModuleIcon @>" border="0">
+    <@ ModuleName @>
+  </h1>
+</div>
 
-    <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><p><@ ModuleDesc @></p></div>
-    <@ Result @>
+<div class="module-desc">
+  <@ ModuleDesc @>
+</div>
 
-    <div class="zform_wrapper">
-        <h2><: Enter your current and new password :></h2>
-        <form action="./?module=password_assistant&action=UpdatePassword" method="post">
-            <table class="zform">
-                <tr>
-                    <th><: Current password :>:</th>
-                    <td><input name="inCurPass" type="password" id="inCurPass" /></td>
-                </tr>
-                <tr>
-                    <th><: New password :>:</th>
-                    <td><input name="inNewPass" type="password" id="inNewPass" /></td>
-                </tr>
-                <tr>
-                    <th><: Confirm new password :>:</th>
-                    <td><input name="inConPass" type="password" id="inConPass" /></td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td align="right"><@ CSFR_Tag @><button class="fg-button ui-state-default ui-corner-all" type="submit" id="button"><: Change :></button></td>
-                </tr>
-            </table>
-        </form>
-    </div>
+<div class="container-fluid module-content">
+
+  <@ Result @>
+
+  <form class="form-horizontal" action="./?module=password_assistant&action=UpdatePassword" method="post">
+
+    <fieldset>
+
+        <legend class="module-legend">
+          <: Enter Your Current And New Password :>
+        </legend>
+ 
+      <div class="control-group">
+        <label class="control-label" for="inCurPass">
+          <: Current Password :>:
+        </label>
+        <div class="controls">
+          <input required type="password" id="inCurPass" name="inCurPass" placeholder="<: Current Password :>">
+        </div>
+      </div>
+ 
+      <div class="control-group">
+        <label class="control-label" for="inNewPass">
+          <: New password :>:
+        </label>
+        <div class="controls">
+          <input required type="password" id="inNewPass" name="inNewPass" placeholder="<: New Password :>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inConPass">
+          <: Confirm new password :>:
+        </label>
+        <div class="controls">
+          <input required type="password" id="inConPass" name="inConPass" placeholder="<: Confirm New Password :>">
+        </div>
+      </div>
+ 
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn load-button" type="submit">
+          <: Change :>
+          </button>
+        </div>
+      </div>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
 
 </div>

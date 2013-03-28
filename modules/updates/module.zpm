@@ -1,11 +1,20 @@
-<div class="zmodule_header" id="zmodule_header_<@ ModuleName @>"><img src="<@ ModuleIcon @>" border="0"><@ ModuleName @></div>
-<div class="zmodule_content" id="zmodule_header_<@ ModuleName @>">
+<div class="module-header">
+  <h1 class="module-title">
+    <img src="<@ ModuleIcon @>">
+    <@ ModuleName @>
+  </h1>
+</div>
 
-    <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><p><@ ModuleDesc @></p></div>
+<div class="module-desc">
+  <@ ModuleDesc @>
+</div>
 
-    <div class="zform_wrapper">
-        <h2><: Checking if your version of ZPanel is up to date... :></h2>
-        <@ ZpanelUpdates @>
-    </div>
+<div class="container-fluid module-content">
+
+  <legend class="module-legend">
+    <: Checking if your version of ZPanel is up to date... :>
+  </legend>
+
+  <p><@ ZpanelUpdates @></p>
 
 </div>

@@ -29,17 +29,17 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     
 }
 
 foreach ($deletedclients as $deletedclient) {
-    $sql = "SELECT * FROM x_aliases WHERE al_acc_fk=:acc AND al_deleted_ts IS NULL";
+    $sql = "SELECT * FROM x_aliases WHERE al_acc_fk=:acc AND al_deleted_ts IS NULL";    
     $numrows = $zdbh->prepare($sql);
     $numrows->bindParam(':acc', $deletedclient);
     $numrows->execute();
-
+    
     if ($numrows->fetchColumn() <> 0) {
         $sql = $zdbh->prepare($sql);
         $sql->execute();
@@ -47,12 +47,13 @@ foreach ($deletedclients as $deletedclient) {
             $bindArray = array(':aliasname' => $rowmailbox['al_address_vc']);
             $sqlStatment = $zdbh->bindQuery("SELECT aliasname FROM hm_aliases WHERE aliasname=:aliasname", $bindArray);
             $result = $zdbh->returnRow();
-
+            
             if ($result) {
                 $msqlSql = "DELETE FROM hm_aliases WHERE aliasname=:address";
                 $msql = $mail_db->prepare($msqlSql);
                 $msql->bindParam(':address', $rowmailbox['al_address_vc']);
                 $msql->execute();
+                
             }
         }
     }

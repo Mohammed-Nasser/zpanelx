@@ -42,7 +42,6 @@ class module_controller {
     static $clientid;
     static $clientpkgid;
     static $resetform;
-    static $not_unique_email;
 
     /**
      * The 'worker' methods.
@@ -59,14 +58,14 @@ class module_controller {
             $numrows->bindParam(':uid', $uid);
             $numrows->execute();
         }
-
+        
         if ($numrows->fetchColumn() <> 0) {
             $sql = $zdbh->prepare($sql);
             if ($uid == 0) {
                 //do not bind as there is no need
-            } else {
+            }else{
                 //else we bind the pram to the sql statment
-                $sql->bindParam(':uid', $uid);
+               $sql->bindParam(':uid', $uid); 
             }
             $res = array();
             $sql->execute();
@@ -77,7 +76,7 @@ class module_controller {
                     $numrows->bindParam(':ac_id_pk', $rowclients['ac_id_pk']);
                     $numrows->execute();
                     $numrowclients = $numrows->fetch();
-
+                    
                     $currentuser = ctrl_users::GetUserDetail($rowclients['ac_id_pk']);
                     $currentuser['diskspacereadable'] = fs_director::ShowHumanFileSize(ctrl_users::GetQuotaUsages('diskspace', $currentuser['userid']));
                     $currentuser['diskspacequotareadable'] = fs_director::ShowHumanFileSize($currentuser['diskquota']);
@@ -165,14 +164,14 @@ class module_controller {
             $sql->execute();
             $currentuser = ctrl_users::GetUserDetail($uid);
             while ($rowclients = $sql->fetch()) {
-                array_push($res, array('fullname' => runtime_xss::xssClean(strip_tags($rowclients['ud_fullname_vc'])),
-                    'username' => runtime_xss::xssClean(strip_tags($currentuser['username'])),
-                    'userid' => runtime_xss::xssClean(strip_tags($currentuser['userid'])),
-                    'fullname' => runtime_xss::xssClean(strip_tags($rowclients['ud_fullname_vc'])),
-                    'postcode' => runtime_xss::xssClean(strip_tags($rowclients['ud_postcode_vc'])),
-                    'address' => runtime_xss::xssClean(strip_tags($rowclients['ud_address_tx'])),
-                    'phone' => runtime_xss::xssClean(strip_tags($rowclients['ud_phone_vc'])),
-                    'email' => runtime_xss::xssClean(strip_tags($currentuser['email']))));
+                array_push($res, array('fullname' => htmlspecialchars(strip_tags($rowclients['ud_fullname_vc']), ENT_QUOTES, 'UTF-8'),
+                    'username' => htmlentities(strip_tags($currentuser['username']), ENT_QUOTES, 'UTF-8'),
+                    'userid' => htmlentities(strip_tags($currentuser['userid']), ENT_QUOTES, 'UTF-8'),
+                    'fullname' => htmlentities(strip_tags($rowclients['ud_fullname_vc']), ENT_QUOTES, 'UTF-8'),
+                    'postcode' => htmlentities(strip_tags($rowclients['ud_postcode_vc']), ENT_QUOTES, 'UTF-8'),
+                    'address' => htmlentities(strip_tags($rowclients['ud_address_tx']), ENT_QUOTES, 'UTF-8'),
+                    'phone' => htmlentities(strip_tags($rowclients['ud_phone_vc']), ENT_QUOTES, 'UTF-8'),
+                    'email' => htmlentities(strip_tags($currentuser['email']), ENT_QUOTES, 'UTF-8')));
             }
             return $res;
         } else {
@@ -200,12 +199,12 @@ class module_controller {
                         $selected = " selected";
                     }
                     array_push($res, array('groupid' => $rowgroups['ug_id_pk'],
-                        'groupname' => runtime_xss::xssClean(ui_language::translate($rowgroups['ug_name_vc'])),
+                        'groupname' => ui_language::translate($rowgroups['ug_name_vc']),
                         'groupselected' => $selected));
                 } else {
                     if (strtoupper($rowgroups['ug_name_vc']) == "USERS") {
                         array_push($res, array('groupid' => $rowgroups['ug_id_pk'],
-                            'groupname' => runtime_xss::xssClean(ui_language::translate($rowgroups['ug_name_vc'])),
+                            'groupname' => ui_language::translate($rowgroups['ug_name_vc']),
                             'groupselected' => $selected));
                     }
                 }
@@ -461,7 +460,7 @@ class module_controller {
         $sql = "SELECT COUNT(*) FROM x_packages WHERE pk_reseller_fk=:userid AND pk_deleted_ts IS NULL";
         $numrows = $zdbh->prepare($sql);
         $numrows->bindParam(':userid', $userid);
-
+        
         if ($numrows->execute()) {
             if ($numrows->fetchColumn() == 0) {
                 return false;
@@ -508,7 +507,7 @@ class module_controller {
         $numrows->bindParam(':uid', $uid);
         $numrows->execute();
         $client = $numrows->fetch();
-
+        
         $sql = $zdbh->prepare("INSERT INTO x_profiles (ud_user_fk, ud_fullname_vc, ud_group_fk, ud_package_fk, ud_address_tx, ud_postcode_vc, ud_phone_vc, ud_created_ts) VALUES (:userid, :fullname, :packageid, :groupid, :address, :postcode, :phone, :time)");
         $sql->bindParam(':userid', $client['ac_id_pk']);
         $sql->bindParam(':fullname', $fullname);
@@ -535,18 +534,12 @@ class module_controller {
         fs_director::SetFileSystemPermissions(ctrl_options::GetSystemOption('hosted_dir') . $username . "/backups", 0777);
         // Send the user account details via. email (if requested)... 
         if ($sendemail <> 0) {
-            if (isset($_SERVER['HTTPS'])) {
-                $protocol = 'https://';
-            } else {
-                $protocol = 'http://';
-            }
             $emailsubject = str_replace("{{username}}", $username, $emailsubject);
             $emailsubject = str_replace("{{password}}", $password, $emailsubject);
             $emailsubject = str_replace("{{fullname}}", $fullname, $emailsubject);
             $emailbody = str_replace("{{username}}", $username, $emailbody);
             $emailbody = str_replace("{{password}}", $password, $emailbody);
             $emailbody = str_replace("{{fullname}}", $fullname, $emailbody);
-            $emailbody = str_replace('{{controlpanelurl}}', $protocol . ctrl_options::GetSystemOption('zpanel_domain'), $emailbody);
 
             $phpmailer = new sys_email();
             $phpmailer->Subject = $emailsubject;
@@ -603,7 +596,7 @@ class module_controller {
             $sql = "SELECT COUNT(*) FROM x_groups WHERE ug_id_pk=:groupid";
             $numrows = $zdbh->prepare($sql);
             $numrows->bindParam(':groupid', $groupid);
-
+            
             if ($numrows->execute()) {
                 if ($numrows->fetchColumn() == 0) {
                     self::$groupblank = true;
@@ -624,21 +617,6 @@ class module_controller {
             self::$emailblank = true;
             return false;
         }
-
-        // Check that the email address is unique to the user's table
-        if (!fs_director::CheckForEmptyValue($email)) {
-            if (ctrl_users::CheckUserEmailIsUnique($email)) {
-                self::$not_unique_email = false;
-                return true;
-            } else {
-                self::$not_unique_email = true;
-                return false; 
-            }
-        } else {
-            self::$not_unique_email = true;
-            return false;
-        }
-
         // Check for password length...
         if (!fs_director::CheckForEmptyValue($password)) {
             if (strlen($password) < ctrl_options::GetSystemOption('password_minlength')) {
@@ -668,30 +646,8 @@ class module_controller {
     }
 
     static function DefaultEmailBody() {
-        $line = ui_language::translate("Hi {{fullname}},\r\rWe are pleased to inform you that your new hosting account is now active!\r\rYou can access your web hosting control panel using this link:\r{{controlpanelurl}}\r\rYour username and password is as follows:\rUsername: {{username}}\rPassword: {{password}}\r\rMany thanks,\rThe management");
+        $line = ui_language::translate("Hi {{fullname}},\r\rWe are pleased to inform you that your new hosting account is now active, you can now login to ZPanel using the following credentials:\r\rUsername: {{username}}\rPassword: {{password}}");
         return $line;
-    }
-    
-    /**
-     * Checks if the user already exists in the x_accounts table.
-     * @global type $zdbh The ZPanelX database handle.
-     * @param type $username The username to check against.
-     * @return boolean
-     */
-    static function CheckUserExits($username){ 
-        global $zdbh;
-            $sql = "SELECT COUNT(*) FROM x_accounts WHERE LOWER(ac_user_vc)=:username";
-            $uniqueuser = $zdbh->prepare($sql);
-            $uniqueuser->bindParam(':username', strtolower($username));       
-            if ($uniqueuser->execute()) {
-                if ($uniqueuser->fetchColumn() > 0) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return true;
-            }        
     }
 
     /**
@@ -1054,37 +1010,34 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$userblank)) {
-            return ui_sysmessage::shout(ui_language::translate("You need to specify a username to create a new client."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You need to specify a username to create a new client."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$emailblank)) {
-            return ui_sysmessage::shout(ui_language::translate("You need to specify an email address to create a new client."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You need to specify an email address to create a new client."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$passwordblank)) {
-            return ui_sysmessage::shout(ui_language::translate("Your password cannot be blank."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your password cannot be blank."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$packageblank)) {
-            return ui_sysmessage::shout(ui_language::translate("You must select a package for your new client."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You must select a package for your new client."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$groupblank)) {
-            return ui_sysmessage::shout(ui_language::translate("You must select a user group for your new client."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You must select a user group for your new client."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$badname)) {
-            return ui_sysmessage::shout(ui_language::translate("Your client name is not valid. Please enter a valid client name."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your client name is not valid. Please enter a valid client name."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$bademail)) {
-            return ui_sysmessage::shout(ui_language::translate("Your email adress is not valid. Please enter a valid email address."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your email adress is not valid. Please enter a valid email address."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$badpassword)) {
-            return ui_sysmessage::shout(ui_language::translate("Your password did not meet the minimun length requirements. Characters needed for password length") . ": " . ctrl_options::GetSystemOption('password_minlength'), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your password did not meet the minimun length requirements. Characters needed for password length") . ": " . ctrl_options::GetSystemOption('password_minlength'), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$alreadyexists)) {
-            return ui_sysmessage::shout(ui_language::translate("A client with that name already appears to exsist on this server."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("A client with that name already appears to exsist on this server."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your client(s) have been saved successfully!"), "zannounceok");
-        }
-        if (!fs_director::CheckForEmptyValue(self::$not_unique_email)) {
-            return ui_sysmessage::shout(ui_language::translate("Another user account is already using this email address."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your client(s) have been saved successfully!"), "alert-success");
         }
         return;
     }

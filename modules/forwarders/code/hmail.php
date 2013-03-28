@@ -29,7 +29,7 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     
 }
@@ -41,7 +41,7 @@ if (!fs_director::CheckForEmptyValue(self::$delete)) {
     //$result = $mail_db->query("SELECT accountaddress FROM hm_accounts WHERE accountaddress='" . $rowforwarder['fw_address_vc'] . "'")->Fetch();
     $numrows = $mail_db->prepare("SELECT accountaddress FROM hm_accounts WHERE accountaddress=:fw_address_vc");
     $numrows->bindParam(':fw_address_vc', $rowforwarder['fw_address_vc']);
-    $numrows->execute();
+    $numrows->execute(); 
     $result = $numrows->fetch();
     if ($result) {
         $sql = "UPDATE hm_accounts SET accountforwardenabled='0', accountforwardaddress='', accountforwardkeeporiginal='0' WHERE accountaddress=:fw_address_vc";

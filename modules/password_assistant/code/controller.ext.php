@@ -83,17 +83,17 @@ class module_controller {
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$error)) {
             if (self::$error == "ok") {
-                return ui_sysmessage::shout(ui_language::translate("Your account password been changed successfully!"), "zannounceok");
+                return ui_sysmessage::shout(ui_language::translate("Your account password been changed successfully!"), "alert-success");
             }
             if (self::$error == "nomatch") {
-                return ui_sysmessage::shout(ui_language::translate("Sorry, your current password does not match the one on your account!"), "zannounceerror");
+                return ui_sysmessage::shout(ui_language::translate("Sorry, your current password does not match the one on your account!"), "alert-error");
             }
             if (self::$error == "error") {
-                return ui_sysmessage::shout(ui_language::translate("An error occured and your ZPanel account password could not be updated. Please ensure you entered all passwords correctly and try again."), "zannounceerror");
+                return ui_sysmessage::shout(ui_language::translate("An error occured and your ZPanel account password could not be updated. Please ensure you entered all passwords correctly and try again."), "alert-error");
             }
         } else {
             if (!fs_director::CheckForEmptyValue(self::$badpassword)) {
-                return ui_sysmessage::shout(ui_language::translate("Your password did not meet the minimun length requirements. Characters needed for password length") . ": " . ctrl_options::GetSystemOption('password_minlength'), "zannounceerror");
+                return ui_sysmessage::shout(ui_language::translate("Your password did not meet the minimun length requirements. Characters needed for password length") . ": " . ctrl_options::GetSystemOption('password_minlength'), "alert-error");
             }
             return;
         }

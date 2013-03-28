@@ -2,28 +2,28 @@ var unsavedChanges = false;
 
 $(document).ready(function() {
 
-    $("#dnsRecords").tabs({
-        cookie: {
-            expires: 7, 
-            name: "dnsRecords Cookie"
-        } 
-    /*
-	   show: function(event, ui) {
-		   window.location.hash = ui.panel.id;
-	   }
-	   */
+
+    $('a[data-toggle="tab"]').on('shown', function(e){
+        //save the latest tab using a cookie:
+        $.cookie('last_tab', $(e.target).attr('href'));
     });
+    //activate latest tab, if it exists:
+    var lastTab = $.cookie('last_tab');
+    if (lastTab) {
+        $('a[href=' + lastTab + ']').tab('show');
+    }
 	
-    $("#dnsRecords input").live("keypress",function() {
+    $("#dnsRecords input").on("keypress",function() {
         $("#dnsTitle a.save, #dnsTitle a.undo").removeClass("disabled");
     });
-    $("#dnsRecords span.delete").live("click",function() {
+    $("#dnsRecords span.delete").on("click",function() {
         $("#dnsTitle a.save, #dnsTitle a.undo").removeClass("disabled");
     });
 	
 
     $("#dnsRecords div.add > span > span").click(function() {
-        var newRecord = $(this).parents("div.add").nextAll(".newRecord").clone();
+        // Pass true argument with clone to clone element AND events
+        var newRecord = $(this).parents("div.add").nextAll(".newRecord").clone( true );
         var counterElement = $("#dnsRecords input[name='newRecords']");
         var newId = parseInt(counterElement.attr("value"));
         newId++;
@@ -47,46 +47,35 @@ $(document).ready(function() {
         $(this).parents("div.records").scrollTop($(this).parents("div.records").scrollTop() + 1000);
 		
         $("#dnsTitle a.undo").removeClass("disabled");
+       
+        //Added this to allow save function upon cloned field
+        $("#dnsTitle a.save").removeClass("disabled");
 		
     });
 	
-    $("span.delete").live('click',function() {
+    $("span.delete").on('click',function() {
         $(this).parents("div.dnsRecord").addClass("deleted").find("input.delete").val("true");
         $(this).parents("div.dnsRecord").find("span.undo").fadeIn('slow');
         unsavedChanges = true;
     });
 	
-    /*
-	$("div.dnsRecord > div.hostName > span").tooltip({
-		bodyHandler: function() {
-			var response;
-			if ($(this).html() == "@" ) {
-				response = "<strong>" + $("#domainName").val();
-			} else {
-				response = $(this).html() + "." + $("#domainName").val();
-			}
-			return "<strong>" + response + "</strong>";
-		}
-	});
-	*/
-	
 	
     $("div.dnsRecordSOA div.serial input").attr("disabled","disabled");
 	
-    $("div.dnsRecordMX div.hostName input").live('keypress',function() {
+    $("div.dnsRecordMX div.hostName input").on('keypress',function() {
         displayWarning("The host name portion of an MX record is typically left blank.<BR/>" +
             "Only enter host name if you want the email address to be similar to <strong>username@hostname.example.com</strong>, " +
             "where hostname is what you are entering and example.com is the current domain name.");
         $("div.dnsRecordMX div.hostName input").die();
     });
 
-    $("div.dnsRecordNS div.hostName input").live('keypress',function() {
+    $("div.dnsRecordNS div.hostName input").on('keypress',function() {
         displayWarning("The host name portion of an NS record is typically left blank.<BR/>" +
             "Only enter host name if you want to delegate a host to another name server.");
         $("div.dnsRecordNS div.hostName input").die();
     });
 
-    $("div.hostName > input").live('change',function() {
+    $("div.hostName > input").on('change',function() {
         var hostName = $(this).val();
         var domainName = $("#domainName").val();
         var pattern = new RegExp(domainName + "$","g"); 
@@ -101,13 +90,13 @@ $(document).ready(function() {
     });
 	
 	
-    $("div.dnsRecord input[type='text']").live('keypress',function() {
+    $("div.dnsRecord input[type='text']").on('keypress',function() {
         $(this).parents("div.dnsRecord").find("span.undo").fadeIn('slow');
         unsavedChanges = true;
     });
 	
 	
-    $("span.undo").live("click",function() {
+    $("span.undo").on("click",function() {
 		
         $(".records div.dnsRecordError").parents("div.records").each(function(index) {
             var id = this.id;
@@ -134,10 +123,10 @@ $(document).ready(function() {
         $("a[href='#"+id+"']").addClass("tabError");
     });
 
-    $(".records div.dnsRecordError").parents("div.records").last().each(function() {
-        $("#dnsRecords").tabs("select",this.id);
-        $("#dnsTitle a.undo").removeClass("disabled");
-    });
+//    $(".records div.dnsRecordError").parents("div.records").last().each(function() {
+//        $("#dnsRecords").tabs("select",this.id);
+//        $("#dnsTitle a.undo").removeClass("disabled");
+//    });
 	
 	
     //Save Changes
@@ -183,40 +172,9 @@ $(document).ready(function() {
     $("#dnsImport div.content > div").click(function() {
         $("input[type='radio']",this).attr("checked","checked");
     });
-	
-/*
-	$("#dnsWizards div.content > div.option > label > input[type='radio']").change(function() {
-		$("#dnsWizards div.content > div.option").removeClass("selected");
-		$("#dnsWizards div.content > div.option > div").hide();
-		
-		if ( $(this).attr("checked") ) {
-			$(this).parents("div.option").addClass("selected").children("div").show();
-		}
-	});
-	*/
-	
-	
-/*
-	$(window).hashchange( function(){
-		$("#dnsRecords").tabs("select",location.hash.replace("/#/",""));
-	});
-	*/
 		
 });
 
-/*
-function UnLoadWindow(e) {
-	var e = e || window.event;
-	if ( !unsavedChanges ) return;
-
-	if (e) {
-		e.returnValue = 'There are unsaved changes.  Are you sure you wish to leave without saving these changes?';
-	} 
-    return 'There are unsaved changes.  Are you sure you wish to leave without saving these changes?';
-}
-
-window.onbeforeunload = UnLoadWindow;
-*/
 
 function displayWarning (message) {
 

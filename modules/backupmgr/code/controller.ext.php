@@ -204,7 +204,7 @@ class module_controller {
 
     static function GetBUOption($name) {
         global $zdbh;
-        // $result = $zdbh->query("SELECT bus_value_tx FROM x_backup_settings WHERE bus_name_vc = '$name'")->Fetch();
+       // $result = $zdbh->query("SELECT bus_value_tx FROM x_backup_settings WHERE bus_name_vc = '$name'")->Fetch();
         $sql = $zdbh->prepare("SELECT bus_value_tx FROM x_backup_settings WHERE bus_name_vc = :name");
         $sql->bindParam(':name', $name);
         $sql->execute();
@@ -240,13 +240,13 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$filenotexist)) {
-            return ui_sysmessage::shout("There was an error saving your backup!", "zannounceerror");
+            return ui_sysmessage::shout("There was an error saving your backup!", "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$deleteok)) {
-            return ui_sysmessage::shout("Backup deleted successfully!", "zannounceok");
+            return ui_sysmessage::shout("Backup deleted successfully!", "alert-success");
         }
         if (!fs_director::CheckForEmptyValue(self::$backupok)) {
-            return ui_sysmessage::shout("Backup completed successfully!", "zannounceok");
+            return ui_sysmessage::shout("Backup completed successfully!", "alert-success");
         }
         return;
     }

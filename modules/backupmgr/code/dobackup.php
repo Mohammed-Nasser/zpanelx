@@ -38,7 +38,7 @@ include('../../../dryden/fs/director.class.php');
 include('../../../dryden/fs/filehandler.class.php');
 include('../../../inc/dbc.inc.php');
 try {
-    $zdbh = new db_driver("mysql:host=" . $host . ";dbname=" . $dbname . "", $user, $pass);
+    $zdbh = new db_driver("mysql:host=localhost;dbname=" . $dbname . "", $user, $pass);
 } catch (PDOException $e) {
     exit();
 }
@@ -65,8 +65,8 @@ if (isset($_GET['id']) && $_GET['id'] != "") {
 
         if ($backup = ExecuteBackup($userid, $dbvals['ac_user_vc'], $download)) {
             echo "<p>Ready to download file: <b>" . basename($backup) . "<b></p>";
-            echo "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\" onclick=\"window.location.href='../../../etc/tmp/" . basename($backup) . "';return false;\">Download Now</button>";
-            echo "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\" value=\"Close Window\" onClick=\"return window.close()\">Close Window</button>";
+            echo "<button class=\"btn\" type=\"button\" onclick=\"window.location.href='../../../etc/tmp/" . basename($backup) . "';return false;\">Download Now</button>&nbsp;&nbsp;&nbsp;";
+            echo "<button class=\"btn\" type=\"button\" value=\"Close Window\" onClick=\"return window.close()\">Close Window</button>";
         } else {
             echo "Could not find user!";
         }
@@ -79,7 +79,7 @@ if (isset($_GET['id']) && $_GET['id'] != "") {
 function ExecuteBackup($userid, $username, $download = 0) {
     include('../../../cnf/db.php');
     try {
-        $zdbh = new db_driver("mysql:host=" . $host . ";dbname=" . $dbname . "", $user, $pass);
+        $zdbh = new db_driver("mysql:host=localhost;dbname=" . $dbname . "", $user, $pass);
     } catch (PDOException $e) {
         exit();
     }

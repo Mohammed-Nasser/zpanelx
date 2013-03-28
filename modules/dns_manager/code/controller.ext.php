@@ -45,7 +45,7 @@ class module_controller {
     static function getInit() {
         global $controller;
         $line = "";
-        $line .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/dns.css\"></script>";
+        //$line .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/dns.css\"></script>";
         $line .= "<script type=\"text/javascript\" src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/dns.js\"></script>";
         return $line;
     }
@@ -87,32 +87,25 @@ class module_controller {
         global $controller;
         $currentuser = ctrl_users::GetUserDetail();
         $line = "";
-        $line .= "<div class=\"zgrid_wrapper\">";
-
-
-        $line .= "<div id=\"dnsTitle\" class=\"account accountTitle\">";
-        $line .= "<div class=\"content\"><h2>" . ui_language::translate("Create Default DNS Records") . "</h2>";
-        $line .= "" . ui_language::translate("No records were found for this domain.  Click the button below to set up your domain records for the first time") . "";
-        $line .= "<div>";
-        $line .= "<div class=\"actions\"><a class=\"back\" href=\"./?module=" . $controller->GetControllerRequest('URL', 'module') . "\">Domain List</a></div>";
-        $line .= "</div><br class=\"clear\">";
-        $line .= "</div>";
-        $line .= "</div>";
-
-
         $line .= "<form action=\"./?module=dns_manager&action=CreateDefaultRecords\" method=\"post\">";
-        $line .= "<table class=\"zform\">";
-        $line .= "<tr>";
-        $line .= "<td>";
-        $line .= "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\">" . ui_language::translate("Create Records") . "</button>";
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "</table>";
+        $line .= "<fieldset>";
+        $line .= "<legend class=\"module-title\">";
+        $line .= "<div class=\"row-fluid\" id=\"dnsTitle\">";
+        $line .= "<div class=\"span11 dns-name\">";
+        $line .= "" . ui_language::translate("Create Default DNS Records") . "";
+        $line .= "</div>";
+        $line .= "<div class=\"span1 dns-actions\">";
+        $line .= "<a class=\"back\" href=\"./?module=" . $controller->GetControllerRequest('URL', 'module') . "\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/domains.png\"><br>Domain List</a>";
+        $line .= "</div>";
+        $line .= "</div>";
+        $line .= "</legend>";
+        $line .= "<p>" . ui_language::translate("No records were found for this domain. Click the button below to set up your domain records for the first time.") . "</p><br>";
         $line .= "<input type=\"hidden\" name=\"inDomain\" value =\"" . $controller->GetControllerRequest('FORM', 'inDomain') . "\" />";
         $line .= "<input type=\"hidden\" name=\"inUserID\" value =\"" . $currentuser['userid'] . "\" />";
+        $line .= "<button class=\"btn\" type=\"submit\" id=\"button\">" . ui_language::translate("Create Records") . "</button>";
+        $line .= "</fieldset>";
         $line .= self::getCSFR_Tag();
         $line .= "</form>";
-        $line .= "</div>";
         return $line;
     }
 
@@ -148,54 +141,68 @@ class module_controller {
         }
         $line = "";
         $line .= "<!-- DNS FORM -->";
-        //$line .= "<div style=\"margin-right:20px;\">";
-        $line .= "<div id=\"dnsTitle\" class=\"account accountTitle\">";
-        $line .= "<div class=\"content\"><h2>" . ui_language::translate("DNS records for") . ":</h2><a href=\"http://" . $domain['vh_name_vc'] . "\" target=\"_blank\">" . $domain['vh_name_vc'] . "</a>";
-        $line .= "<div>";
-        $line .= "<div class=\"actions\"><a class=\"undo disabled\">" . ui_language::translate("Undo Changes") . "</a><a class=\"save disabled\">" . ui_language::translate("Save Changes") . "</a><a class=\"back\" href=\"./?module=" . $controller->GetControllerRequest('URL', 'module') . "\">" . ui_language::translate("Domain List") . "</a></div>";
-        $line .= "</div><br class=\"clear\">";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=dns_manager&action=SaveDNS\" method=\"post\">";
+        $line .= "<fieldset>";
+        $line .= "<legend class=\"module-title\">";
+        $line .= "<div class=\"container-fluid\">";
+        $line .= "<div class=\"row-fluid\" id=\"dnsTitle\">";
+        $line .= "<div class=\"span9 dns-name\">";
+        $line .= "" . ui_language::translate("DNS Records For") . ":&nbsp;<a href=\"http://" . $domain['vh_name_vc'] . "\" target=\"_blank\">" . $domain['vh_name_vc'] . "</a>";
+        $line .= "</div>";
+        $line .= "<div class=\"span3 text-right dns-actions\">";
+        $line .= "<div class=\"a-dns-action\">";
+        $line .= "<a class=\"undo disabled\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/undo.png\"><br>" . ui_language::translate("Undo Changes") . "</a>";
+        $line .= "</div>";
+        $line .= "<div class=\"a-dns-action\">";
+        $line .= "<a class=\"save disabled\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/data_into.png\"><br>" . ui_language::translate("Save Changes") . "</a>";
+        $line .= "</div>";
+        $line .= "<div class=\"a-dns-action\">";
+        $line .= "<a class=\"back\" href=\"./?module=" . $controller->GetControllerRequest('URL', 'module') . "\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/domains.png\"><br>" . ui_language::translate("Domain List") . "</a>";
         $line .= "</div>";
         $line .= "</div>";
-        $line .= "<form action=\"./?module=dns_manager&action=SaveDNS\" method=\"post\">";
+        $line .= "</div>";
+        $line .= "</div>";
+        $line .= "</legend>";
         $line .= "<input id=\"domainName\" name=\"domainName\" value=\"" . $domain['vh_name_vc'] . "\" type=\"hidden\">";
         $line .= "<input id=\"domainID\" name=\"domainID\" value=\"" . $domain['vh_id_pk'] . "\" type=\"hidden\">";
         $line .= "<!-- TABS -->";
-        $line .= "<div class=\"ui-tabs ui-widget ui-widget-content ui-corner-all\" id=\"dnsRecords\">";
-        $line .= "<ul class=\"domains ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all\">";
+        $line .= "<div class=\"row-fluid\" id=\"dnsRecords\">";
+        $line .= "<ul class=\"nav nav-pills\" id=\"dns-pills\">";
         if (self::IsTypeAllowed('A')) {
-            $line .= "<li><a href=\"#typeA\">A</a></li>";
+            $line .= "<li><a href=\"#typeA\" data-toggle=\"tab\">A</a></li>";
         }
         if (self::IsTypeAllowed('AAAA')) {
-            $line .= "<li><a href=\"#typeAAAA\">AAAA</a></li>";
+            $line .= "<li><a href=\"#typeAAAA\" data-toggle=\"tab\">AAAA</a></li>";
         }
         if (self::IsTypeAllowed('CNAME')) {
-            $line .= "<li><a href=\"#typeCNAME\">CNAME</a></li>";
+            $line .= "<li><a href=\"#typeCNAME\" data-toggle=\"tab\">CNAME</a></li>";
         }
         if (self::IsTypeAllowed('MX')) {
-            $line .= "<li><a href=\"#typeMX\">MX</a></li>";
+            $line .= "<li><a href=\"#typeMX\" data-toggle=\"tab\">MX</a></li>";
         }
         if (self::IsTypeAllowed('TXT')) {
-            $line .= "<li><a href=\"#typeTXT\">TXT</a></li>";
+            $line .= "<li><a href=\"#typeTXT\" data-toggle=\"tab\">TXT</a></li>";
         }
         if (self::IsTypeAllowed('SRV')) {
-            $line .= "<li><a href=\"#typeSRV\">SRV</a></li>";
+            $line .= "<li><a href=\"#typeSRV\" data-toggle=\"tab\">SRV</a></li>";
         }
         if (self::IsTypeAllowed('SPF')) {
-            $line .= "<li><a href=\"#typeSPF\">SPF</a></li>";
+            $line .= "<li><a href=\"#typeSPF\" data-toggle=\"tab\">SPF</a></li>";
         }
         if (self::IsTypeAllowed('NS')) {
-            $line .= "<li><a href=\"#typeNS\">NS</a></li>";
+            $line .= "<li><a href=\"#typeNS\" data-toggle=\"tab\">NS</a></li>";
         }
         $line .= "</ul>";
+        $line .= "<div class=\"tab-content\">";
         if (self::IsTypeAllowed('A')) {
             $line .= "<!-- A RECORDS -->";
-            $line .= "<div class=\"records dnsRecordA ui-tabs-panel ui-widget-content ui-corner-bottom\" id=\"typeA\">";
-            $line .= "<div class=\"description\">" . ui_language::translate("The A record contains an IPv4 address. It's target is an IPv4 address, e.g. '192.168.1.1'.") . "</div>";
-            $line .= "<div class=\"header row\">";
-            $line .= "<div class=\"hostName\"><label class=\"enableToolTip\">" . ui_language::translate("Host Name") . "</label></div>";
-            $line .= "<div class=\"TTL\"><label class=\"enableToolTip\">TTL</label></div>";
-            $line .= "<div class=\"in\">&nbsp;</div><div class=\"type\">&nbsp;</div><div class=\"target\"><label class=\"enableToolTip\">" . ui_language::translate("Target") . "</label></div>";
-            $line .= "<div class=\"actions\"><label>" . ui_language::translate("Actions") . "</label></div>";
+            $line .= "<div class=\"records dnsRecordA tab-pane\" id=\"typeA\">";
+            $line .= "<div class=\"description\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/information_big.png\">" . ui_language::translate("The A record contains an IPv4 address. It's target is an IPv4 address, e.g. '192.168.1.1'.") . "</div>";
+            $line .= "<div class=\"header dnsrow\">";
+            $line .= "<div class=\"hostName\">" . ui_language::translate("Host Name") . "</div>";
+            $line .= "<div class=\"TTL\">TTL</div>";
+            $line .= "<div class=\"in\">&nbsp;</div><div class=\"type\">&nbsp;</div><div class=\"target\">" . ui_language::translate("Target") . "</div>";
+            $line .= "<div class=\"actions\">" . ui_language::translate("Actions") . "</div>";
             $line .= "<br>";
             $line .= "</div>";
             //A Records
@@ -210,7 +217,7 @@ class module_controller {
                 } else {
                     $custom_ip = NULL;
                 }
-                $line .= "<div class=\"dnsRecord row\">\n";
+                $line .= "<div class=\"dnsRecord dnsrow\">\n";
                 $line .= "<div class=\"hostName\"><span>" . $rowdns['dn_host_vc'] . "</span></div>\n";
                 $line .= "<div class=\"TTL\">\n";
                 $line .= "<input name=\"ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"text\">\n";
@@ -222,35 +229,35 @@ class module_controller {
                 $line .= "<input name=\"target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"text\" " . $custom_ip . ">\n";
                 $line .= "<input name=\"original_target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"hidden\">\n";
                 $line .= "</div>\n";
-                $line .= "<span class=\"delete enableToolTip\"></span>\n";
-                $line .= "<span class=\"undo enableToolTip\"></span>\n";
+                $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>\n";
+                $line .= "<span class=\"undo\"></span>\n";
                 $line .= "<input name=\"type[" . $rowdns['dn_id_pk'] . "]\" value=\"A\" type=\"hidden\">\n";
                 $line .= "<input class=\"delete\" name=\"delete[" . $rowdns['dn_id_pk'] . "]\" value=\"false\" type=\"hidden\">\n";
                 $line .= "<br>\n";
                 $line .= "</div>\n";
             }
-            $line .= "<div class=\"add row\"><span><span><button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
-            $line .= "<div class=\"newRecord row\" style=\"display: none\">";
-            $line .= "<div class=\"hostName\"><label>" . ui_language::translate("Host Name") . "</label><input name=\"proto_hostName\" type=\"text\"></div>";
-            $line .= "<div class=\"TTL\"><label>TTL</label><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
+            $line .= "<div class=\"add dnsrow\"><span><span><button class=\"btn\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
+            $line .= "<div class=\"newRecord dnsrow\" style=\"display: none\">";
+            $line .= "<div class=\"hostName\"><input name=\"proto_hostName\" type=\"text\"></div>";
+            $line .= "<div class=\"TTL\"><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
             $line .= "<div class=\"in\">IN</div>";
             $line .= "<div class=\"type\">A</div>";
-            $line .= "<div class=\"target\"><label>" . ui_language::translate("Target") . "</label><input name=\"proto_target\" type=\"text\"></div>";
-            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete enableToolTip\"></span><input name=\"proto_type\" value=\"A\" type=\"hidden\">";
+            $line .= "<div class=\"target\"><input name=\"proto_target\" type=\"text\"></div>";
+            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span><input name=\"proto_type\" value=\"A\" type=\"hidden\">";
             $line .= "</div>";
             $line .= "</div> <!-- END A RECORDS -->";
         }
         if (self::IsTypeAllowed('AAAA')) {
             $line .= "<!-- AAA RECORDS -->";
-            $line .= "<div class=\"records dnsRecordAAAA ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide\" id=\"typeAAAA\">";
-            $line .= "<div class=\"description\">" . ui_language::translate("The AAAA record contains an IPv6 address. It's target is an IPv6 address, e.g. '2607:fe90:2::1'.") . "</div>";
-            $line .= "<div class=\"header row\">";
-            $line .= "<div class=\"hostName\"><label class=\"enableToolTip\">" . ui_language::translate("Host Name") . "</label></div>";
-            $line .= "<div class=\"TTL\"><label class=\"enableToolTip\">TTL</label></div>";
+            $line .= "<div class=\"records dnsRecordAAAA tab-pane\" id=\"typeAAAA\">";
+            $line .= "<div class=\"description\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/information_big.png\">" . ui_language::translate("The AAAA record contains an IPv6 address. It's target is an IPv6 address, e.g. '2607:fe90:2::1'.") . "</div>";
+            $line .= "<div class=\"header dnsrow\">";
+            $line .= "<div class=\"hostName\">" . ui_language::translate("Host Name") . "</div>";
+            $line .= "<div class=\"TTL\">TTL</div>";
             $line .= "<div class=\"in\">&nbsp;</div>";
             $line .= "<div class=\"type\">&nbsp;</div>";
-            $line .= "<div class=\"target\"><label class=\"enableToolTip\">" . ui_language::translate("Target") . "</label></div>";
-            $line .= "<div class=\"actions\"><label>" . ui_language::translate("Actions") . "</label></div>";
+            $line .= "<div class=\"target\">" . ui_language::translate("Target") . "</div>";
+            $line .= "<div class=\"actions\">" . ui_language::translate("Actions") . "</div>";
             $line .= "<br>";
             $line .= "</div>";
             //AAAA Records
@@ -261,7 +268,7 @@ class module_controller {
             $sql->execute();
 
             while ($rowdns = $sql->fetch()) {
-                $line .= "<div class=\"dnsRecord row\">\n";
+                $line .= "<div class=\"dnsRecord dnsrow\">\n";
                 $line .= "<div class=\"hostName\"><span>" . $rowdns['dn_host_vc'] . "</span></div>\n";
                 $line .= "<div class=\"TTL\">\n";
                 $line .= "<input name=\"ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"text\">\n";
@@ -273,35 +280,34 @@ class module_controller {
                 $line .= "<input name=\"target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"text\">\n";
                 $line .= "<input name=\"original_target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"hidden\">\n";
                 $line .= "</div>\n";
-                $line .= "<span class=\"delete enableToolTip\"></span>\n";
-                $line .= "<span class=\"undo enableToolTip\"></span>\n";
+                $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>\n";
+                $line .= "<span class=\"undo\"></span>\n";
                 $line .= "<input name=\"type[" . $rowdns['dn_id_pk'] . "]\" value=\"AAAA\" type=\"hidden\">\n";
                 $line .= "<input class=\"delete\" name=\"delete[" . $rowdns['dn_id_pk'] . "]\" value=\"false\" type=\"hidden\">\n";
                 $line .= "<br>\n";
                 $line .= "</div>\n";
             }
-            $line .= "<div class=\"add row\"><span><span><button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
-            $line .= "<div class=\"newRecord row\" style=\"display: none\">";
-            $line .= "<div class=\"hostName\"><label>" . ui_language::translate("Host Name") . "</label><input name=\"proto_hostName\" type=\"text\"></div>";
-            $line .= "<div class=\"TTL\"><label>TTL</label><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
+            $line .= "<div class=\"add dnsrow\"><span><span><button class=\"btn\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
+            $line .= "<div class=\"newRecord dnsrow\" style=\"display: none\">";
+            $line .= "<div class=\"hostName\"><input name=\"proto_hostName\" type=\"text\"></div>";
+            $line .= "<div class=\"TTL\"><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
             $line .= "<div class=\"in\">IN</div><div class=\"type\">AAAA</div>";
-            $line .= "<div class=\"target\"><label>" . ui_language::translate("Target") . "</label><input name=\"proto_target\" type=\"text\"></div>";
-            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete enableToolTip\"></span><input name=\"proto_type\" value=\"AAAA\" type=\"hidden\">";
+            $line .= "<div class=\"target\"><input name=\"proto_target\" type=\"text\"></div>";
+            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span><input name=\"proto_type\" value=\"AAAA\" type=\"hidden\">";
             $line .= "</div>";
             $line .= "</div> <!-- END AAA RECORDS -->";
         }
         if (self::IsTypeAllowed('CNAME')) {
             $line .= "<!-- CNAME RECORDS -->	";
-            $line .= "<div class=\"records dnsRecordCNAME ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide\" id=\"typeCNAME\">";
-            $line .= "<div class=\"description\">" . ui_language::translate("The CNAME record specifies the canonical name of a record. It's target is a fully qualified domain name, e.g.
-'webserver-01.example.com'.") . "</div>";
-            $line .= "<div class=\"header row\">";
-            $line .= "<div class=\"hostName\"><label class=\"enableToolTip\">" . ui_language::translate("Host Name") . "</label></div>";
-            $line .= "<div class=\"TTL\"><label class=\"enableToolTip\">TTL</label></div>";
+            $line .= "<div class=\"records dnsRecordCNAME tab-pane\" id=\"typeCNAME\">";
+            $line .= "<div class=\"description\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/information_big.png\">" . ui_language::translate("The CNAME record specifies the canonical name of a record. It's target is a fully qualified domain name, e.g.'webserver-01.example.com'.") . "</div>";
+            $line .= "<div class=\"header dnsrow\">";
+            $line .= "<div class=\"hostName\">" . ui_language::translate("Host Name") . "</div>";
+            $line .= "<div class=\"TTL\">TTL</div>";
             $line .= "<div class=\"in\">&nbsp;</div>";
             $line .= "<div class=\"type\">&nbsp;</div>";
-            $line .= "<div class=\"target\"><label class=\"enableToolTip\">" . ui_language::translate("Target") . "</label></div>";
-            $line .= "<div class=\"actions\"><label>" . ui_language::translate("Actions") . "</label></div>";
+            $line .= "<div class=\"target\">" . ui_language::translate("Target") . "</div>";
+            $line .= "<div class=\"actions\">" . ui_language::translate("Actions") . "</div>";
             $line .= "<br>";
             $line .= "</div>";
             //CNAME Records
@@ -312,7 +318,7 @@ class module_controller {
             $sql->execute();
 
             while ($rowdns = $sql->fetch()) {
-                $line .= "<div class=\"dnsRecord row\">";
+                $line .= "<div class=\"dnsRecord dnsrow\">";
                 $line .= "<div class=\"hostName\"><span>" . $rowdns['dn_host_vc'] . "</span></div>";
                 $line .= "<div class=\"TTL\">";
                 $line .= "<input name=\"ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"text\">";
@@ -323,36 +329,36 @@ class module_controller {
                 $line .= "<input name=\"target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"text\">";
                 $line .= "<input name=\"original_target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"hidden\">";
                 $line .= "</div>";
-                $line .= "<span class=\"delete enableToolTip\"></span>";
-                $line .= "<span class=\"undo enableToolTip\"></span>";
+                $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
+                $line .= "<span class=\"undo\"></span>";
                 $line .= "<input name=\"type[" . $rowdns['dn_id_pk'] . "]\" value=\"CNAME\" type=\"hidden\">";
                 $line .= "<input class=\"delete\" name=\"delete[" . $rowdns['dn_id_pk'] . "]\" value=\"false\" type=\"hidden\">";
                 $line .= "<br>";
                 $line .= "</div>";
             }
-            $line .= "<div class=\"add row\"><span><span><button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
-            $line .= "<div class=\"newRecord row\" style=\"display: none\">";
-            $line .= "<div class=\"hostName\"><label>" . ui_language::translate("Host Name") . "</label><input name=\"proto_hostName\" type=\"text\"></div>";
-            $line .= "<div class=\"TTL\"><label>TTL</label><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
+            $line .= "<div class=\"add dnsrow\"><span><span><button class=\"btn\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
+            $line .= "<div class=\"newRecord dnsrow\" style=\"display: none\">";
+            $line .= "<div class=\"hostName\"><input name=\"proto_hostName\" type=\"text\"></div>";
+            $line .= "<div class=\"TTL\"><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
             $line .= "<div class=\"in\">IN</div>";
             $line .= "<div class=\"type\">CNAME</div>";
-            $line .= "<div class=\"target\"><label>" . ui_language::translate("Target") . "</label><input name=\"proto_target\" type=\"text\"></div>";
-            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete enableToolTip\"></span><input name=\"proto_type\" value=\"CNAME\" type=\"hidden\">";
+            $line .= "<div class=\"target\"><input name=\"proto_target\" type=\"text\"></div>";
+            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span><input name=\"proto_type\" value=\"CNAME\" type=\"hidden\">";
             $line .= "</div>			";
             $line .= "</div> <!-- END CNAME RECORDS -->";
         }
         if (self::IsTypeAllowed('MX')) {
             $line .= "<!-- MX RECORDS -->";
-            $line .= "<div class=\"records dnsRecordMX ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide\" id=\"typeMX\">";
-            $line .= "<div class=\"description\">" . ui_language::translate("The MX record specifies a mail exchanger host for a domain. Each mail exchanger has a priority or preference that is a numeric value between 0 and 65535.  It's target is a fully qualified domain name, e.g. 'mail.example.com'.") . "</div>";
-            $line .= "<div class=\"header row\">";
-            $line .= "<div class=\"hostName\"><label class=\"enableToolTip\">" . ui_language::translate("Host Name") . "</label></div>";
-            $line .= "<div class=\"TTL\"><label class=\"enableToolTip\">TTL</label></div>";
+            $line .= "<div class=\"records dnsRecordMX tab-pane\" id=\"typeMX\">";
+            $line .= "<div class=\"description\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/information_big.png\">" . ui_language::translate("The MX record specifies a mail exchanger host for a domain. Each mail exchanger has a priority or preference that is a numeric value between 0 and 65535.  It's target is a fully qualified domain name, e.g. 'mail.example.com'.") . "</div>";
+            $line .= "<div class=\"header dnsrow\">";
+            $line .= "<div class=\"hostName\">" . ui_language::translate("Host Name") . "</div>";
+            $line .= "<div class=\"TTL\">TTL</div>";
             $line .= "<div class=\"in\">&nbsp;</div>";
             $line .= "<div class=\"type\">&nbsp;</div>";
-            $line .= "<div class=\"priority\"><label class=\"enableToolTip\">" . ui_language::translate("Priority") . "</label></div>";
-            $line .= "<div class=\"target\"><label class=\"enableToolTip\">" . ui_language::translate("Target") . "</label></div>";
-            $line .= "<div class=\"actions\"><label>" . ui_language::translate("Actions") . "</label></div>";
+            $line .= "<div class=\"priority\">" . ui_language::translate("Priority") . "</div>";
+            $line .= "<div class=\"target\">" . ui_language::translate("Target") . "</div>";
+            $line .= "<div class=\"actions\">" . ui_language::translate("Actions") . "</div>";
             $line .= "<br>";
             $line .= "</div>";
             //MX Records
@@ -362,42 +368,42 @@ class module_controller {
             $sql->bindParam(':domainID', $domainID);
             $sql->execute();
             while ($rowdns = $sql->fetch()) {
-                $line .= "<div class=\"dnsRecord row\">";
+                $line .= "<div class=\"dnsRecord dnsrow\">";
                 $line .= "<div class=\"hostName\"><span>" . $rowdns['dn_host_vc'] . "</span></div>";
                 $line .= "<div class=\"TTL\"><input name=\"ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"text\"><input name=\"original_ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"hidden\"></div>";
                 $line .= "<div class=\"in\">IN</div>";
                 $line .= "<div class=\"type\">MX</div>";
                 $line .= "<div class=\"priority\"><input name=\"priority[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_priority_in'] . "\" type=\"text\"><input name=\"original_priority[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_priority_in'] . "\" type=\"hidden\"></div>";
                 $line .= "<div class=\"target\"><input name=\"target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"text\"><input name=\"original_target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"hidden\"></div>";
-                $line .= "<span class=\"delete enableToolTip\"></span>";
-                $line .= "<span class=\"undo enableToolTip\"></span>";
+                $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
+                $line .= "<span class=\"undo\"></span>";
                 $line .= "<input name=\"type[" . $rowdns['dn_id_pk'] . "]\" value=\"MX\" type=\"hidden\">";
                 $line .= "<input class=\"delete\" name=\"delete[" . $rowdns['dn_id_pk'] . "]\" value=\"false\" type=\"hidden\">";
                 $line .= "<br>";
                 $line .= "</div>";
             }
-            $line .= "<div class=\"add row\"><span><span><button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
-            $line .= "<div class=\"newRecord row\" style=\"display: none\">";
-            $line .= "<div class=\"hostName\"><label>" . ui_language::translate("Host Name") . "</label><input name=\"proto_hostName\" type=\"text\"></div>";
-            $line .= "<div class=\"TTL\"><label>TTL</label><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
+            $line .= "<div class=\"add dnsrow\"><span><span><button class=\"btn\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
+            $line .= "<div class=\"newRecord dnsrow\" style=\"display: none\">";
+            $line .= "<div class=\"hostName\"><input name=\"proto_hostName\" type=\"text\"></div>";
+            $line .= "<div class=\"TTL\"><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
             $line .= "<div class=\"in\">IN</div>";
             $line .= "<div class=\"type\">MX</div>";
-            $line .= "<div class=\"priority\"><label>Priority</label><input name=\"proto_priority\" type=\"text\"></div>";
-            $line .= "<div class=\"target\"><label>" . ui_language::translate("Target") . "</label><input name=\"proto_target\" type=\"text\"></div>";
-            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete enableToolTip\"></span>";
+            $line .= "<div class=\"priority\"><input name=\"proto_priority\" type=\"text\"></div>";
+            $line .= "<div class=\"target\"><input name=\"proto_target\" type=\"text\"></div>";
+            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
             $line .= "<input name=\"proto_type\" value=\"MX\" type=\"hidden\">";
             $line .= "</div>			";
             $line .= "</div> <!-- END MX RECORDS -->";
         }
         if (self::IsTypeAllowed('TXT')) {
             $line .= "<!-- TXT RECORDS -->";
-            $line .= "<div class=\"records dnsRecordTXT ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide\" id=\"typeTXT\">";
-            $line .= "<div class=\"description\">" . ui_language::translate("The TXT field can be used to attach textual data to a domain.") . "</div>";
-            $line .= "<div class=\"header row\"><div class=\"hostName\"><label class=\"enableToolTip\">Host Name</label></div>";
-            $line .= "<div class=\"TTL\"><label class=\"enableToolTip\">TTL</label></div>";
+            $line .= "<div class=\"records dnsRecordTXT tab-pane\" id=\"typeTXT\">";
+            $line .= "<div class=\"description\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/information_big.png\">" . ui_language::translate("The TXT field can be used to attach textual data to a domain.") . "</div>";
+            $line .= "<div class=\"header dnsrow\"><div class=\"hostName\">Host Name</div>";
+            $line .= "<div class=\"TTL\">TTL</div>";
             $line .= "<div class=\"in\">&nbsp;</div><div class=\"type\">&nbsp;</div>";
-            $line .= "<div class=\"target\"><label class=\"enableToolTip\">" . ui_language::translate("Target") . "</label></div>";
-            $line .= "<div class=\"actions\"><label>" . ui_language::translate("Actions") . "</label></div>";
+            $line .= "<div class=\"target\">" . ui_language::translate("Target") . "</div>";
+            $line .= "<div class=\"actions\">" . ui_language::translate("Actions") . "</div>";
             $line .= "<br>";
             $line .= "</div>";
             //TXT Records
@@ -407,43 +413,43 @@ class module_controller {
             $sql->bindParam(':domainID', $domainID);
             $sql->execute();
             while ($rowdns = $sql->fetch()) {
-                $line .= "<div class=\"dnsRecord row\">";
+                $line .= "<div class=\"dnsRecord dnsrow\">";
                 $line .= "<div class=\"hostName\"><span>" . $rowdns['dn_host_vc'] . "</span></div>";
                 $line .= "<div class=\"TTL\"><input name=\"ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"text\"><input name=\"original_ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"hidden\"></div>";
                 $line .= "<div class=\"in\">IN</div>";
                 $line .= "<div class=\"type\">TXT</div>";
                 $line .= "<div class=\"target\"><input name=\"target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"text\"><input name=\"original_target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"hidden\"></div>";
-                $line .= "<span class=\"delete enableToolTip\"></span>";
-                $line .= "<span class=\"undo enableToolTip\"></span>";
+                $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
+                $line .= "<span class=\"undo\"></span>";
                 $line .= "<input name=\"type[" . $rowdns['dn_id_pk'] . "]\" value=\"TXT\" type=\"hidden\">";
                 $line .= "<input class=\"delete\" name=\"delete[" . $rowdns['dn_id_pk'] . "]\" value=\"false\" type=\"hidden\">";
                 $line .= "<br>";
                 $line .= "</div>";
             }
-            $line .= "<div class=\"add row\"><span><span><button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
-            $line .= "<div class=\"newRecord row\" style=\"display: none\">";
-            $line .= "<div class=\"hostName\"><label>" . ui_language::translate("Host Name") . "</label><input name=\"proto_hostName\" type=\"text\"></div>";
-            $line .= "<div class=\"TTL\"><label>TTL</label><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
+            $line .= "<div class=\"add dnsrow\"><span><span><button class=\"btn\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
+            $line .= "<div class=\"newRecord dnsrow\" style=\"display: none\">";
+            $line .= "<div class=\"hostName\"><input name=\"proto_hostName\" type=\"text\"></div>";
+            $line .= "<div class=\"TTL\"><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
             $line .= "<div class=\"in\">IN</div>";
             $line .= "<div class=\"type\">TXT</div>";
-            $line .= "<div class=\"target\"><label>" . ui_language::translate("Target") . "</label><input name=\"proto_target\" type=\"text\"></div>";
-            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete enableToolTip\"></span>";
+            $line .= "<div class=\"target\"><input name=\"proto_target\" type=\"text\"></div>";
+            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
             $line .= "<input name=\"proto_type\" value=\"TXT\" type=\"hidden\">";
             $line .= "</div>";
             $line .= "</div> <!-- END TXT RECORDS -->";
         }
         if (self::IsTypeAllowed('SRV')) {
             $line .= "<!-- SRV RECORDS -->	";
-            $line .= "<div class=\"records dnsRecordSRV ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide\" id=\"typeSRV\">";
-            $line .= "<div class=\"description\">" . ui_language::translate("SRV records can be used to encode the location and port of services on a domain name.  It's target is a fully qualified domain name, e.g. 'host.example.com'.") . "</div>";
-            $line .= "<div class=\"header row\">";
-            $line .= "<div class=\"hostName\"><label class=\"enableToolTip\">" . ui_language::translate("Host Name") . "</label></div>";
-            $line .= "<div class=\"TTL\"><label class=\"enableToolTip\">TTL</label></div>";
-            $line .= "<div class=\"in\">&nbsp;</div><div class=\"type\">&nbsp;</div><div class=\"priority\"><label class=\"enableToolTip\">" . ui_language::translate("Priority") . "</label></div>";
-            $line .= "<div class=\"weight\"><label class=\"enableToolTip\">" . ui_language::translate("Weight") . "</label></div>";
-            $line .= "<div class=\"port\"><label class=\"enableToolTip\">" . ui_language::translate("Port") . "</label></div>";
-            $line .= "<div class=\"target\"><label class=\"enableToolTip\">" . ui_language::translate("Target") . "</label></div>";
-            $line .= "<div class=\"actions\"><label>" . ui_language::translate("Actions") . "</label></div>";
+            $line .= "<div class=\"records dnsRecordSRV tab-pane\" id=\"typeSRV\">";
+            $line .= "<div class=\"description\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/information_big.png\">" . ui_language::translate("SRV records can be used to encode the location and port of services on a domain name.  It's target is a fully qualified domain name, e.g. 'host.example.com'.") . "</div>";
+            $line .= "<div class=\"header dnsrow\">";
+            $line .= "<div class=\"hostName\">" . ui_language::translate("Host Name") . "</div>";
+            $line .= "<div class=\"TTL\">TTL</div>";
+            $line .= "<div class=\"in\">&nbsp;</div><div class=\"type\">&nbsp;</div><div class=\"priority\">" . ui_language::translate("Priority") . "</div>";
+            $line .= "<div class=\"weight\">" . ui_language::translate("Weight") . "</div>";
+            $line .= "<div class=\"port\">" . ui_language::translate("Port") . "</div>";
+            $line .= "<div class=\"target\">" . ui_language::translate("Target") . "</div>";
+            $line .= "<div class=\"actions\">" . ui_language::translate("Actions") . "</div>";
             $line .= "<br>";
             $line .= "</div>";
             //SRV Records
@@ -453,7 +459,7 @@ class module_controller {
             $sql->bindParam(':domainID', $domainID);
             $sql->execute();
             while ($rowdns = $sql->fetch()) {
-                $line .= "<div class=\"dnsRecord row\">";
+                $line .= "<div class=\"dnsRecord dnsrow\">";
                 $line .= "<div class=\"hostName\"><span>" . $rowdns['dn_host_vc'] . "</span></div>";
                 $line .= "<div class=\"TTL\"><input name=\"ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"text\"><input name=\"original_ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"hidden\"></div>";
                 $line .= "<div class=\"in\">IN</div>";
@@ -462,39 +468,39 @@ class module_controller {
                 $line .= "<div class=\"weight\"><input name=\"weight[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_weight_in'] . "\" type=\"text\"><input name=\"original_weight[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_weight_in'] . "\" type=\"hidden\"></div>";
                 $line .= "<div class=\"port\"><input name=\"port[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_port_in'] . "\" type=\"text\"><input name=\"original_port[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_port_in'] . "\" type=\"hidden\"></div>";
                 $line .= "<div class=\"target\"><input name=\"target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"text\"><input name=\"original_target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"hidden\"></div>";
-                $line .= "<span class=\"delete enableToolTip\"></span>";
-                $line .= "<span class=\"undo enableToolTip\"></span>";
+                $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
+                $line .= "<span class=\"undo\"></span>";
                 $line .= "<input name=\"type[" . $rowdns['dn_id_pk'] . "]\" value=\"SRV\" type=\"hidden\">";
                 $line .= "<input class=\"delete\" name=\"delete[" . $rowdns['dn_id_pk'] . "]\" value=\"false\" type=\"hidden\">";
                 $line .= "<br>";
                 $line .= "</div>";
             }
-            $line .= "<div class=\"add row\"><span><span><button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
-            $line .= "<div class=\"newRecord row\" style=\"display: none\">";
-            $line .= "<div class=\"hostName\"><label>" . ui_language::translate("Host Name") . "</label><input name=\"proto_hostName\" type=\"text\"></div>";
-            $line .= "<div class=\"TTL\"><label>TTL</label><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
+            $line .= "<div class=\"add dnsrow\"><span><span><button class=\"btn\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
+            $line .= "<div class=\"newRecord dnsrow\" style=\"display: none\">";
+            $line .= "<div class=\"hostName\"><input name=\"proto_hostName\" type=\"text\"></div>";
+            $line .= "<div class=\"TTL\"><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
             $line .= "<div class=\"in\">IN</div>";
             $line .= "<div class=\"type\">SRV</div>";
-            $line .= "<div class=\"priority\"><label>" . ui_language::translate("Priority") . "</label><input name=\"proto_priority\" type=\"text\"></div>";
-            $line .= "<div class=\"weight\"><label>" . ui_language::translate("Weight") . "</label><input name=\"proto_weight\" type=\"text\"></div>";
-            $line .= "<div class=\"port\"><label>" . ui_language::translate("Port") . "</label><input name=\"proto_port\" type=\"text\"></div>";
-            $line .= "<div class=\"target\"><label>" . ui_language::translate("Target") . "</label><input name=\"proto_target\" type=\"text\"></div>";
-            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete enableToolTip\"></span>";
+            $line .= "<div class=\"priority\"><input name=\"proto_priority\" type=\"text\"></div>";
+            $line .= "<div class=\"weight\"><input name=\"proto_weight\" type=\"text\"></div>";
+            $line .= "<div class=\"port\"><input name=\"proto_port\" type=\"text\"></div>";
+            $line .= "<div class=\"target\"><input name=\"proto_target\" type=\"text\"></div>";
+            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
             $line .= "<input name=\"proto_type\" value=\"SRV\" type=\"hidden\">";
             $line .= "</div>";
             $line .= "</div> <!-- END SRV RECORDS -->	";
         }
         if (self::IsTypeAllowed('SPF')) {
             $line .= "<!-- SPF RECORDS -->";
-            $line .= "<div class=\"records dnsRecordSPF ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide\" id=\"typeSPF\">";
-            $line .= "<div class=\"description\">" . ui_language::translate("SPF records is used to store Sender Policy Framework details.  It's target is a text string, e.g.<br>'v=spf1 a:192.168.1.1 include:example.com mx ptr -all' (Click <a href=\"http://www.microsoft.com/mscorp/safety/content/technologies/senderid/wizard/\" target=\"_blank\">HERE</a> for the Microsoft SPF Wizard.)") . "</div>";
-            $line .= "<div class=\"header row\">";
-            $line .= "<div class=\"hostName\"><label class=\"enableToolTip\">" . ui_language::translate("Host Name") . "</label></div>";
-            $line .= "<div class=\"TTL\"><label class=\"enableToolTip\">TTL</label></div>";
+            $line .= "<div class=\"records dnsRecordSPF tab-pane\" id=\"typeSPF\">";
+            $line .= "<div class=\"description\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/information_big.png\">" . ui_language::translate("SPF records is used to store Sender Policy Framework details.  It's target is a text string, e.g.<br>'v=spf1 a:192.168.1.1 include:example.com mx ptr -all' (Click <a href=\"http://www.microsoft.com/mscorp/safety/content/technologies/senderid/wizard/\" target=\"_blank\">HERE</a> for the Microsoft SPF Wizard.)") . "</div>";
+            $line .= "<div class=\"header dnsrow\">";
+            $line .= "<div class=\"hostName\">" . ui_language::translate("Host Name") . "</div>";
+            $line .= "<div class=\"TTL\">TTL</div>";
             $line .= "<div class=\"in\">&nbsp;</div>";
             $line .= "<div class=\"type\">&nbsp;</div>";
-            $line .= "<div class=\"target\"><label class=\"enableToolTip\">" . ui_language::translate("Target") . "</label></div>";
-            $line .= "<div class=\"actions\"><label>" . ui_language::translate("Actions") . "</label></div>";
+            $line .= "<div class=\"target\">" . ui_language::translate("Target") . "</div>";
+            $line .= "<div class=\"actions\">" . ui_language::translate("Actions") . "</div>";
             $line .= "<br>";
             $line .= "</div>";
             //SPF Records
@@ -504,40 +510,40 @@ class module_controller {
             $sql->bindParam(':domainID', $domainID);
             $sql->execute();
             while ($rowdns = $sql->fetch()) {
-                $line .= "<div class=\"dnsRecord row\">";
+                $line .= "<div class=\"dnsRecord dnsrow\">";
                 $line .= "<div class=\"hostName\"><span>" . $rowdns['dn_host_vc'] . "</span></div>";
                 $line .= "<div class=\"TTL\"><input name=\"ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"text\"><input name=\"original_ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"hidden\"></div>";
                 $line .= "<div class=\"in\">IN</div>";
                 $line .= "<div class=\"type\">SPF</div>";
                 $line .= "<div class=\"target\"><input name=\"target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"text\"><input name=\"original_target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"hidden\"></div>";
-                $line .= "<span class=\"delete enableToolTip\"></span>";
-                $line .= "<span class=\"undo enableToolTip\"></span>";
+                $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
+                $line .= "<span class=\"undo\"></span>";
                 $line .= "<input name=\"type[" . $rowdns['dn_id_pk'] . "]\" value=\"SPF\" type=\"hidden\">";
                 $line .= "<input class=\"delete\" name=\"delete[" . $rowdns['dn_id_pk'] . "]\" value=\"false\" type=\"hidden\">";
                 $line .= "<br>";
                 $line .= "</div>";
             }
-            $line .= "<div class=\"add row\"><span><span><button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
-            $line .= "<div class=\"newRecord row\" style=\"display: none\">";
-            $line .= "<div class=\"hostName\"><label>" . ui_language::translate("Host Name") . "</label><input name=\"proto_hostName\" type=\"text\"></div>";
-            $line .= "<div class=\"TTL\"><label>TTL</label><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
+            $line .= "<div class=\"add dnsrow\"><span><span><button class=\"btn\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
+            $line .= "<div class=\"newRecord dnsrow\" style=\"display: none\">";
+            $line .= "<div class=\"hostName\"><input name=\"proto_hostName\" type=\"text\"></div>";
+            $line .= "<div class=\"TTL\"><input name=\"proto_ttl\" value=\"86400\" type=\"text\"></div>";
             $line .= "<div class=\"in\">IN</div>";
             $line .= "<div class=\"type\">SPF</div>";
-            $line .= "<div class=\"target\"><label>Target</label><input name=\"proto_target\" type=\"text\"></div>";
-            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete enableToolTip\"></span>";
+            $line .= "<div class=\"target\"><input name=\"proto_target\" type=\"text\"></div>";
+            $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\"><span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
             $line .= "<input name=\"proto_type\" value=\"SPF\" type=\"hidden\">";
             $line .= "</div>";
             $line .= "</div> <!-- END SPF RECORDS -->";
         }
         if (self::IsTypeAllowed('NS')) {
             $line .= "<!-- NS RECORDS -->";
-            $line .= "<div class=\"records dnsRecordNS ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide\" id=\"typeNS\">";
-            $line .= "<div class=\"description\">" . ui_language::translate("Nameserver record. Specifies nameservers for a domain. It's target is a fully qualified domain name, e.g.  'ns1.example.com'.  The records should match what the domain name has registered with the internet root servers.") . "</div>";
-            $line .= "<div class=\"header row\">";
-            $line .= "<div class=\"hostName\"><label class=\"enableToolTip\">" . ui_language::translate("Host Name") . "</label></div>";
-            $line .= "<div class=\"TTL\"><label class=\"enableToolTip\">TTL</label></div>";
-            $line .= "<div class=\"in\">&nbsp;</div><div class=\"type\">&nbsp;</div><div class=\"target\"><label class=\"enableToolTip\">" . ui_language::translate("Target") . "</label></div>";
-            $line .= "<div class=\"actions\"><label>" . ui_language::translate("Actions") . "</label></div>";
+            $line .= "<div class=\"records dnsRecordNS tab-pane\" id=\"typeNS\">";
+            $line .= "<div class=\"description\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/information_big.png\">" . ui_language::translate("Nameserver record. Specifies nameservers for a domain. It's target is a fully qualified domain name, e.g.  'ns1.example.com'.  The records should match what the domain name has registered with the internet root servers.") . "</div>";
+            $line .= "<div class=\"header dnsrow\">";
+            $line .= "<div class=\"hostName\">" . ui_language::translate("Host Name") . "</div>";
+            $line .= "<div class=\"TTL\">TTL</div>";
+            $line .= "<div class=\"in\">&nbsp;</div><div class=\"type\">&nbsp;</div><div class=\"target\">" . ui_language::translate("Target") . "</div>";
+            $line .= "<div class=\"actions\">" . ui_language::translate("Actions") . "</div>";
             $line .= "<br>";
             $line .= "</div>";
             //NS Records
@@ -547,46 +553,59 @@ class module_controller {
             $sql->bindParam(':domainID', $domainID);
             $sql->execute();
             while ($rowdns = $sql->fetch()) {
-                $line .= "<div class=\"dnsRecord row\">";
+                $line .= "<div class=\"dnsRecord dnsrow\">";
                 $line .= "<div class=\"hostName\"><span>" . $rowdns['dn_host_vc'] . "</span></div>";
                 $line .= "<div class=\"TTL\"><input name=\"ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"text\"><input name=\"original_ttl[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_ttl_in'] . "\" type=\"hidden\"></div>";
                 $line .= "<div class=\"in\">IN</div>";
                 $line .= "<div class=\"type\">NS</div>";
                 $line .= "<div class=\"target\"><input name=\"target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"text\"><input name=\"original_target[" . $rowdns['dn_id_pk'] . "]\" value=\"" . $rowdns['dn_target_vc'] . "\" type=\"hidden\"></div>";
-                $line .= "<span class=\"delete enableToolTip\"></span>";
-                $line .= "<span class=\"undo enableToolTip\"></span>";
+                $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
+                $line .= "<span class=\"undo\"></span>";
                 $line .= "<input name=\"type[" . $rowdns['dn_id_pk'] . "]\" value=\"NS\" type=\"hidden\">";
                 $line .= "<input class=\"delete\" name=\"delete[" . $rowdns['dn_id_pk'] . "]\" value=\"false\" type=\"hidden\">";
                 $line .= "<br>";
                 $line .= "</div>";
             }
-            $line .= "<div class=\"add row\"><span><span><button class=\"fg-button ui-state-default ui-corner-all\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
-            $line .= "<div class=\"newRecord row\" style=\"display: none\">";
-            $line .= "<div class=\"hostName\"><label>" . ui_language::translate("Host Name") . "</label><input name=\"proto_hostName\" type=\"text\"></div>";
-            $line .= "<div class=\"TTL\"><label>TTL</label><input name=\"proto_ttl\" value=\"172800\" type=\"text\"></div>";
+            $line .= "<div class=\"add dnsrow\"><span><span><button class=\"btn\" type=\"button\">" . ui_language::translate("Add New Record") . "</button></span></span></div>";
+            $line .= "<div class=\"newRecord dnsrow\" style=\"display: none\">";
+            $line .= "<div class=\"hostName\"><input name=\"proto_hostName\" type=\"text\"></div>";
+            $line .= "<div class=\"TTL\"><input name=\"proto_ttl\" value=\"172800\" type=\"text\"></div>";
             $line .= "<div class=\"in\">IN</div>";
             $line .= "<div class=\"type\">NS</div>";
-            $line .= "<div class=\"target\"><label>" . ui_language::translate("Target") . "</label><input name=\"proto_target\" type=\"text\"></div>";
+            $line .= "<div class=\"target\"><input name=\"proto_target\" type=\"text\"></div>";
             $line .= "<input class=\"delete\" name=\"proto_delete\" value=\"false\" type=\"hidden\">";
-            $line .= "<span class=\"delete enableToolTip\"></span>";
+            $line .= "<span class=\"delete\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/delete_small.png\"></span>";
             $line .= "<input name=\"proto_type\" value=\"NS\" type=\"hidden\">";
             $line .= "</div>";
             $line .= "<input name=\"newRecords\" value=\"0\" type=\"hidden\">";
             $line .= "</div> <!-- END NS RECORDS -->";
         }
-        $line .= "</div> <!-- END TABS -->";
+        $line .= "</div></div> <!-- END TABS -->";
         $line .= "<div id=\"dnsTitle\" class=\"account accountTitle\">";
-        $line .= "<div class=\"content\">";
-        $line .= "<div>";
-        $line .= "<div class=\"actions\"><a class=\"undo disabled\">" . ui_language::translate("Undo Changes") . "</a><a class=\"save disabled\">" . ui_language::translate("Save Changes") . "</a><a class=\"back\" href=\"./?module=" . $controller->GetControllerRequest('URL', 'module') . "\">" . ui_language::translate("Domain List") . "</a></div>";
-        $line .= "</div><br class=\"clear\">";
+
+        $line .= "<div class=\"container-fluid\">";
+        $line .= "<div class=\"row-fluid\">";
+        $line .= "<div class=\"span3 offset9 text-right dns-actions\">";
+        $line .= "<div class=\"a-dns-action\">";
+        $line .= "<a class=\"undo disabled\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/undo.png\"><br>" . ui_language::translate("Undo Changes") . "</a>";
         $line .= "</div>";
-        //$line .= "</div>";
+        $line .= "<div class=\"a-dns-action\">";
+        $line .= "<a class=\"save disabled\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/data_into.png\"><br>" . ui_language::translate("Save Changes") . "</a>";
+        $line .= "</div>";
+        $line .= "<div class=\"a-dns-action\">";
+        $line .= "<a class=\"back\" href=\"./?module=" . $controller->GetControllerRequest('URL', 'module') . "\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/domains.png\"><br>" . ui_language::translate("Domain List") . "</a>";
+        $line .= "</div>";
+        $line .= "</div>";
+        $line .= "</div>";
+        $line .= "</div>";
+
+
+
         $line .= self::getCSFR_Tag();
         $line .= "</form>";
         //$line .= "</div>";
         $line .= "<!-- END DNS FORM -->";
-        $line .= "<div class=\"zgrid_wrapper\">";
+        $line .= "<div class=\"dns-checker\">";
         $line .= "<h2>DNS Status for domain: " . $domain['vh_name_vc'] . "</h2>";
         $line .= "<table class=\"none\" cellpadding=\"0\" cellspacing=\"0\"><tr valign=\"top\"><td>";
         $line .= $zone_status;
@@ -602,14 +621,14 @@ class module_controller {
         global $controller;
         $currentuser = ctrl_users::GetUserDetail();
         $line = "";
-        $line .= "<div class=\"zgrid_wrapper\">";
-        $line .= "<h2>" . ui_language::translate("Manage Domains") . "</h2>";
-        $line .= "" . ui_language::translate("Choose fom the list of domains below") . "";
-        $line .= "<form name=DisplayDNS action=\"./?module=dns_manager&action=DisplayRecords\" method=\"post\">";
-        $line .= "<br><br>";
-        $line .= "<table class=\"zform\">";
-        $line .= "<tr>";
-        $line .= "<td><select name=\"inDomain\" id=\"inDomain\">";
+        $line .= "<form class=\"form-horizontal\" name=\"DisplayDNS\" action=\"./?module=dns_manager&action=DisplayRecords\" method=\"post\">";
+        $line .= "<fieldset>";
+        $line .= "<legend class=\"module-legend\">";
+        $line .= "" . ui_language::translate("Manage DNS Records") . "";
+        $line .= "</legend>";
+        $line .= "<div class=\"control-group\">";
+        $line .= "Domain:&nbsp;&nbsp;";
+        $line .= "<select name=\"inDomain\" id=\"inDomain\">";
         $line .= "<option value=\"\" selected=\"selected\">-- " . ui_language::translate("Select a domain") . " --</option>";
         //$sql = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk=" . $currentuser['userid'] . " AND vh_type_in !=2 AND vh_deleted_ts IS NULL");
         $sql = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk=:userid AND vh_type_in !=2 AND vh_deleted_ts IS NULL");
@@ -620,16 +639,12 @@ class module_controller {
         while ($rowdomains = $sql->fetch()) {
             $line .= "<option value=\"" . $rowdomains['vh_id_pk'] . "\">" . $rowdomains['vh_name_vc'] . "</option>";
         }
-        $line .= "</select></td>";
-        $line .= "<td>";
-        $line .= "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inSelect\" value=\"" . $rowdomains['vh_id_pk'] . "\">" . ui_language::translate("Select") . "</button>";
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "</table>";
+        $line .= "</select>";
+        $line .= "&nbsp;&nbsp;<button class=\"btn\" type=\"submit\" id=\"button\" name=\"inSelect\" value=\"" . $rowdomains['vh_id_pk'] . "\">" . ui_language::translate("Select") . "</button>";
+        $line .= "</div>";
+        $line .= "</fieldset>";
         $line .= self::getCSFR_Tag();
         $line .= "</form>";
-        $line .= "<p>&nbsp;</p>";
-        $line .= "</div>";
         return $line;
     }
 
@@ -1529,43 +1544,43 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$ttl_error)) {
-            return ui_sysmessage::shout(ui_language::translate("TTL must be a numeric value."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("TTL must be a numeric value."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$hostname_error)) {
-            return ui_sysmessage::shout(ui_language::translate("Hostnames must be unique."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Hostnames must be unique."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$invalidIPv4_error)) {
-            return ui_sysmessage::shout(ui_language::translate("IP Address is not a valid IPV4 address."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("IP Address is not a valid IPV4 address."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$invalidIPv6_error)) {
-            return ui_sysmessage::shout(ui_language::translate("IP Address is not a valid IPV6 address"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("IP Address is not a valid IPV6 address"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$invalidDomainName_error)) {
-            return ui_sysmessage::shout(ui_language::translate("An invalid domain name character was entered. Domain names are limited to alphanumeric characters and hyphens."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("An invalid domain name character was entered. Domain names are limited to alphanumeric characters and hyphens."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$invalidIP_error)) {
-            return ui_sysmessage::shout(ui_language::translate("Target is not a valid IP address"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Target is not a valid IP address"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$priorityNumeric_error)) {
-            return ui_sysmessage::shout(ui_language::translate("Priority must be a numeric value."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Priority must be a numeric value."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$priorityRange_error)) {
-            return ui_sysmessage::shout(ui_language::translate("The priority of a dns record must be a numeric value between 0 and 65535"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("The priority of a dns record must be a numeric value between 0 and 65535"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$weightNumeric_error)) {
-            return ui_sysmessage::shout(ui_language::translate("Weight must be a numeric value."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Weight must be a numeric value."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$weightRange_error)) {
-            return ui_sysmessage::shout(ui_language::translate("The weight of a dns record must be a numeric value between 0 and 65535"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("The weight of a dns record must be a numeric value between 0 and 65535"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$portNumeric_error)) {
-            return ui_sysmessage::shout(ui_language::translate("PORT must be a numeric value."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("PORT must be a numeric value."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$portRange_error)) {
-            return ui_sysmessage::shout(ui_language::translate("The port of a dns record must be a numeric value between 0 and 65535"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("The port of a dns record must be a numeric value between 0 and 65535"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your DNS have been saved successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your DNS have been saved successfully!"), "alert-success");
         }
         return;
     }

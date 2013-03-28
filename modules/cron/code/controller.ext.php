@@ -38,7 +38,7 @@ class module_controller {
         global $zdbh;
         global $controller;
         $currentuser = ctrl_users::GetUserDetail();
-        $line = "<h2>" . ui_language::translate("Current Cron Tasks") . "</h2>";
+        $line = "<div><legend class=\"module-legend\">" . ui_language::translate("Current Cron Tasks") . "</legend></div>";
         $sql = "SELECT COUNT(*) FROM x_cronjobs WHERE ct_acc_fk=:userid AND ct_deleted_ts IS NULL";       
         $numrows = $zdbh->prepare($sql);
         $numrows->bindParam(':userid', $currentuser['userid']);
@@ -50,26 +50,30 @@ class module_controller {
                 $sql->bindParam(':userid', $currentuser['userid']);
                 $sql->execute();
                 $line .= "<form action=\"./?module=cron&action=DeleteCron\" method=\"post\">";
-                $line .= "<table class=\"zgrid\">";
-                $line .= "<tr>";
+                $line .= "<table class=\"table table-striped\" id=\"no-more-tables\">";
+                $line .= "<thead>";
                 $line .= "<th>" . ui_language::translate("Script") . "</th>";
                 $line .= "<th>" . ui_language::translate("Timing") . "</th>";
                 $line .= "<th>" . ui_language::translate("Description") . "</th>";
                 $line .= "<th></th>";
-                $line .= "</tr>";
+                $line .= "</thead>";
+                $line .= "<tbody>";
                 while ($rowcrons = $sql->fetch()) {
                     $line .= "<tr>";
-                    $line .= "<td>" . $rowcrons['ct_script_vc'] . "</td>";
-                    $line .= "<td>" . ui_language::translate(self::TranslateTiming($rowcrons['ct_timing_vc'])) . "</td>";
-                    $line .= "<td>" . $rowcrons['ct_description_tx'] . "</td>";
-                    $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" name=\"inDelete_" . $rowcrons['ct_id_pk'] . "\" id=\"button\" value=\"inDelete_" . $rowcrons['ct_id_pk'] . "\">" . ui_language::translate("Delete") . "</button></td>";
+                    $line .= "<td data-title=\"" . ui_language::translate("Script") . "\">" . $rowcrons['ct_script_vc'] . "</td>";
+                    $line .= "<td data-title=\"" . ui_language::translate("Timing") . "\">" . ui_language::translate(self::TranslateTiming($rowcrons['ct_timing_vc'])) . "</td>";
+                    $line .= "<td data-title=\"" . ui_language::translate("Description") . "\">" . $rowcrons['ct_description_tx'] . "</td>";
+                    $line .= "<td><button class=\"btn load-button\" type=\"submit\" name=\"inDelete_" . $rowcrons['ct_id_pk'] . "\" value=\"inDelete_" . $rowcrons['ct_id_pk'] . "\">" . ui_language::translate("Delete") . "</button></td>";
                     $line .= "</tr>";
                 }
+                $line .= "</body>";
                 $line .= "</table>";
                 $line .= runtime_csfr::Token();
                 $line .= "</form>";
             } else {
+                $line .= "<p>";
                 $line .= ui_language::translate("You currently do not have any tasks setup.");
+                $line .= "</p><br/><br/>";
             }
             return $line;
         }
@@ -80,39 +84,32 @@ class module_controller {
         global $controller;
         $currentuser = ctrl_users::GetUserDetail();
 
-        $line = "<h2>Create a new task</h2>";
-        $line .= "<form action=\"./?module=cron&action=CreateCron\" method=\"post\">";
-        $line .= "<table class=\"zform\">";
-        $line .= "<tr valign=\"top\">";
-        $line .= "<th>" . ui_language::translate("Script") . ":</th>";
-        $line .= "<td><input name=\"inScript\" type=\"text\" id=\"inScript\" size=\"50\" /><br />" . ui_language::translate("example") . ": /folder/task.php</td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Comment") . ":</th>";
-        $line .= "<td><input name=\"inDescription\" type=\"text\" id=\"inDescription\" size=\"50\" maxlength=\"50\" /></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Executed") . ":</th>";
-        $line .= "<td><select name=\"inTiming\" id=\"inTiming\">";
-        $line .= "<option value=\"* * * * *\">" . ui_language::translate("Every 1 minute") . "</option>";
-        $line .= "<option value=\"0,5,10,15,20,25,30,35,40,45,50,55 * * * *\">" . ui_language::translate("Every 5 minutes") . "</option>";
-        $line .= "<option value=\"0,10,20,30,40,50 * * * *\">" . ui_language::translate("Every 10 minutes") . "</option>";
-        $line .= "<option value=\"0,30 * * * *\">" . ui_language::translate("Every 30 minutes") . "</option>";
-        $line .= "<option value=\"0 * * * *\">" . ui_language::translate("Every 1 hour") . "</option>";
-        $line .= "<option value=\"0 0,2,4,6,8,10,12,14,16,18,20,22 * * *\">" . ui_language::translate("Every 2 hours") . "</option>";
-        $line .= "<option value=\"0 0,8,16 * * *\">" . ui_language::translate("Every 8 hours") . "</option>";
-        $line .= "<option value=\"0 0,12 * * *\">" . ui_language::translate("Every 12 hours") . "</option>";
-        $line .= "<option value=\"0 0 * * *\">" . ui_language::translate("Every 1 day") . "</option>";
-        $line .= "<option value=\"0 0 * * 0\">" . ui_language::translate("Every week") . "</option>";
-        $line .= "</select></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th colspan=\"2\" align=\"right\"><input type=\"hidden\" name=\"inReturn\" value=\"GetFullURL\" />";
+        $line = "<legend class=\"module-legend\">Create a new task</legend>";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=cron&action=CreateCron\" method=\"post\">";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"inScript\">" . ui_language::translate("Script") . ":</label>";
+        $line .= "<div class=\"controls\"><input required name=\"inScript\" type=\"text\" id=\"inScript\" /><p class=\"help-block\">" . ui_language::translate("Example") . ": yourdomain_com/yourcron.php</p></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"inDescription\">" . ui_language::translate("Comment") . ":</label>";
+        $line .= "<div class=\"controls\"><input name=\"inDescription\" type=\"text\" id=\"inDescription\" maxlength=\"50\" /></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"inTiming\">" . ui_language::translate("Executed") . ":</label>";
+        $line .= "<div class=\"controls\"><select required name=\"inTiming\" id=\"inTiming\">";
+        $line .= "<option value=\"* * * * *\">" . ui_language::translate("Every 1 Minute") . "</option>";
+        $line .= "<option value=\"0,5,10,15,20,25,30,35,40,45,50,55 * * * *\">" . ui_language::translate("Every 5 Minutes") . "</option>";
+        $line .= "<option value=\"0,10,20,30,40,50 * * * *\">" . ui_language::translate("Every 10 Minutes") . "</option>";
+        $line .= "<option value=\"0,30 * * * *\">" . ui_language::translate("Every 30 Minutes") . "</option>";
+        $line .= "<option value=\"0 * * * *\">" . ui_language::translate("Every 1 Hour") . "</option>";
+        $line .= "<option value=\"0 0,2,4,6,8,10,12,14,16,18,20,22 * * *\">" . ui_language::translate("Every 2 Hours") . "</option>";
+        $line .= "<option value=\"0 0,8,16 * * *\">" . ui_language::translate("Every 8 Hours") . "</option>";
+        $line .= "<option value=\"0 0,12 * * *\">" . ui_language::translate("Every 12 Hours") . "</option>";
+        $line .= "<option value=\"0 0 * * *\">" . ui_language::translate("Every 1 Day") . "</option>";
+        $line .= "<option value=\"0 0 * * 0\">" . ui_language::translate("Every Week") . "</option>";
+        $line .= "</select></div></div>";
+        $line .= "<div class=\"control-group\">";
+        $line .= "<div class=\"controls\">";
+        $line .= "<input type=\"hidden\" name=\"inReturn\" value=\"GetFullURL\" />";
         $line .= "<input type=\"hidden\" name=\"inUserID\" value=\"" . $currentuser['userid'] . "\" />";
+        $line .= "<button class=\"btn load-button\" type=\"submit\">" . ui_language::translate("Create") . "</button>";
+        $line .= "</div></div>";
         $line .= runtime_csfr::Token();
-        $line .= "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\">" . ui_language::translate("Create") . "</button></th>";
-        $line .= "</tr>";
-        $line .= "</table>";
         $line .= "</form>";
 
         return $line;
@@ -336,25 +333,25 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$blank)) {
-            return ui_sysmessage::shout(ui_language::translate("You need to specify a valid location for your script."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You need to specify a valid location for your script."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$noexists)) {
-            return ui_sysmessage::shout(ui_language::translate("Your script does not appear to exist at that location."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your script does not appear to exist at that location."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$cronnoexists)) {
-            return ui_sysmessage::shout(ui_language::translate("System Cron file could not be created."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("System Cron file could not be created."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$cronnowrite)) {
-            return ui_sysmessage::shout(ui_language::translate("Could not write to the System Cron file."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Could not write to the System Cron file."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$alreadyexists)) {
-            return ui_sysmessage::shout(ui_language::translate("You can not add the same cron task more than once."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You can not add the same cron task more than once."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$error)) {
-            return ui_sysmessage::shout(ui_language::translate("There was an error updating the cron job."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("There was an error updating the cron job."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Cron updated successfully."), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Cron updated successfully."), "alert-success");
         }
         return;
     }

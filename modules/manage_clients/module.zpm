@@ -1,263 +1,433 @@
-<div class="zmodule_header" id="zmodule_header_<@ ModuleName @>"><img src="<@ ModuleIcon @>" border="0"><@ ModuleName @></div>
-<div class="zmodule_content" id="zmodule_header_<@ ModuleName @>">
+<div class="module-header">
+  <h1 class="module-title">
+    <img src="<@ ModuleIcon @>" border="0">
+    <@ ModuleName @>
+  </h1>
+</div>
 
-    <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><p><@ ModuleDesc @></p></div>
-    <@ Result @>
+<div class="module-desc">
+  <@ ModuleDesc @>
+</div>
 
-    <% if isDeleteClient %>
-    <div class="zform_wrapper">
-        <h2><: Delete :>: <@ EditCurrentName @> ?</h2>
-        <p><: Please confirm that you want to delete this client. :></p>
-        <p><b><: WARNING! This will remove all files and services belonging to this client! :></b></p>
-        <form action="./?module=manage_clients&action=DeleteClient" method="post">
-            <table class="zform" cellpadding="0" cellspacing="0">
-                <% if AllClientList %>
-                <tr>
-                    <th><: Move clients and packages (if any exist) this user has to :>:</th>
-                    <td>
-                        <select name="inMoveClient" id="inMoveClient">
-                            <% loop AllClientList %>
-                            <option value="<& moveclientid &>"><& moveclientname &></option>
-                            <% endloop %>
-                        </select>
-                    </td>
-                </tr>
-                <% endif %>
-                <tr>
-                    <th colspan="2" align="right">
-                        <input type="hidden" name="inDelete" value="<@ EditCurrentID @>">
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" ><: Delete :></button>
-                        <button class="fg-button ui-state-default ui-corner-all" type="button" onclick="window.location.href='./?module=manage_clients';return false;"><: Cancel :></button>
-                    </th>
-                </tr>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
-    <% endif %>
+<div class="container-fluid module-content">
 
-    <% if isEditClient %>
-    <div class="zgrid_wrapper">
-        <h2><: Edit existing client :>: <@ EditCurrentName @></h2>
-        <form action="./?module=manage_clients&action=UpdateClient" method="post">
-            <table class="zform">
-                <tr>
-                    <th><: Username :>:</th>
-                    <td><input name="inUserName" type="text" disabled="disabled" size="30" maxlength="30" id="inUserName" value="<@ EditCurrentName @>" readonly="readonly" /></td>
-                </tr>
-                <tr>
-                    <th><: User group :>:</th>
-                    <td>
-                        <select name="inGroup" id="inGroup">
-                            <% loop CurrentGroupList %>
-                            <option value="<& groupid &>" <& groupselected &>><& groupname &></option>
-                            <% endloop %>
-                        </select>
-                    </td>
-                <tr>
-                    <th><: Package :>:</th>
-                    <td>
-                        <select name="inPackage" id="inPackage">
-                            <% loop CurrentPackageList %>
-                            <option value="<& packageid &>" <& packageselected &>><& packagename &></option>
-                            <% endloop %>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th><: Full name :>:</th>
-                    <td><input type="text" name="inFullName" id="inFullName" value="<@ EditCurrentFullName @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Email Address :>:</th>
-                    <td><input type="text" name="inEmailAddress" id="inEmailAddress" value="<@ EditCurrentEmail @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Postal Address :>:</th>
-                    <td><textarea name="inAddress" id="inAddress" cols="45" rows="5"><@ EditCurrentAddress @></textarea></td>
-                </tr>
-                <tr>
-                    <th><: Postal Code :>:</th>
-                    <td><input name="inPostCode" type="text" id="inPostCode" size="20" maxlength="10" value="<@ EditCurrentPost @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Phone Number :>:</th>
-                    <td><input name="inPhone" type="text" id="inPhone" size="20" maxlength="50" value="<@ EditCurrentPhone @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Reset password :>:</th>
-                    <td><input name="inNewPassword" type="password" id="inNewPassword" size="20" /></td>
-                </tr>
-                <td>
-                    <% loop CheckEnabledHTML %>
-                    <input type="radio" name="inEnabled" value="1" <& echecked &>/> Enabled
-                           <input type="radio" name="inEnabled" value="0" <& dchecked &>/> Disabled
-                           <% endloop %>
-                </td>
-                </tr>
-                <tr>
-                    <th><input type="hidden" name="inClientID" value="<@ EditCurrentID @>" /></th>
-                    <td>
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inSubmit" value="Save"><: Save :></button>
-                        <button class="fg-button ui-state-default ui-corner-all type="button" onclick="window.location.href='./?module=manage_clients';return false;"><: Cancel :></button>
-                    </td>
-                </tr>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
-    <% endif %>
+  <@ Result @>
 
-    <div class="zgrid_wrapper">
-        <h2><: Current Clients :></h2>
-        <% if ClientList %>
-        <form action="./?module=manage_clients&action=EditClient" method="post">
-            <table class="zgrid">
-                <tr>
-                    <th><: Username :></th>
-                    <th><: Package :></th>
-                    <th><: Group :></th>
-                    <th><: Clients :></th>
-                    <th><: Current Disk :></th>
-                    <th><: Current Bandwidth :></th>
-                    <th></th>
-                </tr>
-                <% loop ClientList %>
-                <tr>
-                    <td><& username &></td>
-                    <td><& packagename &></td>
-                    <td><& usergroup &></td>
-                    <td><& numclients &></td>
-                    <td><& diskspacereadable &> / <& diskspacequotareadable &></td>
-                    <td><& bandwidthreadable &> / <& bandwidthquotareadable &></td>
-                    <td>
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inEdit_<& userid &>" value="<& userid &>">Edit</button>
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inDelete_<& userid &>" value="<& userid &>">Delete</button>
-                    </td>
-                </tr>
-                <% endloop %>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
+  <script>window.jQuery || document.write('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">\x3C<\/script>')</script>
+
+  <% if isDeleteClient %>
+  <form class="form-horizontal" action="./?module=manage_clients&action=DeleteClient" method="post">
+  
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Delete :>: <@ EditCurrentName @> ?
+      </legend>
+
+      <p>
+        <: Please confirm that you want to delete this client. :><br>
+        <b><: WARNING! This will remove all files and services belonging to this client! :></b>
+      </p><br>
+
+      <div class="control-group">
+        <label class="control-label" for="inMoveClient">
+          <: Merge To :>:
+        </label>
+        <div class="controls">
+          <select required name="inMoveClient" id="inMoveClient">
+            <% loop AllClientList %>	
+            <option value="<& moveclientid &>"><& moveclientname &></option>
+            <% endloop %>
+          </select>
+          <p class="help-block">This will merge all reseller clients and packages (if they exist) to this user upon deletion of the parent account (<@ EditCurrentName @>).</p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <input type="hidden" name="inDelete" value="<@ EditCurrentID @>">
+          <button class="btn load-button" type="submit"><: Delete :></button>&nbsp;&nbsp;&nbsp;
+          <button class="btn" onclick="window.location.href='./?module=manage_clients';return false;"><: Cancel :></button>
+        </div>
+      </div>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+  <% endif %>
+
+  <% if isEditClient %>
+  <form class="form-horizontal" action="./?module=manage_clients&action=UpdateClient" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Edit Existing Client :>: <@ EditCurrentName @>
+      </legend>
+
+      <div class="control-group">
+        <label class="control-label">
+          <: Username :>:
+        </label>
+        <div class="controls">
+          <input name="inUserName" type="text" maxlength="10" id="inUserName" value="<@ EditCurrentName @>" disabled>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inGroup">
+          <: User Group :>:
+        </label>
+        <div class="controls">
+          <select required name="inGroup" id="inGroup">
+            <% loop CurrentGroupList %>
+            <option value="<& groupid &>" <& groupselected &>><& groupname &></option>
+            <% endloop %>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inPackage>
+          <: Package :>:
+        </label>
+        <div class="controls">
+          <select required name="inPackage" id="inPackage">
+            <% loop CurrentPackageList %>
+            <option value="<& packageid &>" <& packageselected &>><& packagename &></option>
+            <% endloop %>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inFullName">
+          <: Full Name :>:
+        </label>
+        <div class="controls">
+          <input required type="text" id="inFullName" name="inFullName" value="<@ EditCurrentFullName @>">
+        </div>
+      </div>
+ 
+      <div class="control-group">
+        <label class="control-label" for="inEmailAddress">
+          <: Email Address :>:
+        </label>
+        <div class="controls">
+          <input required type="email" id="inEmailAddress" name="inEmailAddress" value="<@ EditCurrentEmail @>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inPhone">
+          <: Phone Number :>:
+        </label>
+        <div class="controls">
+          <input required type="tel" id="inPhone" name="inPhone" value="<@ EditCurrentPhone @>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inAddress">
+          <: Postal Address :>:
+        </label>
+        <div class="controls">
+          <textarea required id="inAddress" name="inAddress" rows="3"><@ EditCurrentAddress @></textarea>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inPostCode">
+          <: Postal Code :>:
+        </label>
+        <div class="controls">
+          <input required type="text" id="inPostCode" name="inPostCode" value="<@ EditCurrentPost @>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inNewPassword">
+          <: Reset Password :>:
+        </label>
+        <div class="controls">
+          <input required name="inNewPassword" type="text" id="inNewPassword" placeholder="New Password">
+          <p class="help-block">
+            <a href="#" class="link-password" id="generate"><: Generate Password :></a>
+          </p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <% loop CheckEnabledHTML %>
+        <div class="controls">
+          <input type="radio" data-label="Enable Account" name="inEnabled" value="1" <& echecked &>> 
+        </div>
+        <div class="controls">
+          <input type="radio" data-label="Disable Account" name="inEnabled" value="0" <& dchecked &>>
+        </div>
+        <% endloop %>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <input type="hidden" name="inClientID" value="<@ EditCurrentID @>">
+          <button class="btn load-button" type="submit" name="inSubmit" value="Save"><: Save :></button>&nbsp;&nbsp;&nbsp;
+          <button class="btn" onclick="window.location.href='./?module=manage_clients';return false;"><: Cancel :></button>
+        </div>
+      </div>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+  <% endif %>
+
+  <form action="./?module=manage_clients&action=EditClient" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Current Clients :>
+      </legend>
+
+      <% if ClientList %>
+
+      <table class="table table-striped" id="no-more-tables">
+        <thead>
+          <th><: Username :></th>
+          <th><: Package :></th>
+          <th><: Group :></th>
+          <th><: Clients :></th>
+          <th><: Current Disk :></th>
+          <th><: Current Bandwidth :></th>
+          <th></th>
+          <th></th>
+        </thead>
+
+        <tbody>
+        <% loop ClientList %>
+          <tr>
+            <td data-title="<: Username :>"><& username &></td>
+            <td data-title="<: Package :>"><& packagename &></td>
+            <td data-title="<: Group :>"><& usergroup &></td>
+            <td data-title="<: Clients :>"><& numclients &></td>
+            <td data-title="<: Current Disk :>"><& diskspacereadable &> / <& diskspacequotareadable &></td>
+            <td data-title="<: Current Bandwidth :>"><& bandwidthreadable &> / <& bandwidthquotareadable &></td>
+            <td>
+              <button class="btn" type="submit" name="inEdit_<& userid &>" value="<& userid &>">Edit</button>
+            </td>
+            <td>
+              <button class="btn" type="submit" name="inDelete_<& userid &>" value="<& userid &>">Delete</button>
+            </td>
+          </tr>
+        <% endloop %>
+        </tbody>
+      </table>
+
         <% else %>
         <% if HasPackage %>
-        <: You have no client accounts at this time. Create a client using the form below. :>
+        <p><: You have no client accounts at this time. Create a client using the form below. :></p>
         <% else %>
-        <: You must first create a Package with the Package Manager module before you can create a client. :>
+        <p><: You must first create a Package with the Package Manager module before you can create a client. :></p>
         <% endif %>
         <% endif %>
-    </div>
 
-    <% if DisabledClientList %>
-    <div class="zgrid_wrapper">
-        <h2><: Disabled Clients :></h2>
-        <form action="./?module=manage_clients&action=EditDisabledClient" method="post">
-            <table class="zgrid">
-                <tr>
-                    <th><: Username :></th>
-                    <th><: Package :></th>
-                    <th><: Group :></th>
-                    <th><: Current Disk :></th>
-                    <th><: Current Bandwidth :></th>
-                    <th></th>
-                </tr>
-                <% loop DisabledClientList %>
-                <tr>
-                    <td><& username &></td>
-                    <td><& packagename &></td>
-                    <td><& usergroup &></td>
-                    <td><& diskspacereadable &> / <& diskspacequotareadable &></td>
-                    <td><& bandwidthreadable &> / <& bandwidthquotareadable &></td>
-                    <td>
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inEdit_<& userid &>" value="<& userid &>">Edit</button>
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inDelete_<& userid &>" value="<& userid &>">Delete</button>
-                    </td>
-                </tr>
-                <% endloop %>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
-    <% endif %>
+    </fieldset>
 
-    <% if HasPackage %>
-    <% if isCreateClient %>
-    <div class="zform_wrapper">
-        <h2><: Create new client account :></h2>
-        <form action="./?module=manage_clients&action=CreateClient" method="post">
-            <table class="zform">
-                <tr>
-                    <th><: Username :>:</th>
-                    <td><input type="text" name="inNewUserName" id="inNewUserName" size="30" maxlength="30" value="<@ FormName @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Password :>:</th>
-                    <td><input type="text" name="inNewPassword" id="input-password" size="30" value="<@ RandomPassword @>" /> <a href="#" class="link-password" id="generate"><: Generate Password :></a></td>
-                </tr>
-                <tr>
-                    <th><: Usergroup :>:</th>
-                    <td>
-                        <select name="inNewGroup" id="inNewGroup">
-                            <option value="" selected="selected">-- Select a usergroup --</option>
-                            <% loop GroupList %>
-                            <option value="<& groupid &>"><& groupname &></option>
-                            <% endloop %>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th><: Package :>:</th>
-                    <td>
-                        <select name="inNewPackage" id="inNewPackage">
-                            <option value="" selected="selected">-- Select a package --</option>
-                            <% loop PackageList %>
-                            <option value="<& packageid &>"><& packagename &></option>
-                            <% endloop %>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th><: Full Name :>:</th>
-                    <td><input type="text" name="inNewFullName" id="inNewFullName" value="<@ FormFullName @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Email Address :>:</th>
-                    <td><input type="text" name="inNewEmailAddress" id="inNewEmailAddress" value="<@ FormEmail @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Postal Address :>:</th>
-                    <td><textarea name="inNewAddress" id="inNewAddress" cols="45" rows="5"><@ FormAddress @></textarea></td>
-                </tr>
-                <tr>
-                    <th><: Postal Code :>:</th>
-                    <td><input name="inNewPostCode" type="text" id="inNewPostCode" size="20" maxlength="10" value="<@ FormPost @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Phone Number :>:</th>
-                    <td><input name="inNewPhone" type="text" id="inNewPhone" size="20" maxlength="50" value="<@ FormPhone @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Send welcome email? :></th>
-                    <td><input name="inSWE" type="checkbox" id="inSWE" value="1" checked="checked" /></td>
-                </tr>
-                <tr>
-                    <th><: Email Subject :>:</th>
-                    <td><input name="inEmailSubject" type="text" id="inEmailSubject" value="<: Your ZPanel Account details :>" style="width:380px;" /></td>
-                </tr>
-                <tr>
-                    <th><: Email Body :>:</th>
-                    <td><textarea name="inEmailBody" id="inEmailBody" cols="45" rows="5"><@ DefaultEmailBody @></textarea></td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td><button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inSubmit" value="Save"><: Save :></button></td>
-                </tr>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
-    <% endif %>
-    <% endif %>
+  <@ CSFR_Tag @>
+  </form>
+
+  <% if DisabledClientList %>
+
+  <form action="./?module=manage_clients&action=EditDisabledClient" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Disabled Clients :>
+      </legend>
+
+      <p>Clients of Resellers are not disabled, only the Reseller Client itself. You must Shadow the Reseller and disable the accounts within.</p>
+
+      <table class="table table-striped" id="no-more-tables">
+        <thead>
+          <th><: Username :></th>
+          <th><: Package :></th>
+          <th><: Group :></th>
+          <th><: Current Disk :></th>
+          <th><: Current Bandwidth :></th>
+          <th></th>
+          <th></th>
+        </thead>
+
+        <tbody>
+        <% loop DisabledClientList %>
+          <tr>
+            <td data-title="<: Username :>"><& username &></td>
+            <td data-title="<: Package :>"><& packagename &></td>
+            <td data-title="<: Group :>"><& usergroup &></td>
+            <td data-title="<: Current Disk :>"><& diskspacereadable &> / <& diskspacequotareadable &></td>
+            <td data-title="<: Current Bandwidth :>"><& bandwidthreadable &> / <& bandwidthquotareadable &></td>
+            <td>
+              <button class="btn" type="submit" name="inEdit_<& userid &>" value="<& userid &>">Edit</button>
+            </td>
+            <td>
+              <button class="btn" type="submit" name="inDelete_<& userid &>" value="<& userid &>">Delete</button>
+            </td>
+          </tr>
+        <% endloop %>
+        </tbody>
+      </table>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+  <% endif %>
+
+  <% if HasPackage %>
+  <% if isCreateClient %>
+  <form class="form-horizontal" action="./?module=manage_clients&action=CreateClient" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Create New Client Account :>
+      </legend>
+
+      <div class="control-group">
+        <label class="control-label" for="inNewUserName">
+          <: Username :>:
+        </label>
+        <div class="controls">
+          <input required name="inNewUserName" type="text" maxlength="10" id="inNewUserName" placeholder="Username">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inNewPassword">
+          <: Password :>:
+        </label>
+        <div class="controls">
+          <input required name="inNewPassword" type="text" id="inNewPassword" placeholder="Password">
+          <p class="help-block">
+            <a href="#" class="link-password" id="generate"><: Generate Password :></a>
+          </p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inNewGroup">
+          <: User Group :>:
+        </label>
+        <div class="controls">
+          <select required name="inNewGroup" id="inNewGroup">
+            <% loop GroupList %>
+            <option value="<& groupid &>" <& groupselected &>><& groupname &></option>
+            <% endloop %>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inNewPackage">
+          <: Package :>:
+        </label>
+        <div class="controls">
+          <select required name="inNewPackage" id="inNewPackage">
+            <% loop PackageList %>
+            <option value="<& packageid &>" <& packageselected &>><& packagename &></option>
+            <% endloop %>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inNewFullName">
+          <: Full Name :>:
+        </label>
+        <div class="controls">
+          <input required type="text" id="inNewFullName" name="inNewFullName" placeholder="Full Name">
+        </div>
+      </div>
+ 
+      <div class="control-group">
+        <label class="control-label" for"inNewEmailAddress">
+          <: Email Address :>:
+        </label>
+        <div class="controls">
+          <input required type="email" id="inNewEmailAddress" name="inNewEmailAddress" placeholder="Email Address">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for"inNewPhone">
+          <: Phone Number :>:
+        </label>
+        <div class="controls">
+          <input required type="tel" id="inNewPhone" name="inNewPhone" placeholder="Phone Number">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inNewAddress">
+          <: Postal Address :>:
+        </label>
+        <div class="controls">
+          <textarea required id="inNewAddress" name="inNewAddress" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inNewPostCode">
+          <: Postal Code :>:
+        </label>
+        <div class="controls">
+          <input type="text" id="inNewPostCode" name="inNewPostCode" placeholder="Postal Code">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for"inSWE">
+          <: Send Welcome Email :>:
+        </label>
+        <div class="controls">
+          <input type="checkbox" id="inSWE" name="inSWE" value="1" CHECKED>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for"inEmailSubject">
+          <: Email Subject :>:
+        </label>
+        <div class="controls">
+          <input type="text" id="inEmailSubject" name="inEmailSubject" value="<: Your ZPanel Account Details :>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inEmailBody">
+          <: Email Message :>:
+        </label>
+        <div class="controls">
+          <textarea id="inEmailBody" name="inEmailBody" rows="5"><@ DefaultEmailBody @></textarea>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn load-button" type="submit" name="inSubmit" value="Save"><: Create :></button>
+        </div>
+      </div>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+  <% endif %>
+  <% endif %>
+
 </div>
 
 <script type="text/javascript">
@@ -297,7 +467,7 @@
             linkId = $(this).attr('id');
             if (linkId == 'generate'){
                 password = $.password(<@ MinPassLength @>,false);
-                $('#input-password').val(password);
+                $('#inNewPassword').val(password);
             }
             e.preventDefault();
         });

@@ -1,29 +1,52 @@
-<div class="zmodule_header" id="zmodule_header_<@ ModuleName @>"><img src="<@ ModuleIcon @>" border="0"><@ ModuleName @></div>
-<div class="zmodule_content" id="zmodule_header_<@ ModuleName @>">
+<div class="module-header">
+  <h1 class="module-title">
+    <img src="<@ ModuleIcon @>">
+    <@ ModuleName @>
+  </h1>
+</div>
 
-    <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><p><@ ModuleDesc @></p></div>
-    <@ Result @>
+<div class="module-desc">
+  <@ ModuleDesc @>
+</div>
 
-    <div class="zgrid_wrapper">
-        <h2><: Configure your Mail Settings :></h2>
-        <form action="./?module=mail_admin&action=UpdateConfig" method="post">
-            <table class="zgrid">
-                <% loop Config %>
-                <tr valign="top">
-                    <th nowrap="nowrap"><& cleanname &></th>
-                    <td><& fieldhtml &></td>
-                    <td><& description &></td>
-                </tr>
-                <% endloop %>
-                <tr>
-                    <th colspan="3">
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inSaveSystem"><: Save Changes :></button>
-                        <button class="fg-button ui-state-default ui-corner-all" type="button" onclick="window.location.href='./?module=moduleadmin';return false;"><: Cancel :></button>
-                    </th>
-                </tr>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
+<div class="container-fluid module-content">
+
+  <@ Result @>
+
+  <form class="form-horizontal" action="./?module=mail_admin&action=UpdateConfig" method="post">
+
+    <fieldset>
+
+      <legend>
+        <: Configure your Mail Settings :>
+      </legend>
+
+      <% loop Config %>
+
+      <div class="control-group">
+        <label class="control-label" >
+          <& cleanname &>
+        </label>
+        <div class="controls">
+          <& fieldhtml &>
+          <span class="help-inline">
+            <& description &>
+          </span>
+        </div>
+      </div>
+
+      <% endloop %>
+
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn load-button" type="submit" name="inSaveSystem"><: Save Changes :></button>&nbsp;&nbsp;&nbsp;
+          <button class="btn" onclick="window.location.href='./?module=moduleadmin';return false;"><: Cancel :></button>
+        </div>
+      </div>
+
+    </fieldset> 
+
+  <@ CSFR_Tag @>
+  </form>
 
 </div>

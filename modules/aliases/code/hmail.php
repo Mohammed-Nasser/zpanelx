@@ -29,7 +29,7 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     
 }
@@ -41,7 +41,7 @@ if (!fs_director::CheckForEmptyValue(self::$delete)) {
     $bindArray = array(':aliasname' => $rowalias['al_address_vc']);
     $sqlStatment = $mail_db->bindQuery("SELECT aliasname FROM hm_aliases WHERE aliasname=:aliasname", $bindArray);
     $result = $mail_db->returnRow();
-
+    
     if ($result) {
         $sqlStatment = "DELETE FROM hm_aliases WHERE aliasname=:aliasname";
         $sql = $mail_db->prepare($sqlStatment);
@@ -57,7 +57,7 @@ if (!fs_director::CheckForEmptyValue(self::$create)) {
     $bindArray = array(':domain' => $domain);
     $sqlStatment = $mail_db->bindQuery("SELECT domainid FROM hm_domains WHERE domainname=:domain", $bindArray);
     $result = $mail_db->returnRow();
-
+    
     if ($result) {
         $sqlStatment = "INSERT INTO hm_aliases (aliasdomainid,
 										aliasname,

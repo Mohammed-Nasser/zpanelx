@@ -320,6 +320,11 @@ class module_controller {
         }
     }
 
+    static function getModuleDesc() {
+        $message = ui_language::translate(ui_module::GetModuleDescription());
+        return $message;
+    }
+
     static function getCSFR_Tag() {
         return runtime_csfr::Token();
     }

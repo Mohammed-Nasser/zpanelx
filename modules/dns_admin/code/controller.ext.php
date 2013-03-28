@@ -49,19 +49,18 @@ class module_controller {
     static function DisplayDNSConfig() {
         global $zdbh;
         global $controller;
-        $line = "<h2>" . ui_language::translate("Configure your DNS Settings") . "</h2>";
-        $line .= "<div style=\"display: block; margin-right:20px;\">";
-        $line .= "<div class=\"ui-tabs ui-widget ui-widget-content ui-corner-all\" id=\"dnsTabs\">";
-        $line .= "<ul class=\"domains ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all\">";
-        $line .= "<li><a href=\"#general\">" . ui_language::translate("General") . "</a></li>";
-        $line .= "<li><a href=\"#tools\">" . ui_language::translate("Tools") . "</a></li>";
-        $line .= "<li><a href=\"#services\">" . ui_language::translate("Services") . "</a></li>";
-        $line .= "<li><a href=\"#logs\">" . ui_language::translate("Logs") . "</a></li>";
+      $line = "<fieldset>";
+        $line = "<legend class=\"module-legend\">" . ui_language::translate("Configure Your DNS Settings") . "</legend>";
+        $line .= "<ul class=\"nav nav-pills\" id=\"dns-pills\">";
+        $line .= "<li class=\"active\"><a href=\"#general\" data-toggle=\"tab\">" . ui_language::translate("General") . "</a></li>";
+        $line .= "<li><a href=\"#tools\" data-toggle=\"tab\">" . ui_language::translate("Tools") . "</a></li>";
+        $line .= "<li><a href=\"#services\" data-toggle=\"tab\">" . ui_language::translate("Services") . "</a></li>";
+        $line .= "<li><a href=\"#logs\" data-toggle=\"tab\">" . ui_language::translate("Logs") . "</a></li>";
         $line .= "</ul>";
+        $line .= "<div class=\"tab-content\">";
         //general
-        $line .= "<div class=\"ui-tabs-panel ui-widget-content ui-corner-bottom\" id=\"general\">";
-        $line .= "<form action=\"./?module=dns_admin&action=UpdateDNSConfig\" method=\"post\">";
-        $line .= "<table class=\"zgrid\">";
+        $line .= "<div class=\"tab-pane active\" id=\"general\">";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=dns_admin&action=UpdateDNSConfig\" method=\"post\">";
         $count = 0;
         $sql = "SELECT COUNT(*) FROM x_settings WHERE so_module_vc=:moduleName AND so_usereditable_en = 'true'";
         $numrows = $zdbh->prepare($sql);
@@ -81,26 +80,20 @@ class module_controller {
                     } else {
                         $fieldhtml = ctrl_options::OutputSettingTextArea($row['so_name_vc'], $row['so_value_tx']);
                     }
-                    $line .= "<tr valign=\"top\"><th nowrap=\"nowrap\">" . ui_language::translate($row['so_cleanname_vc']) . "</th><td>" . $fieldhtml . "</td><td>" . ui_language::translate($row['so_desc_tx']) . "</td></tr>";
+                    $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate($row['so_cleanname_vc']) . "</label><div class=\"controls\">" . $fieldhtml . "<span class=\"help-inline\">" . ui_language::translate($row['so_desc_tx']) . "</span></div></div>";
                 }
-                $line .= "<tr><th colspan=\"3\"><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inSaveSystem\">" . ui_language::translate("Save Changes") . "</button><button class=\"fg-button ui-state-default ui-corner-all type=\"button\" onclick=\"window.location.href='./?module=moduleadmin';return false;\">" . ui_language::translate("Cancel") . "</button></tr>";
+                $line .= "<div class=\"control-group\"><div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inSaveSystem\">" . ui_language::translate("Save Changes") . "</button>&nbsp;&nbsp;&nbsp;<button class=\"btn\" onclick=\"window.location.href='./?module=moduleadmin';return false;\">" . ui_language::translate("Cancel") . "</button></div></div>";
             }
         }
-        $line .= "</table>";
         $line .= "</form>";
         $line .= "</div>";
         //tools
-        $line .= "<div class=\"ui-tabs-panel ui-widget-content ui-corner-bottom\" id=\"tools\">";
-        $line .= "<form action=\"./?module=dns_admin&action=UpdateTools\" method=\"post\">";
-        $line .= "<table class=\"zgrid\">";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Reset all Records to Default") . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inResetAll\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Reset Records to Default on Single Domain") . " ";
-        $line .= "<select name=\"inResetDomainID\">";
+        $line .= "<div class=\"tab-pane\" id=\"tools\">";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=dns_admin&action=UpdateTools\" method=\"post\">";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Reset all Records to Default") . "</label>";
+        $line .= "<div class=\"controls fix-controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inResetAll\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\" for=\"select\">" . ui_language::translate("Reset Records to Default on Single Domain") . "</label>";
+        $line .= "<div class=\"controls fix-controls\"><select name=\"inResetDomainID\">";
         $line .= "<option value=\"\">--- " . ui_language::translate("Select Domain") . " ---</option>";
         $sql = "SELECT COUNT(*) FROM x_vhosts WHERE vh_deleted_ts IS NULL";
         if ($numrows = $zdbh->query($sql)) {
@@ -113,16 +106,12 @@ class module_controller {
             }
         }
         $line .= "</select>";
-        $line .= "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inResetDomain\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<th>" . ui_language::translate("Add Default Records to Missing Domains") . "";
-        $line .= "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inAddMissing\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Delete Record Type from ALL Records") . " ";
-        $line .= "<select name=\"inType\" id=\"inType\">";
+        $line .= "&nbsp;&nbsp;&nbsp;";
+        $line .= "<button class=\"btn load-button\" type=\"submit\" name=\"inResetDomain\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\" for=\"button\">" . ui_language::translate("Add Default Records to Missing Domains") . "</label>";
+        $line .= "<div class=\"controls fix-controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inAddMissing\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\" for=\"inType\">" . ui_language::translate("Delete Record Type from ALL Records") . "</label>";
+        $line .= "<div class=\"controls fix-controls\"><select name=\"inType\" id=\"inType\">";
         $line .= "<option value=\"A\">A</option>";
         $line .= "<option value=\"AAAA\">AAAA</option>";
         $line .= "<option value=\"CNAME\">CNAME</option>";
@@ -132,107 +121,69 @@ class module_controller {
         $line .= "<option value=\"SPF\">SPF</option>";
         $line .= "<option value=\"NS\">NS</option>";
         $line .= "</select>";
-        $line .= "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inDeleteType\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Purge Deleted Zone Records From Database") . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inPurge\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Delete ALL Zone Records") . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inDeleteAll\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<th>" . ui_language::translate("Force Records Update on Next Daemon Run") . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inForceUpdate\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "</table>";
+        $line .= "&nbsp;&nbsp;&nbsp;";
+        $line .= "<button class=\"btn load-button\" type=\"submit\" name=\"inDeleteType\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Purge Deleted Zone Records From Database") . "</label>";
+        $line .= "<div class=\"controls fix-controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inPurge\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Delete ALL Zone Records") . "</label>";
+        $line .= "<div class=\"controls fix-controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inDeleteAll\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Force Records Update on Next Daemon Run") . "</label>";
+        $line .= "<div class=\"controls fix-controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inForceUpdate\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
         $line .= "</form>";
         $line .= "</div>";
         //Services
-        $line .= "<div class=\"ui-tabs-panel ui-widget-content ui-corner-bottom\" id=\"services\">";
-        $line .= "<form action=\"./?module=dns_admin&action=UpdateService\" method=\"post\">";
-        $line .= "<table class=\"none\" border=\"0\" cellpading=\"0\" cellspacing=\"0\" width=\"100%\"><tr valign=\"top\"><td width=\"100%\">";
-        $line .= "<table class=\"zgrid\">";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Start Service") . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inStartService\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Stop Service") . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inStopService\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Reload BIND") . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inReloadService\" value=\"1\">" . ui_language::translate("GO") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<th>" . ui_language::translate("Service Port Status") . "</th>";
+        $line .= "<div class=\"tab-pane\" id=\"services\">";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=dns_admin&action=UpdateService\" method=\"post\">";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Start Service") . "</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inStartService\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Stop Service") . "</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inStopService\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Reload BIND") . "</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inReloadService\" value=\"1\">" . ui_language::translate("GO") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Service Port Status") . ":</label>";
         if (fs_director::CheckForEmptyValue(sys_monitoring::PortStatus(53))) {
-            $line .= "<td><font color=\"red\">" . ui_language::translate("STOPPED") . "</font></td>";
+            $line .= "<div class=\"controls fix-controls-text\"><font color=\"red\">" . ui_language::translate("STOPPED") . "</font>";
         } else {
-            $line .= "<td><font color=\"green\">" . ui_language::translate("RUNNING") . "</font></td>";
+            $line .= "<div class=\"controls fix-controls-text\"><font color=\"green\">" . ui_language::translate("RUNNING") . "</font>";
         }
-        $line .= "</tr>";
-        $line .= "</table>";
-        $line .= "</td><td>";
         if (fs_director::CheckForEmptyValue(sys_monitoring::PortStatus(53))) {
-            $line .= "<img src=\"/modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.png\" border=\"0\"/>";
+            $line .= "<img src=\"/modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.png\" height=\"25px\" width=\"25px\" border=\"0\"/></div></div>";
         } else {
-            $line .= "<img src=\"/modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.png\" border=\"0\"/>";
+            $line .= "<img src=\"/modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.png\" height=\"25px\" width=\"25px\" border=\"0\"/></div></div>";
         }
-        $line .="</td></tr></table>";
         $line .= "</form>";
         $line .= "</div>";
         //logs
         self::ViewErrors();
-
-        $line .= "<div class=\"ui-tabs-panel ui-widget-content ui-corner-bottom\" id=\"logs\">";
-        $line .= "<form action=\"./?module=dns_admin&action=Updatelogs\" method=\"post\">";
-        $line .= "<table class=\"zgrid\">";
-        $line .= "<tr>";
-        $line .= "<th style=\"width:350px;\">" . self::CheckLogReadable(ctrl_options::GetSystemOption('bind_log')) . " " . self::CheckLogWritable(ctrl_options::GetSystemOption('bind_log')) . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inSetPerms\" value=\"1\">" . ui_language::translate("Set Permissions") . "</button></td>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Clear errors") . "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inClearErrors\" value=\"1\">" . ui_language::translate("Clear") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Clear warnings") . "";
-        $line .= "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inClearWarnings\" value=\"1\">" . ui_language::translate("Clear") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("Clear logs") . "";
-        $line .= "</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inClearLogs\" value=\"1\">" . ui_language::translate("Clear") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "</table>";
+        
+        $line .= "<div class=\"tab-pane\" id=\"logs\">";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=dns_admin&action=Updatelogs\" method=\"post\">";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . self::CheckLogReadable(ctrl_options::GetSystemOption('bind_log')) . " " . self::CheckLogWritable(ctrl_options::GetSystemOption('bind_log')) . "</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inSetPerms\" value=\"1\">" . ui_language::translate("Set Permissions") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Clear Errors") . "</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inClearErrors\" value=\"1\">" . ui_language::translate("Clear") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Clear Warnings") . "</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inClearWarnings\" value=\"1\">" . ui_language::translate("Clear") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Clear Logs") . "</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inClearLogs\" value=\"1\">" . ui_language::translate("Clear") . "</button></div></div>";
         $line .= "</form>";
-        $line .= "<form name=\"launchbindlog\" action=\"modules/dns_admin/code/getbindlog.php\" target=\"bindlogwindow\" method=\"post\" onsubmit=\"window.open('', 'bindlogwindow', 'scrollbars=yes,menubar=no,height=525,width=825,resizable=no,toolbar=no,location=no,status=no')\">";
-        $line .= "<table class=\"zgrid\">";
-        $line .= "<tr>";
+        $line .= "<form class=\"form-horizontal\" name=\"launchbindlog\" action=\"modules/dns_admin/code/getbindlog.php\" target=\"bindlogwindow\" method=\"post\" onsubmit=\"window.open('', 'bindlogwindow', 'scrollbars=yes,menubar=no,height=525,width=825,resizable=no,toolbar=no,location=no,status=no')\">";
         if (count(self::$logerror) > 0) {
             $logerrorcolor = "red";
         } else {
             $logerrorcolor = NULL;
         }
-        $line .= "<th style=\"width:350px;\">" . ui_language::translate("View Errors") . " (<font color=\"" . $logerrorcolor . "\">" . count(self::$logerror) . "</font>)</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"logerror_a\" name=\"inViewErrors\" value=\"1\">" . ui_language::translate("View") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("View Errors") . " (<font color=\"" . $logerrorcolor . "\">" . count(self::$logerror) . "</font>)</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" id=\"logerror_a\" name=\"inViewErrors\" value=\"1\">" . ui_language::translate("View") . "</button></div></div>";
         if (count(self::$logwarning) > 0) {
             $logwarningcolor = "red";
         } else {
             $logwarningcolor = NULL;
         }
-        $line .= "<th>" . ui_language::translate("View warnings") . " (<font color=\"" . $logwarningcolor . "\">" . count(self::$logwarning) . "</font>)</th>";
-        $line .= "<td><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"logwarning_a\" name=\"inViewWarnings\" value=\"1\">" . ui_language::translate("View") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>" . ui_language::translate("View logs") . " (" . count(self::$getlog) . ")</th>";
-        $line .= "<td><input type=\"hidden\" name=\"inBindLog\" value=\"" . ctrl_options::GetSystemOption('bind_log') . "\" /><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inViewLogs\" value=\"1\">" . ui_language::translate("View") . "</button></td>";
-        $line .= "</tr>";
-        $line .= "</table>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("View warnings") . " (<font color=\"" . $logwarningcolor . "\">" . count(self::$logwarning) . "</font>)</label>";
+        $line .= "<div class=\"controls\"><button class=\"btn\" type=\"submit\" id=\"logwarning_a\" name=\"inViewWarnings\" value=\"1\">" . ui_language::translate("View") . "</button></div></div>";
+        $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("View logs") . " (" . count(self::$getlog) . ")</label>";
+        $line .= "<div class=\"controls\"><input type=\"hidden\" name=\"inBindLog\" value=\"" . ctrl_options::GetSystemOption('bind_log') . "\" /><button class=\"btn\" type=\"submit\" id=\"button\" name=\"inViewLogs\" value=\"1\">" . ui_language::translate("View") . "</button></div></div>";
         $line .= "</form>";
         $line .= "</div>";
 
@@ -240,15 +191,10 @@ class module_controller {
 
 
         $line .= "</div>";
-        $line .= "</div>";
-        $line .= "</div>";
 
         //CHARTS
-        $line .= "<table class=\"none\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td>";
         $line .= self::DisplayDNSUsagepChart();
-        $line .= "</td><td>";
         $line .= self::DisplayRecordsUsagepChart();
-        $line .= "</td></tr></table>";
 
         return $line;
     }
@@ -652,8 +598,12 @@ class module_controller {
         $total = $numtotalrecords;
         $active = $numactiverecords;
         $deleted = $total - $active;
-        $line = "<h2>DNS Database Usage</h2>";
-        $line .= "<img src=\"etc/lib/pChart2/zpanel/z3DPie.php?score=" . $active . "::" . $deleted . "&labels=Active Domain Records:   " . $active . "::Deleted Domain Records: " . $deleted . "&legendfont=verdana&legendfontsize=8&imagesize=240::190&chartsize=120::90&radius=100&legendsize=10::160\"/>";
+        $line .= "<div class=\"row-fluid\">";
+        $line .= "<div class=\"span6\">";
+        $line .= "<fieldset>";
+        $line .= "<legend class=\"module-legend\">DNS Database Usage</legend>";
+        $line .= "<div class=\"text-center\"><img src=\"etc/lib/pChart2/zpanel/z3DPie.php?score=" . $active . "::" . $deleted . "&labels=Active Domain Records:   " . $active . "::Deleted Domain Records: " . $deleted . "&legendfont=verdana&legendfontsize=8&imagesize=240::190&chartsize=120::90&radius=100&legendsize=10::160\"/></div>";
+        $line .= "</fieldset></div>";
         return $line;
     }
 
@@ -721,8 +671,11 @@ class module_controller {
         $SRVrecords = $numSRVrecords;
         $SPFrecords = $numSPFrecords;
         $NSrecords = $numNSrecords;
-        $line = "<h2>Record Types Usage</h2>";
-        $line .= "<img src=\"etc/lib/pChart2/zpanel/z3DPie.php?score=" . $Arecords . "::" . $NSrecords . "::" . $MXrecords . "::" . $SPFrecords . "::" . $TXTrecords . "::" . $SRVrecords . "::" . $CNAMErecords . "::" . $AAAArecords . "&labels=A: " . $Arecords . "::NS: " . $NSrecords . "::MX: " . $MXrecords . "::SPF: " . $SPFrecords . "::TXT: " . $TXTrecords . "::SRV: " . $SRVrecords . "::CNAME: " . $CNAMErecords . "::AAAA: " . $AAAArecords . "&legendfont=verdana&legendfontsize=8&imagesize=340::190&chartsize=120::90&radius=100&legendsize=240::80\"/>";
+        $line .= "<div class=\"span6\">";
+        $line .= "<fieldset>";
+        $line .= "<legend class=\"module-legend\">Record Types Usage</legend>";
+        $line .= "<div class=\"text-center\"><img src=\"etc/lib/pChart2/zpanel/z3DPie.php?score=" . $Arecords . "::" . $NSrecords . "::" . $MXrecords . "::" . $SPFrecords . "::" . $TXTrecords . "::" . $SRVrecords . "::" . $CNAMErecords . "::" . $AAAArecords . "&labels=A: " . $Arecords . "::NS: " . $NSrecords . "::MX: " . $MXrecords . "::SPF: " . $SPFrecords . "::TXT: " . $TXTrecords . "::SRV: " . $SRVrecords . "::CNAME: " . $CNAMErecords . "::AAAA: " . $AAAArecords . "&legendfont=verdana&legendfontsize=8&imagesize=340::190&chartsize=120::90&radius=100&legendsize=240::80\"/></div>";
+        $line .= "</fieldset></div></div>";
         return $line;
     }
 
@@ -833,8 +786,8 @@ class module_controller {
 															dn_weight_in,
 															dn_port_in,
 															dn_created_ts) VALUES (
-															:userID,
-															:vh_name_vc,
+															userID,
+															vh_name_vc,
 															:domainID,
 															'A',
 															'mail',
@@ -1036,28 +989,28 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your settings have been saved successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your settings have been saved successfully!"), "alert-success");
         }
         if (!fs_director::CheckForEmptyValue(self::$notwritable)) {
-            return ui_sysmessage::shout(ui_language::translate("No permission to write to log file."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("No permission to write to log file."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$forceupdate)) {
-            return ui_sysmessage::shout(ui_language::translate("All zone records will be updated on next daemon run."), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("All zone records will be updated on next daemon run."), "alert-success");
         }
         if (!fs_director::CheckForEmptyValue(self::$reset)) {
-            return ui_sysmessage::shout(number_format(self::$reset) . " " . ui_language::translate("Domains records where reset to default"), "zannounceok");
+            return ui_sysmessage::shout(number_format(self::$reset) . " " . ui_language::translate("Domains records where reset to default"), "alert-success");
         }
         if (!fs_director::CheckForEmptyValue(self::$addmissing)) {
-            return ui_sysmessage::shout(number_format(self::$addmissing) . " " . ui_language::translate("Domains records were created"), "zannounceok");
+            return ui_sysmessage::shout(number_format(self::$addmissing) . " " . ui_language::translate("Domains records were created"), "alert-success");
         }
         if (!fs_director::CheckForEmptyValue(self::$deletedtype)) {
-            return ui_sysmessage::shout(number_format(self::$deletedtype) . " '" . self::$type . "' " . ui_language::translate("Records where marked as deleted from the database"), "zannounceok");
+            return ui_sysmessage::shout(number_format(self::$deletedtype) . " '" . self::$type . "' " . ui_language::translate("Records where marked as deleted from the database"), "alert-success");
         }
         if (!fs_director::CheckForEmptyValue(self::$deleted)) {
-            return ui_sysmessage::shout(number_format(self::$deleted) . " " . ui_language::translate("Records where marked as deleted from the database"), "zannounceok");
+            return ui_sysmessage::shout(number_format(self::$deleted) . " " . ui_language::translate("Records where marked as deleted from the database"), "alert-success");
         }
         if (!fs_director::CheckForEmptyValue(self::$purged)) {
-            return ui_sysmessage::shout(number_format(self::$purged) . " " . ui_language::translate("Records where purged from the database"), "zannounceok");
+            return ui_sysmessage::shout(number_format(self::$purged) . " " . ui_language::translate("Records where purged from the database"), "alert-success");
         }
         return;
     }

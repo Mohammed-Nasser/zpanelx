@@ -45,7 +45,7 @@ function WriteDNSZoneRecordsHook() {
         $sql = "SELECT COUNT(*) FROM x_dns WHERE dn_vhost_fk=:dnsrecord AND dn_deleted_ts IS NULL";
         $numrows = $zdbh->prepare($sql);
         $numrows->bindParam(':dnsrecord', $dnsrecord);
-
+       
         if ($numrows->execute()) {
             if ($numrows->fetchColumn() <> 0) {
                 $sql = $zdbh->prepare("SELECT * FROM x_dns WHERE dn_vhost_fk=:dnsrecord AND dn_deleted_ts IS NULL ORDER BY dn_type_vc");
@@ -65,8 +65,8 @@ function WriteDNSZoneRecordsHook() {
                 $zone_file = (ctrl_options::GetSystemOption('zone_dir')) . $domain['dn_name_vc'] . ".txt";
                 $line = "$" . "TTL 10800" . fs_filehandler::NewLine();
                 $line .= "@ IN SOA " . $domain['dn_name_vc'] . ".    ";
-                $line .= "postmaster." . $domain['dn_name_vc'] . ". (" . fs_filehandler::NewLine();
-                $line .= "                       " . date("Ymdt") . "	;serial" . fs_filehandler::NewLine();
+                $line .= "postmaster@" . $domain['dn_name_vc'] . ". (" . fs_filehandler::NewLine();
+                $line .= "                       " . time() . "	;serial" . fs_filehandler::NewLine();
                 $line .= "                       " . ctrl_options::GetSystemOption('refresh_ttl') . "      ;refresh after 6 hours" . fs_filehandler::NewLine();
                 $line .= "                       " . ctrl_options::GetSystemOption('retry_ttl') . "       ;retry after 1 hour" . fs_filehandler::NewLine();
                 $line .= "                       " . ctrl_options::GetSystemOption('expire_ttl') . "     ;expire after 1 week" . fs_filehandler::NewLine();
@@ -79,7 +79,7 @@ function WriteDNSZoneRecordsHook() {
                         $line .= $rowdns['dn_host_vc'] . "		" . $rowdns['dn_ttl_in'] . "		IN		AAAA		" . $rowdns['dn_target_vc'] . fs_filehandler::NewLine();
                     }
                     if ($rowdns['dn_type_vc'] == "CNAME") {
-                        $line .= $rowdns['dn_host_vc'] . "              " . $rowdns['dn_ttl_in'] . "            IN              CNAME           " . $rowdns['dn_target_vc'] . ($rowdns['dn_target_vc'] == '@' ? '' : '.') . fs_filehandler::NewLine();
+                        $line .= $rowdns['dn_host_vc'] . "		" . $rowdns['dn_ttl_in'] . "		IN		CNAME		" . $rowdns['dn_target_vc'] . fs_filehandler::NewLine();
                     }
                     if ($rowdns['dn_type_vc'] == "MX") {
                         $line .= $rowdns['dn_host_vc'] . "		" . $rowdns['dn_ttl_in'] . "		IN		MX		" . $rowdns['dn_priority_in'] . "	" . $rowdns['dn_target_vc'] . "." . fs_filehandler::NewLine();

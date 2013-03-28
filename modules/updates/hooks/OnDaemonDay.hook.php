@@ -7,10 +7,10 @@
  */
 echo fs_filehandler::NewLine() . "START ZPanel Updates hook" . fs_filehandler::NewLine();
 echo "Checking for latest version of ZPanel..." . fs_filehandler::NewLine();
-CheckZPanelLatestVersion();
+CheckZPanelLAtestVersion();
 echo "END ZPanel Updates hook" . fs_filehandler::NewLine();
 
-function CheckZPanelLatestVersion() {
+function CheckZPanelLAtestVersion() {
     // Grab the latest version of ZPanel from the ZPanel API servers and cache it into the database.
     $live_version = ws_generic::ReadURLRequestResult(ctrl_options::GetSystemOption('update_url'));
     if (!$live_version)

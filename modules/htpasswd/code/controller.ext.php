@@ -464,16 +464,16 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$blank)) {
-            return ui_sysmessage::shout(ui_language::translate("You need to specify a user name and password."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You need to specify a user name and password."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$nomatch)) {
-            return ui_sysmessage::shout(ui_language::translate("Your passwords do not match!"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your passwords do not match!"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$nowrite)) {
-            return ui_sysmessage::shout(ui_language::translate("Cannot write to that directory! Check your permissions."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Cannot write to that directory! Check your permissions."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Your directory has been protected successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Your directory has been protected successfully!"), "alert-success");
         }
         return;
     }

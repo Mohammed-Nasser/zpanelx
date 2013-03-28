@@ -129,13 +129,13 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$blank)) {
-            return ui_sysmessage::shout(ui_language::translate("You must fill out all fields!"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You must fill out all fields!"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$emailerror)) {
-            return ui_sysmessage::shout(ui_language::translate("Your email address is not valid!"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your email address is not valid!"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your account settings have been saved successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your account settings have been saved successfully!"), "alert-success");
         }
         return;
     }

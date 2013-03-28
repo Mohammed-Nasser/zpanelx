@@ -29,7 +29,7 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     
 }
@@ -37,12 +37,12 @@ try {
 // Deleting Postfix Alias
 if (!fs_director::CheckForEmptyValue(self::$delete)) {
     //$result = $mail_db->query("SELECT address FROM alias WHERE address='" . $rowalias['al_address_vc'] . "'")->Fetch();
-
+    
     $bindArray = NULL;
     $bindArray = array(':aliasname' => $rowalias['al_address_vc']);
     $sqlStatment = $mail_db->bindQuery("SELECT address FROM alias WHERE address=:aliasname", $bindArray);
     $result = $mail_db->returnRow();
-
+    
     if ($result) {
         $sqlStatment = "DELETE FROM alias WHERE address=:address";
         $sql = $mail_db->prepare($sqlStatment);
@@ -54,12 +54,12 @@ if (!fs_director::CheckForEmptyValue(self::$delete)) {
 // Adding Postfix Alias
 if (!fs_director::CheckForEmptyValue(self::$create)) {
     //$result = $mail_db->query("SELECT address FROM alias WHERE address='" . $fulladdress . "'")->Fetch();
-
+    
     $bindArray = NULL;
     $bindArray = array(':address' => $fulladdress);
     $sqlStatment = $mail_db->bindQuery("SELECT address FROM alias WHERE address=:address", $bindArray);
     $result = $mail_db->returnRow();
-
+    
     if (!$result) {
         $sqlStatment2 = "INSERT INTO alias  (address,
 										 	goto,

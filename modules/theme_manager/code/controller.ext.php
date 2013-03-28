@@ -176,12 +176,17 @@ class module_controller {
         $currentuser = ctrl_users::GetUserDetail();
         $urlvars = $controller->GetAllControllerRequests('URL');
         if (isset($urlvars['saved'])) {
-            return ui_sysmessage::shout(ui_language::translate("Your theme configuration has been saved and has been updated for all clients!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Your theme configuration has been saved and has been updated for all clients!"), "alert-success");
         }
         if (isset($urlvars['selectcss'])) {
-            return ui_sysmessage::shout(ui_language::translate("This theme has more than one variation, please choose a variation you'd like to use.."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("This theme has more than one variation, please choose a variation you'd like to use.."), "alert-error");
         }
         return false;
+    }
+
+    static function getModuleDesc() {
+        $message = ui_language::translate(ui_module::GetModuleDescription());
+        return $message;
     }
 
     static function getCSFR_Tag() {

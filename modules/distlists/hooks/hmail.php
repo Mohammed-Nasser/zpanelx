@@ -29,7 +29,7 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     
 }
@@ -40,7 +40,7 @@ foreach ($deletedclients as $deletedclient) {
     $numrows = $zdbh->prepare($sql);
     $numrows->bindParam(':deletedclient', $deletedclient);
     $numrows->execute();
-
+    
     if ($numrows->fetchColumn() <> 0) {
         $sql = $zdbh->prepare($sql);
         $sql->bindParam(':deletedclient', $deletedclient);

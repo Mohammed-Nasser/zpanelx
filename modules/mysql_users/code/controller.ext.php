@@ -418,36 +418,18 @@ class module_controller {
         return true;
     }
 
-    static function ExecuteRemoveDB($myuserid, $mapid) { // <-- mmid = dbmaps
+ static function ExecuteRemoveDB($myuserid, $mapid) { // <-- mmid = dbmaps
         global $zdbh;
         runtime_hook::Execute('OnBeforeRemoveDatabaseAccess');
-     
-        $numrows = $zdbh->prepare("SELECT * FROM x_mysql_dbmap WHERE mm_id_pk=:mapid");
-        $numrows->bindParam(':mapid', $mapid);
-        $numrows->execute();
-        $rowdbmap = $numrows->fetch();
-     
-        $numrows = $zdbh->prepare("SELECT * FROM x_mysql_databases WHERE my_id_pk=:mm_database_fk AND my_deleted_ts IS NULL");
-        $numrows->bindParam(':mm_database_fk', $rowdbmap['mm_database_fk']);
-        $numrows->execute();
-        $rowdb = $numrows->fetch();
-       
-        $numrows = $zdbh->prepare("SELECT * FROM x_mysql_users WHERE mu_id_pk=:myuserid AND mu_deleted_ts IS NULL");
-        $numrows->bindParam(':myuserid', $myuserid);
-        $numrows->execute();
-        $rowuser = $numrows->fetch();
-
+        $rowdbmap = $zdbh->query("SELECT * FROM x_mysql_dbmap WHERE mm_id_pk=" . $mapid . "")->fetch();
+        $rowdb = $zdbh->query("SELECT * FROM x_mysql_databases WHERE my_id_pk=" . $rowdbmap['mm_database_fk'] . " AND my_deleted_ts IS NULL")->fetch();
+        $rowuser = $zdbh->query("SELECT * FROM x_mysql_users WHERE mu_id_pk=" . $myuserid . " AND mu_deleted_ts IS NULL")->fetch();
         $sql = $zdbh->prepare("REVOKE ALL PRIVILEGES ON `" . $rowdb['my_name_vc'] . "`.* FROM '" . $rowuser['mu_name_vc'] . "'@'" . $rowuser['mu_access_vc'] . "'");
         $sql->execute();
-        
         $sql = $zdbh->prepare("FLUSH PRIVILEGES");
         $sql->execute();
-
-        $sql = $zdbh->prepare("DELETE FROM x_mysql_dbmap WHERE mm_id_pk=:mapid AND mm_user_fk=:myuserid");
-        $sql->bindParam(':mapid', $mapid);
-        $sql->bindParam(':myuserid', $myuserid);
+        $sql = $zdbh->prepare("DELETE FROM x_mysql_dbmap WHERE mm_id_pk=" . $mapid . " AND mm_user_fk=" . $myuserid . "");
         $sql->execute();
-
         runtime_hook::Execute('OnAfterRemoveDatabaseAccess');
         self::$ok = true;
         return true;
@@ -685,28 +667,28 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$blank)) {
-            return ui_sysmessage::shout(ui_language::translate("You need to specify a user name and select a database to create your MySQL user."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You need to specify a user name and select a database to create your MySQL user."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$rootabuse)) {
-            return ui_sysmessage::shout(ui_language::translate("You cannot create a user named 'root'! This attempt has been logged and the system administrator notified!."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You cannot create a user named 'root'! This attempt has been logged and the system administrator notified!."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$alreadyexists)) {
-            return ui_sysmessage::shout(ui_language::translate("A MySQL username with that name already appears to exsist."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("A MySQL username with that name already appears to exsist."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$badname)) {
-            return ui_sysmessage::shout(ui_language::translate("Your MySQL user name is not valid. Please enter a valid MySQL user name."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your MySQL user name is not valid. Please enter a valid MySQL user name."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$badpass)) {
-            return ui_sysmessage::shout(ui_language::translate("Your MySQL password is not valid. Valid characters are A-Z, a-z, 0-9."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your MySQL password is not valid. Valid characters are A-Z, a-z, 0-9."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$badIP)) {
-            return ui_sysmessage::shout(ui_language::translate("The IP address is not valid. Please enter a valid IP address."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("The IP address is not valid. Please enter a valid IP address."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$dbalreadyadded)) {
-            return ui_sysmessage::shout(ui_language::translate("That database has already been added to this user."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("That database has already been added to this user."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your MySQL users have been saved successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your MySQL users have been saved successfully!"), "alert-success");
         }
         return;
     }

@@ -30,7 +30,7 @@ class module_controller {
     static $delete;
     static $ok;
 
-    public static function getFAQS() {
+    function getFAQS() {
         global $zdbh;
         $sql = "SELECT * FROM x_faqs WHERE fq_question_tx IS NOT NULL AND fq_deleted_ts IS NULL";
         $numrows = $zdbh->query($sql);
@@ -52,7 +52,7 @@ class module_controller {
         }
     }
 
-    public function ListCurrentFAQ($fid) {
+    function ListCurrentFAQ($fid) {
         global $zdbh;
         $sql = "SELECT * FROM x_faqs WHERE fq_id_pk=:fid IS NOT NULL AND fq_deleted_ts IS NULL";
         //$numrows = $zdbh->query($sql);
@@ -78,7 +78,7 @@ class module_controller {
         }
     }
 
-    public static function getUserFAQS() {
+    function getUserFAQS() {
         global $zdbh;
         global $controller;
         $currentuser = ctrl_users::GetUserDetail();
@@ -112,7 +112,7 @@ class module_controller {
         }
     }
 
-    public static function getAddFAQS() {
+    function getAddFAQS() {
         global $controller;
         $currentuser = ctrl_users::GetUserDetail();
         if ($currentuser['usergroup'] == "Administrators" || $currentuser['usergroup'] == "Resellers") {
@@ -235,13 +235,13 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$error)) {
-            return ui_sysmessage::shout(ui_language::translate("You need to enter a question and an answer to add a FAQ item!"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You need to enter a question and an answer to add a FAQ item!"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$delete)) {
-            return ui_sysmessage::shout(ui_language::translate("FAQ item was deleted successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("FAQ item was deleted successfully!"), "alert-success");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("FAQ item was added successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("FAQ item was added successfully!"), "alert-success");
         }
         return;
     }

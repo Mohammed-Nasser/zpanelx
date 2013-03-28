@@ -29,7 +29,7 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     
 }
@@ -51,7 +51,7 @@ foreach ($deletedclients as $deletedclient) {
             $numrows->bindParam(':dl_address_vc', $rowmailbox['dl_address_vc']);
             $numrows->execute();
             $result = $numrows->fetch();
-
+            
             if ($result) {
                 $msql = "DELETE FROM alias WHERE address=:dl_address_vc";
                 $msql = $mail_db->prepare($msql);

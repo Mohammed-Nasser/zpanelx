@@ -1,56 +1,101 @@
-<div class="zmodule_header" id="zmodule_header_<@ ModuleName @>"><img src="<@ ModuleIcon @>" border="0"><@ ModuleName @></div>
-<div class="zmodule_content" id="zmodule_header_<@ ModuleName @>">
+<div class="module-header">
+  <h1 class="module-title">
+    <img src="<@ ModuleIcon @>" border="0">
+    <@ ModuleName @>
+  </h1>
+</div>
 
-    <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><p><@ ModuleDesc @></p></div>
-    <@ Result @>
+<div class="module-desc">
+  <@ ModuleDesc @>
+</div>
 
-    <% loop AccountSettings %>
-    <% endloop %>
+<div class="container-fluid module-content">
 
-    <div class="zform_wrapper">
-        <h2><: Enter your account details :></h2>
-        <form action="./?module=my_account&action=UpdateAccountSettings" method="post">
-            <table class="zform">
-                <tr>
-                    <th><: Full name :>:</th>
-                    <td><input name="inFullname" type="text" id="inFullname" size="40" value="<& fullname &>" /></td>
-                </tr>
-                <tr>
-                    <th><: Email Address :>:</th>
-                    <td><input name="inEmail" type="text" id="inEmail" size="40" value="<& email &>" /></td>
-                </tr>
-                <tr>
-                    <th><: Phone Number :>:</th>
-                    <td><input name="inPhone" type="text" id="inPhone" size="20" value="<& phone &>" /></td>
-                </tr>
-                <tr>
-                    <th><: Choose Language :>:</th>
-                    <td>
-                        <select name="inLanguage" id="inLanguage" style="width:50px;">
+  <@ Result @>
 
-                            <% loop LangList %>
-                            <option value="<& language &>" <& selected &>><& language &></option>"
-                            <% endloop %>
+  <% loop AccountSettings %>
+  <% endloop %>
 
-                        </select>
-                    </td>
-                </tr>
-                <% loop AccountSettings %>
-                <% endloop %>
-                <tr>
-                    <th><: Postal Address :>:</th>
-                    <td><textarea name="inAddress" id="inAddress" cols="45" rows="5"><& address &></textarea></td>
-                </tr>
-                <tr>
-                    <th><: Postal Code :>:</th>
-                    <td><input name="inPostalCode" type="text" id="inPostalCode" size="15" value="<& postcode &>" /></td>
-                </tr>
-                <tr>
-                    <th>&nbsp;</th>
-                    <td align="right"><@ CSFR_Tag @><button class="fg-button ui-state-default ui-corner-all" id="button" type="submit" ><: Update Account :></button</td>
-                </tr>	
-            </table>
-        </form>
-    </div>
+  <form class="form-horizontal" action="./?module=my_account&action=UpdateAccountSettings" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Enter Your Account Details :>
+      </legend>
+ 
+      <div class="control-group">
+        <label class="control-label" for="inFullname">
+          <: Full Name :>:
+        </label>
+        <div class="controls">
+          <input required type="text" id="inFullname" name="inFullname" value="<& fullname &>">
+        </div>
+      </div>
+ 
+      <div class="control-group">
+        <label class="control-label" for="inEmail">
+          <: Email Address :>:
+        </label>
+        <div class="controls">
+          <input required type="email" id="inEmail" name="inEmail" value="<& email &>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inPhone">
+          <: Phone Number :>:
+        </label>
+        <div class="controls">
+          <input required type="tel" id="inPhone" name="inPhone" value="<& phone &>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inLanguage">
+          <: Country :>:
+        </label>
+        <div class="controls">
+          <select required name="inLanguage" id="inLanguage">
+            <% loop LangList %>
+              <option value="<& language &>" <& selected &>><& language &></option>"
+            <% endloop %>
+          </select>
+        </div>
+      </div>
+
+  <% loop AccountSettings %>
+  <% endloop %>
+
+      <div class="control-group">
+        <label class="control-label" for="inAddress">
+          <: Postal Address :>:
+        </label>
+        <div class="controls">
+          <textarea required id="inAddress" name="inAddress" rows="3"><& address &></textarea>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inPostalCode">
+          <: Postal Code :>:
+        </label>
+        <div class="controls">
+          <input required type="text" id="inPostalCode" name="inPostalCode" value="<& postcode &>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn load-button" type="submit">
+           <: Update Account :>
+          </button>
+        </div>
+      </div>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
 
 </div>

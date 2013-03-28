@@ -1,136 +1,206 @@
-<div class="zmodule_header" id="zmodule_header_<@ ModuleName @>"><img src="<@ ModuleIcon @>" border="0"><@ ModuleName @></div>
-<div class="zmodule_content" id="zmodule_header_<@ ModuleName @>">
+<div class="module-header">
+  <h1 class="module-title">
+    <img src="<@ ModuleIcon @>" border="0">
+    <@ ModuleName @>
+  </h1>
+</div>
 
-    <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><p><: This module enables you to manage user groups for your client, User groups enable you to control what modules your users can see and access.  :></p></div>
+<div class="module-desc">
+  <@ ModuleDesc @>
+</div>
 
-    <% if isDeleteGroup %>
-    <div class="zform_wrapper">
-        <h2><: Delete user group :>: <@ EditCurrentName @> ?</h2>
-        <% if GroupMoveToList %>
-        <: Please confirm and choose a group to move any existing clients to before the selected group is deleted. :>
-        <% else %>
-        <: Please confirm that you want to delete this group. :>
-        <% endif %>
-        <p>&nbsp;</p>
-        <form action="./?module=manage_groups&action=DeleteGroup" method="post">
-            <table class="zform">
-                <% if GroupMoveToList %>
-                <tr>
-                    <th><: Move current group members to :>:</th>
-                    <td><select name="inMoveGroup" id="inMoveGroup">
-                            <% loop GroupMoveToList %>
-                            <option value="<& groupid &>"><& groupname &></option>"
-                            <% endloop %>
-                        </select>
-                    </td>
-                </tr>
-                <% endif %>
-                <tr>
-                    <th colspan="2" align="right">
-                        <input type="hidden" name="inGroupID" value="<@ CurrentID @>">
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" ><: Delete :></button>
-                        <button class="fg-button ui-state-default ui-corner-all type="button" onclick="window.location.href='./?module=manage_groups';return false;"><: Cancel :></button>
-                    </th>
-                </tr>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
-    <% endif %>
+<div class="container-fluid module-content">
 
-    <div class="zgrid_wrapper">
-        <% if DefaultGroupList %>
-        <h2><: Default user groups :></h2>
-        <table class="zgrid">
-            <tr>
-                <th><: Group :></th>
-                <th nowrap="nowrap"><: Users :></th>
-                <th><: Description  :></th>
-                <th></th>
-            </tr>
-            <% loop DefaultGroupList %>
-            <tr>
-                <td><& groupname &></td>
-                <td><& usersingroup &></td>
-                <td><& groupdesc &></td>
-                <td nowrap="nowrap"></td>
-            </tr>
+  <% if isDeleteGroup %>
+  <form class="form-horizontal" action="./?module=manage_groups&action=DeleteGroup" method="post">
+  
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Delete User Group :>: <@ EditCurrentName @> ?
+      </legend>
+
+      <% if GroupMoveToList %>
+      <p><: Please confirm and choose a group to move any existing clients to before the selected group is deleted. :></p>
+      <% else %>
+      <p><: Please confirm that you want to delete this group. :></p>
+      <% endif %>
+
+      <% if GroupMoveToList %>
+      <div class="control-group">
+        <label class="control-label" for="inMoveGroup">
+          <: Move To :>:
+        </label>
+        <div class="controls">
+          <select required name="inMoveGroup" id="inMoveGroup">
+            <% loop GroupMoveToList %>
+            <option value="<& groupid &>"><& groupname &></option>"
             <% endloop %>
-        </table>
-        <% endif %>
-        <h2><: Current user groups :></h2>
-        <% if GroupList %>
-        <form action="./?module=manage_groups&action=EditGroup" method="post">
-            <table class="zgrid">
-                <tr>
-                    <th><: Group :></th>
-                    <th nowrap="nowrap"><: Users :></th>
-                    <th><: Description  :></th>
-                    <th></th>
-                </tr>
-                <% loop GroupList %>
-                <tr>
-                    <td><& groupname &></td>
-                    <td><& usersingroup &></td>
-                    <td><& groupdesc &></td>
-                    <td nowrap="nowrap"><button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inEdit_<& groupid &>" id="inEdit_<& groupid &>" value="inEdit_<& groupid &>">Edit</button><button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inDelete_<& groupid &>" id="inDelete_<& groupid &>" value="inDelete_<& groupid &>">Delete</button></td>
-                </tr>
-                <% endloop %>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-        <% else %>
-        <p><: There are currently no custom user groups configured! :></p>
-        <% endif %>
-    </div>
+          </select>
+          <p class="help-block">This will merge all reseller clients and packages (if they exist) to this user upon deletion of the parent account (<@ EditCurrentName @>).</p>
+        </div>
+      </div>
+      <% endif %>
 
-    <% if isCreateGroup %>
-    <div class="zform_wrapper">
-        <h2><: Create new user group :></h2>
-        <form action="./?module=manage_groups&action=CreateGroup" method="post">
-            <table class="zform">
-                <tr>
-                    <th><: Group name :>:</th>
-                    <td><input name="inGroupName" type="text" id="inGroupName" size="30" /></td>
-                </tr>
-                <tr>
-                    <th><: Description :>:</th>
-                    <td><input name="inDesc" type="text" id="inDesc" size="30" /></td>
-                </tr>
-                <tr>
-                    <th colspan="2" align="right">
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" ><: Create :></button>
-                    </th>
-                </tr>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
-    <% endif %>
+      <div class="control-group">
+        <div class="controls">
+          <input type="hidden" name="inGroupID" value="<@ CurrentID @>">
+          <button class="btn load-button" type="submit"><: Delete :></button>
+          <button class="btn" onclick="window.location.href='./?module=manage_groups';return false;"><: Cancel :></button>
+        </div>
+      </div>
 
-    <% if isEditGroup %>
-    <div class="zform_wrapper">
-        <h2><: Edit user group :></h2>
-        <form action="./?module=manage_groups&action=UpdateGroup" method="post">
-            <table class="zform">
-                <tr>
-                    <th><: Group name :>:</th>
-                    <td><input name="inGroupName" type="text" id="inGroupName" size="30" value="<@ EditCurrentName @>" /></td>
-                </tr>
-                <tr>
-                    <th><: Description :>:</th>
-                    <td><input name="inDesc" type="text" id="inDesc" size="30"  value="<@ EditCurrentDesc @>" /></td>
-                </tr>
-                <tr>
-                    <th colspan="2" align="right">
-                        <input type="hidden" name="inGroupID" value="<@ CurrentID @>">
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" ><: Save :></button>
-                    </th>
-                </tr>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
-    <% endif %>
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+  <% endif %>
+
+  <% if isEditGroup %>
+  <form class="form-horizontal" action="./?module=manage_groups&action=UpdateGroup" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Edit User Group :>
+      </legend>
+
+      <div class="control-group">
+        <label class="control-label" for="inGroupName">
+          <: Group Name :>:
+        </label>
+        <div class="controls">
+          <input required name="inGroupName" type="text" id="inGroupName" value="<@ EditCurrentName @>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inDesc">
+          <: Description :>:
+        </label>
+        <div class="controls">
+          <input required name="inDesc" type="text" id="inDesc" value="<@ EditCurrentDesc @>">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <input type="hidden" name="inGroupID" value="<@ CurrentID @>">
+          <button class="btn load-button" type="submit"><: Save :></button>&nbsp;&nbsp;&nbsp;
+          <button class="btn" onclick="window.location.href='./?module=manage_groups';return false;"><: Cancel :></button>
+        </div>
+      </div>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+  <% endif %>
+
+  <% if DefaultGroupList %>
+  <legend class="module-legend">
+    <: Default User Groups :>
+  </legend>
+
+  <table class="table table-striped" id="no-more-tables">
+    <thead>
+      <th><: Group :></th>
+      <th><: Users :></th>
+      <th><: Description :></th>
+    </thead>
+
+    <tbody>
+    <% loop DefaultGroupList %>
+      <tr>
+        <td data-title="<: Group :>"><& groupname &></td>
+        <td data-title="<: Users :>"><& usersingroup &></td>
+        <td data-title="<: Description :>"><& groupdesc &></td>
+      </tr>
+    <% endloop %>
+    </tbody>
+  </table>
+  <% endif %>
+
+  <form action="./?module=manage_groups&action=EditGroup" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Custom User Groups :>
+      </legend>
+
+      <% if GroupList %>
+
+      <table class="table table-striped" id="no-more-tables">
+        <thead>
+          <th><: Group :></th>
+          <th><: Users :></th>
+          <th><: Description :></th>
+        </thead>
+
+        <tbody>
+        <% loop GroupList %>
+          <tr>
+            <td data-title="<: Group :>"><& groupname &></td>
+            <td data-title="<: Users :>"><& usersingroup &></td>
+            <td data-title="<: Description :>"><& groupdesc &></td>
+            <td>
+              <button class="btn" type="submit" name="inEdit_<& groupid &>" id="inEdit_<& groupid &>" value="inEdit_<& groupid &>">Edit</button>
+            </td>
+            <td>
+              <button class="btn" type="submit" name="inDelete_<& groupid &>" id="inDelete_<& groupid &>" value="inDelete_<& groupid &>">Delete</button>
+            </td>
+          </tr>
+        <% endloop %>
+        </tbody>
+      </table>
+
+      <% else %>
+      <p><: There are currently no custom user groups configured! :></p>
+      <% endif %>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+
+  <% if isCreateGroup %>
+  <form class="form-horizontal" action="./?module=manage_groups&action=CreateGroup" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Create New Custom User Group :>
+      </legend>
+
+      <div class="control-group">
+        <label class="control-label" for="inGroupName">
+          <: Group Name :>:
+        </label>
+        <div class="controls">
+          <input required name="inGroupName" type="text" id="inGroupName" placeholder="Group Name">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inDesc">
+          <: Description :>:
+        </label>
+        <div class="controls">
+          <input required name="inDesc" type="text" id="inDesc" placeholder="Description">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn load-button" type="submit"><: Create :></button>
+        </div>
+      </div>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+  <% endif %>
 
 </div>

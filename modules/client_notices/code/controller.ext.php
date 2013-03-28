@@ -89,7 +89,12 @@ class module_controller {
         header("location: ./?module=" . $controller->GetCurrentModule() . "&saved=true");
         exit;
     }
-    
+
+    static function getModuleDesc() {
+        $message = ui_language::translate(ui_module::GetModuleDescription());
+        return $message;
+    }
+
     static function getCSFR_Tag() {
         return runtime_csfr::Token();
     }

@@ -641,22 +641,22 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$blank)) {
-            return ui_sysmessage::shout(ui_language::translate("You need to specify a package name to create your package."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You need to specify a package name to create your package."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$badname)) {
-            return ui_sysmessage::shout(ui_language::translate("Your package name is not valid. Please enter a valid package name."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your package name is not valid. Please enter a valid package name."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$alreadyexists)) {
-            return ui_sysmessage::shout(ui_language::translate("A package with that name already appears to exsist."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("A package with that name already appears to exsist."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$error)) {
-            return ui_sysmessage::shout(ui_language::translate("There was an error updating your packages"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("There was an error updating your packages"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$samepackage)) {
-            return ui_sysmessage::shout(ui_language::translate("You cant move clients to the same package you are deleting!"), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("You cant move clients to the same package you are deleting!"), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your packages have been saved successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your packages have been saved successfully!"), "alert-success");
         }
         return;
     }

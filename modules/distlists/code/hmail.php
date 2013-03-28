@@ -29,7 +29,7 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     
 }
@@ -110,7 +110,7 @@ if (!fs_director::CheckForEmptyValue(self::$delete)) {
 if (!fs_director::CheckForEmptyValue(self::$deleteuser)) {
     //$result = $mail_db->query("SELECT distributionlistid FROM hm_distributionlists WHERE distributionlistaddress='" . $rowdl['dl_address_vc'] . "'")->Fetch();    
     $numrows = $mail_db->prepare("SELECT distributionlistid FROM hm_distributionlists WHERE distributionlistaddress=:dl_address_vc");
-    $numrows->bindParam(':dl_address_vc', $rowdl['dl_address_vc']);
+    $numrows->bindParam(':dl_address_vc', $rowdl['dl_address_vc'] );
     $numrows->execute();
     $result = $numrows->fetch();
     if ($result) {

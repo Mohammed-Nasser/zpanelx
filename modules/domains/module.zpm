@@ -1,103 +1,154 @@
-<div class="zmodule_header" id="zmodule_header_<@ ModuleName @>"><img src="<@ ModuleIcon @>" border="0"><@ ModuleName @></div>
-<div class="zmodule_content" id="zmodule_header_<@ ModuleName @>">
+<div class="module-header">
+  <h1 class="module-title">
+    <img src="<@ ModuleIcon @>">
+    <@ ModuleName @>
+  </h1>
+</div>
 
-    <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><p><@ ModuleDesc @></p></div>
-    <@ Result @>
+<div class="module-desc">
+  <@ ModuleDesc @>
+</div>
 
-    <% if isDeleteDomain %>
-    <div class="zform_wrapper">
-        <h2><: Delete :>: <@ CurrentDomain @>?</h2>
-        <p><: Please confirm that you want to delete this domain. :></p>
-        <form action="./?module=domains&action=DeleteDomain" method="post">
-            <table class="none" cellpadding="0" cellspacing="0">
-                <tr>
-                    <td colspan="2" align="right">
-                        <input type="hidden" name="inDelete" value="<@ CurrentID @>">
-                        <button class="fg-button ui-state-default ui-corner-all" type="submit" ><: Delete :></button>
-                        <button class="fg-button ui-state-default ui-corner-all" type="button" onclick="window.location.href='./?module=domains';return false;"><: Cancel :></button>
-                    </td>
-                </tr>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-    </div>
-    <% endif %>
+<div class="container-fluid module-content">
 
-    <div class="zgrid_wrapper">
-        <h2><: Current domains :></h2>
-        <% if DomainList %>
-        <form action="./?module=domains&action=ConfirmDeleteDomain" method="post">
-            <table class="zgrid">
-                <tr>
-                    <th><: Domain name :></th>
-                    <th><: Home directory :></th>
-                    <th><: Status :></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <% loop DomainList %>
-                <tr>
-                    <td><a href="http://<& name &>/" target="_blank"><& name &></a></td>
-                    <td><& directory &></td>
-                    <& status &>
-                    <td><button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="inDelete_<& id &>" id="inDelete_<& id &>" value="inDelete_<& id &>"><: Delete :></button></td>
-                </tr>			
-                <% endloop %>
-            </table>
-            <@ CSFR_Tag @>
-        </form>
-        <% else %>
-        <: You currently do not have any domains configured. Create a domain using the form below. :>
-        <% endif %>
-    </div>
+  <script>window.jQuery || document.write('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">\x3C<\/script>')</script>
 
-    <div class="zform_wrapper">
-        <table class="none" width="100%" cellborder="0" cellspacing="0">
-        <tr valign="top">
+  <@ Result @>
+
+  <% if isDeleteDomain %>
+  <form class="form-horizontal" action="./?module=domains&action=DeleteDomain" method="post">
+  
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Delete :>: <@ CurrentDomain @>?
+      </legend>
+
+      <p><: Please confirm that you want to delete this domain. :></p>
+
+      <div class="control-group">
+          <input type="hidden" name="inDelete" value="<@ CurrentID @>">
+          <button class="btn load-button" type="submit"><: Delete :></button>&nbsp;&nbsp;&nbsp;
+          <button class="btn" onclick="window.location.href='./?module=domains';return false;"><: Cancel :></button>
+      </div>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+  <% endif %>
+
+  <form action="./?module=domains&action=ConfirmDeleteDomain" method="post">
+
+    <fieldset>
+
+      <legend class="module-legend">
+        <: Current Domains :>
+      </legend>
+
+      <% if DomainList %>
+
+      <table class="table table-striped" id="no-more-tables">
+        <thead>
+          <th><: Domain Name :></th>
+          <th><: Home Directory :></th>
+          <th><: Status :></th>
+          <th></th>
+          <th></th>
+        </thead>
+
+        <tbody>
+        <% loop DomainList %>
+          <tr>
+            <td data-title="<: Domain Name :>"><a href="http://<& name &>/" target="_blank"><& name &></a></td>
+            <td data-title="<: Home Directory :>"><& directory &></td>
+            <td data-title="<: Status :>"><& status &></td>
             <td>
-                <h2>Create a new domain</h2>
-                <% if CreateDomain %>
-                <form action="./?module=domains&action=CreateDomain" method="post" name="CreateDomain">
-                    <table class="zform">
-                        <tr>
-                            <th nowrap="nowrap"><: Domain name :>:</th>
-                            <td><input name="inDomain" type="text" id="inDomain" size="30" /></td>
-                        </tr>
-                        <tr>
-                            <th nowrap="nowrap"><: Home directory :>:</th>
-                            <td><input name="inAutoHome" type="radio" id="inAutoHome" value="1" onclick="hide_div('showdomainselect');" CHECKED />&nbsp;<: Create a new home directory :></td>
-                        </tr>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <td><input name="inAutoHome" type="radio" id="inAutoHome" value="2" onclick="show_div('showdomainselect');" />&nbsp;<: Use existing home directory :></td>
-                        </tr>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <td>
-                                <div id="showdomainselect" style="display:none;">
-                                    <select name="inDestination" id="inDestination">
-                                        <option value="">/ (root)</option>
-                                        <% loop DomainDirsList %>
-                                        <option value="<& domains &>">/<& domains &></option>
-                                        <% endloop %>
-                                    </select>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <td align="right"><button class="fg-button ui-state-default ui-corner-all" type="submit" id="button" name="CreateDomain" value="1">Create</button></td>
-                        </tr>
-                    </table>
-                    <@ CSFR_Tag @>
-                </form>
-                <% else %>
-                <: You have reached your domain limit! :>
-                <% endif %>	
+              <button class="btn" type="submit" name="inDelete_<& id &>" id="inDelete_<& id &>" value="inDelete_<& id &>"><: Delete :></button>
             </td>
-            <td align="right"><@ DomainUsagepChart @></td>
-        </tr></table>	
+          </tr>
+        <% endloop %>
+        </tbody>
+      </table>
+
+      <% else %>
+      <p><: You currently do not have any domains configured. Create a domain using the form below. :></p>
+      <% endif %>
+
+    </fieldset>
+
+  <@ CSFR_Tag @>
+  </form>
+
+  <div class="row-fluid">
+    <div class="span6">
+      <% if CreateDomain %>
+      <form class="form-horizontal" action="./?module=domains&action=CreateDomain" method="post" name="CreateDomain">
+
+        <fieldset>
+
+          <legend class="module-legend">
+            <: Create a New Domain :>
+          </legend>
+
+          <div class="control-group">
+            <label class="control-label" for="inDomain">
+              <: Domain Name :>:
+            </label>
+            <div class="controls">
+              <input required name="inDomain" type="text" id="inDomain" placeholder="<: Domain Name :>">
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" >
+              <: Home Directory :>:
+            </label>
+            <div class="controls">
+              <label class="radio" onclick="hide_div('showdomainselect');">
+                <input name="inAutoHome" type="radio" id="inAutoHome" value="1" data-label="<: Create a new home directory :>" onclick="hide_div('showdomainselect');" CHECKED />
+              </label>
+              <label class="radio" onclick="show_div('showdomainselect');">
+                <input name="inAutoHome" type="radio" id="inAutoHome" value="2" data-label="<: Use existing home directory :>" onclick="show_div('showdomainselect');" />
+              </label>
+              <p class="help-block" id="showdomainselect" style="display:none;">
+                <select name="inDestination" id="inDestination">
+                  <option value="">/ (root)</option>
+                  <% loop DomainDirsList %>
+                  <option value="<& domains &>">/<& domains &></option>
+                  <% endloop %>
+                </select>
+              </p>
+            </div>
+          </div>
+ 
+          <div class="control-group">
+            <div class="controls">
+              <button class="btn load-button" type="submit" name="CreateDomain" value="1">Create</button>
+            </div>
+          </div>
+
+        </fieldset>
+
+      <@ CSFR_Tag @>
+      </form>
     </div>
+
+  <% else %>
+      <legend class="module-legend">
+        <: Create a New Domain :>
+      </legend>
+      <p><: You have reached your domain limit! :></p>
+    </div>
+  <% endif %>
+
+    <div class="span6">
+      <legend class="module-legend">
+        Domain Usage Chart
+      </legend>
+      <div class="text-center"><@ DomainUsagepChart @></div>
+    </div>
+  </div>
 
 </div>
 

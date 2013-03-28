@@ -29,7 +29,7 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     
 }
@@ -40,7 +40,7 @@ foreach ($deletedclients as $deletedclient) {
     $numrows = $zdbh->prepare("SELECT * FROM x_forwarders WHERE fw_acc_fk=:deletedclient AND fw_deleted_ts IS NULL");
     $numrows->bindParam(':deletedclient', $deletedclient);
     $numrows->execute();
-
+        
     if ($numrows->fetchColumn() <> 0) {
         $sql = $zdbh->prepare("SELECT * FROM x_forwarders WHERE fw_acc_fk=:deletedclient AND fw_deleted_ts IS NULL");
         $sql->bindParam(':deletedclient', $deletedclient);
@@ -51,7 +51,7 @@ foreach ($deletedclients as $deletedclient) {
             $numrows->bindParam(':fw_address_vc', $rowforwarder['fw_address_vc']);
             $numrows->execute();
             $result = $numrows->fetch();
-
+            
             if ($result) {
                 $sql = "DELETE * FROM hm_accounts WHERE accountaddress=:fw_address_vc";
                 $sql = $mail_db->prepare($sql);

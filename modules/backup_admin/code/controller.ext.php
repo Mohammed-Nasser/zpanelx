@@ -91,7 +91,7 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your settings have been saved successfully!"));
+            return ui_sysmessage::shout(ui_language::translate("Changes to your settings have been saved successfully!"), "alert-success");
         }
         return;
     }

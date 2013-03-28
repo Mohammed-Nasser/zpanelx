@@ -29,7 +29,7 @@ include('cnf/db.php');
 $z_db_user = $user;
 $z_db_pass = $pass;
 try {
-    $mail_db = new db_driver("mysql:host=" . $host . ";dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
+    $mail_db = new db_driver("mysql:host=localhost;dbname=" . $mailserver_db . "", $z_db_user, $z_db_pass);
 } catch (PDOException $e) {
     echo $e;
 }
@@ -96,7 +96,7 @@ if (!fs_director::CheckForEmptyValue(self::$create)) {
         $password = '{PLAIN-MD5}' . md5($password);
         $location = $domain . "/" . $address . "/";
         $maxMail = ctrl_options::GetSystemOption('max_mail_size');
-
+        
         $sql->bindParam(':password', $password);
         $sql->bindParam(':address', $address);
         $sql->bindParam(':fulladdress', $fulladdress);

@@ -55,9 +55,8 @@ class module_controller {
 
     static function DisplayApacheConfig() {
         global $zdbh;
-        $line = "<h2>" . ui_language::translate("Configure your Apache Settings") . "</h2>";
-        $line .= "<form action=\"./?module=apache_admin&action=UpdateApacheConfig\" method=\"post\">";
-        $line .= "<table class=\"zgrid\">";
+        $line = "<legend class=\"module-legend\">" . ui_language::translate("Configure your Apache Settings") . "</legend>";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=apache_admin&action=UpdateApacheConfig\" method=\"post\">";
         $count = 0;
         $sql = "SELECT COUNT(*) FROM x_settings WHERE so_module_vc=:module AND so_usereditable_en = 'true'";
         $moduleName = ui_module::GetModuleName();
@@ -77,13 +76,12 @@ class module_controller {
                     } else {
                         $fieldhtml = ctrl_options::OutputSettingTextArea($row['so_name_vc'], $row['so_value_tx']);
                     }
-                    $line .= "<tr valign=\"top\"><th nowrap=\"nowrap\">" . ui_language::translate($row['so_cleanname_vc']) . "</th><td>" . $fieldhtml . "</td><td>" . ui_language::translate($row['so_desc_tx']) . "</td></tr>";
+                    $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate($row['so_cleanname_vc']) . "</label><div class=\"controls\">" . $fieldhtml . "<span class=\"help-inline\">" . ui_language::translate($row['so_desc_tx']) . "</span></div></div>";
                 }
-                $line .= "<tr><th>" . ui_language::translate("Force Update") . "</th><td><input type=\"checkbox\"></td><td>" . ui_language::translate("Force vhost.conf to be updated on next daemon run. Any change in settings also triggers vhost.conf to be updated.") . "</td></tr>";
-                $line .= "<tr><th colspan=\"3\"><button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inSaveSystem\">" . ui_language::translate("Save Changes") . "</button><button class=\"fg-button ui-state-default ui-corner-all type=\"button\" onclick=\"window.location.href='./?module=moduleadmin';return false;\">" . ui_language::translate("Cancel") . "</button></th></tr>";
+                $line .= "<div class=\"control-group\"><label class=\"control-label\" id=\"bold-label\">" . ui_language::translate("Force Update") . "</label><div class=\"controls\"><input type=\"checkbox\"><span class=\"help-inline fix-check-label\">" . ui_language::translate("Force vhost.conf to be updated on next daemon run. Any change in settings also triggers vhost.conf to be updated.") . "</span></div></div>";
+                $line .= "<div class=\"control-group\"><div class=\"controls\"><button class=\"btn load-button\" type=\"submit\" name=\"inSaveSystem\">" . ui_language::translate("Save Changes") . "</button>&nbsp;&nbsp;&nbsp;<button class=\"btn\" onclick=\"window.location.href='./?module=moduleadmin';return false;\">" . ui_language::translate("Cancel") . "</button></div></div>";
             }
         }
-        $line .= "</table>";
         $line .= runtime_csfr::Token();
         $line .= "</form>";
         return $line;
@@ -91,14 +89,11 @@ class module_controller {
 
     static function DisplayVhostConfig() {
         global $zdbh;
-        $line = "<h2>" . ui_language::translate("Override a Virtual Host Setting") . "</h2>";
-        $line .= "<form action=\"./?module=apache_admin&action=DisplayVhost\" method=\"post\">";
-        $line .= "<table class=\"zform\">";
-        $line .= "<tr><td>";
-        $line .= "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inSelectVhost\">" . ui_language::translate("Select Vhost") . "</button>";
-        $line .= "</td><td>";
+        $line = "<legend class=\"module-legend\">" . ui_language::translate("Override a Virtual Host Setting") . "</legend>";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=apache_admin&action=DisplayVhost\" method=\"post\">";
+        $line .= "<div class=\"control-group\">";
         $line .= "<select name=\"inVhost\" id=\"inVhost\">";
-        $line .= "<option value=\"\" selected=\"selected\">-- " . ui_language::translate("Select a domain") . " --</option>";
+        $line .= "<option value=\"\" selected=\"selected\">-- " . ui_language::translate("Select a Domain") . " --</option>";
         $sql = "SELECT COUNT(*) FROM x_vhosts WHERE vh_enabled_in=1 AND vh_deleted_ts IS NULL";
         if ($numrows = $zdbh->query($sql)) {
             if ($numrows->fetchColumn() <> 0) {
@@ -112,8 +107,8 @@ class module_controller {
             }
         }
         $line .= "</select>";
-        $line .= "</td></tr>";
-        $line .= "</table>";
+        $line .= "&nbsp;&nbsp;&nbsp;<button class=\"btn load-button\" type=\"submit\" name=\"inSelectVhost\">" . ui_language::translate("Select Vhost") . "</button>";
+        $line .= "</div>";
         $line .= runtime_csfr::Token();
         $line .= "</form>";
         return $line;
@@ -132,14 +127,11 @@ class module_controller {
 
     static function DisplayVhostOverrides() {
         global $zdbh;
-        $line = "<h2>" . ui_language::translate("All Virtual Hosts with Overrides") . "</h2>";
-        $line .= "<form action=\"./?module=apache_admin&action=DisplayVhost\" method=\"post\">";
-        $line .= "<table class=\"zform\">";
-        $line .= "<tr><td>";
-        $line .= "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inSelectVhost\">" . ui_language::translate("Select Vhost") . "</button>";
-        $line .= "</td><td>";
+        $line = "<legend class=\"module-legend\">" . ui_language::translate("All Virtual Hosts with Overrides") . "</legend>";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=apache_admin&action=DisplayVhost\" method=\"post\">";
+        $line .= "<div class=\"control-group\">";
         $line .= "<select name=\"inVhost\" id=\"inVhost\">";
-        $line .= "<option value=\"\" selected=\"selected\">-- " . ui_language::translate("Select a domain") . " --</option>";
+        $line .= "<option value=\"\" selected=\"selected\">-- " . ui_language::translate("Select a Domain") . " --</option>";
         $sql = "SELECT COUNT(*) FROM x_vhosts WHERE vh_deleted_ts IS NULL";
         if ($numrows = $zdbh->query($sql)) {
             if ($numrows->fetchColumn() <> 0) {
@@ -162,8 +154,8 @@ class module_controller {
             }
         }
         $line .= "</select>";
-        $line .= "</td></tr>";
-        $line .= "</table>";
+        $line .= "&nbsp;&nbsp;&nbsp;<button class=\"btn\" type=\"submit\" id=\"button\" name=\"inSelectVhost\">" . ui_language::translate("Select Vhost") . "</button>";
+        $line .= "</div>";
         $line .= runtime_csfr::Token();
         $line .= "</form>";
         return $line;
@@ -196,15 +188,12 @@ class module_controller {
 
     static function DisplayDisabledVhostConfig() {
         global $zdbh;
-        $line = "<h2>" . ui_language::translate("Disabled Virtual Hosts") . "</h2>";
-        //$line .= ui_language::translate("Select a Virtual Host below.");
-        $line .= "<form action=\"./?module=apache_admin&action=DisplayVhost\" method=\"post\">";
-        $line .= "<table class=\"zform\">";
-        $line .= "<tr><td>";
-        $line .= "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"inSelectVhost\">" . ui_language::translate("Select Vhost") . "</button>";
-        $line .= "</td><td>";
+        $line = "<legend class=\"module-legend\">" . ui_language::translate("Disabled Virtual Hosts") . "</legend>";
+        //$line .= ui_language::translate("Select a Virtual Host Below.");
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=apache_admin&action=DisplayVhost\" method=\"post\">";
+        $line .= "<div class=\"control-group\">";
         $line .= "<select name=\"inVhost\" id=\"inVhost\">";
-        $line .= "<option value=\"\" selected=\"selected\">-- " . ui_language::translate("Select a domain") . " --</option>";
+        $line .= "<option value=\"\" selected=\"selected\">-- " . ui_language::translate("Select a Domain") . " --</option>";
         $sql = "SELECT COUNT(*) FROM x_vhosts WHERE vh_enabled_in=0 AND vh_deleted_ts IS NULL";
         if ($numrows = $zdbh->query($sql)) {
             if ($numrows->fetchColumn() <> 0) {
@@ -218,8 +207,8 @@ class module_controller {
             }
         }
         $line .= "</select>";
-        $line .= "</td></tr>";
-        $line .= "</table>";
+        $line .= "&nbsp;&nbsp;&nbsp;<button class=\"btn load-button\" type=\"submit\" name=\"inSelectVhost\">" . ui_language::translate("Select Vhost") . "</button>";
+        $line .= "</div>";
         $line .= runtime_csfr::Token();
         $line .= "</form>";
         return $line;
@@ -228,11 +217,10 @@ class module_controller {
     static function DisplayApacheVhost() {
         global $zdbh;
         global $controller;
-        $line = "<h2>" . ui_language::translate("Virtual Host Override") . "</h2>";
+        $line = "<legend class=\"module-legend\">" . ui_language::translate("Virtual Host Override") . "</legend>";
         $line .= ui_language::translate("Set options for virtual host") . ": <b>" . $controller->GetControllerRequest('FORM', 'inVhost') . "</b>";
         $line .= "<br><br>";
-        $line .= "<form action=\"./?module=apache_admin&action=SaveVhost\" method=\"post\">";
-        $line .= "<table class=\"zform\">";
+        $line .= "<form class=\"form-horizontal\" action=\"./?module=apache_admin&action=SaveVhost\" method=\"post\">";
         $sql = "SELECT COUNT(*) FROM x_vhosts WHERE vh_name_vc=:vhost AND vh_deleted_ts IS NULL";
 
         $inVhost = $controller->GetControllerRequest('FORM', 'inVhost');
@@ -248,20 +236,19 @@ class module_controller {
                 $sql->execute();
                 $row = $sql->fetch();
 
-                $line .= "<tr><th>" . ui_language::translate("Domain Enabled") . ":</th><td><input type=\"checkbox\" name=\"vh_enabled_in\" id=\"vh_enabled_in\" value=\"1\" " . fs_director::IsChecked($row['vh_enabled_in']) . "/></td></tr>";
-                $line .= "<tr><th>" . ui_language::translate("Suhosin Enabled") . ":</th><td><input type=\"checkbox\" name=\"vh_suhosin_in\" id=\"vh_suhosin_in\" value=\"1\" " . fs_director::IsChecked($row['vh_suhosin_in']) . "/></td></tr>";
-                $line .= "<tr><th>" . ui_language::translate("OpenBase Enabled") . ":</th><td><input type=\"checkbox\" name=\"vh_obasedir_in\" id=\"vh_obasedir_in\" value=\"1\" " . fs_director::IsChecked($row['vh_obasedir_in']) . "/></td></tr>";
-                $line .= "<tr><th>" . ui_language::translate("Port Override") . "</th><td><input type=\"text\" name=\"vh_custom_port_in\" id=\"vh_custom_port_in\" maxlength=\"6\" value=\"" . $row['vh_custom_port_in'] . "\"/>";
-                $line .= "<tr><th>" . ui_language::translate("Forward Port 80 to Overriden Port") . ":</th><td><input type=\"checkbox\" name=\"vh_portforward_in\" id=\"vh_portforward_in\" value=\"1\" " . fs_director::IsChecked($row['vh_portforward_in']) . "/>" . ui_language::translate("Warning requires Apache mod_rewrite to be installed on the server.") . "</td></tr>";
-                $line .= "<tr><th>" . ui_language::translate("IP Override") . "</th><td><input type=\"text\" name=\"vh_custom_ip_vc\" id=\"vh_custom_ip_vc\" maxlength=\"20\" value=\"" . $row['vh_custom_ip_vc'] . "\"/>";
-                $line .= "<tr valign=\"top\"><th>" . ui_language::translate("Custom Entry") . ":</th><td><textarea cols=\"60\" rows=\"10\" name=\"vh_custom_tx\">" . $row['vh_custom_tx'] . "</textarea></td></tr>";
+                $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"vh_enabled_in\">" . ui_language::translate("Domain Enabled") . ":</label><div class=\"controls\"><input type=\"checkbox\" name=\"vh_enabled_in\" id=\"vh_enabled_in\" value=\"1\" " . fs_director::IsChecked($row['vh_enabled_in']) . "/></div></div>";
+                $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"vh_suhosin_in\">" . ui_language::translate("Suhosin Enabled") . ":</label><div class=\"controls\"><input type=\"checkbox\" name=\"vh_suhosin_in\" id=\"vh_suhosin_in\" value=\"1\" " . fs_director::IsChecked($row['vh_suhosin_in']) . "/></div></div>";
+                $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"vh_obasedir_in\">" . ui_language::translate("OpenBase Enabled") . ":</label><div class=\"controls\"><input type=\"checkbox\" name=\"vh_obasedir_in\" id=\"vh_obasedir_in\" value=\"1\" " . fs_director::IsChecked($row['vh_obasedir_in']) . "/></div></div>";
+                $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"vh_custom_port_in\">" . ui_language::translate("Port Override") . "</label><div class=\"controls\"><input type=\"text\" name=\"vh_custom_port_in\" id=\"vh_custom_port_in\" maxlength=\"6\" value=\"" . $row['vh_custom_port_in'] . "\"/></div></div>";
+                $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"vh_portforward_in\">" . ui_language::translate("Forward Port 80 to Overriden Port") . ":</label><div class=\"controls\"><input type=\"checkbox\" name=\"vh_portforward_in\" id=\"vh_portforward_in\" value=\"1\" data-label=\"" . ui_language::translate("Warning requires Apache mod_rewrite to be installed on the server.") . "\" " . fs_director::IsChecked($row['vh_portforward_in']) . "/></div></div>";
+                $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"vh_custom_ip_vc\">" . ui_language::translate("IP Override") . "</label><div class=\"controls\"><input type=\"text\" name=\"vh_custom_ip_vc\" id=\"vh_custom_ip_vc\" maxlength=\"20\" value=\"" . $row['vh_custom_ip_vc'] . "\"/></div></div>";
+                $line .= "<div class=\"control-group\"><label class=\"control-label\" for=\"vh_custom_tx\">" . ui_language::translate("Custom Entry") . ":</label><div class=\"controls\"><textarea cols=\"60\" rows=\"10\" name=\"vh_custom_tx\" id=\"vh_custom_tx\">" . $row['vh_custom_tx'] . "</textarea></div></div>";
             }
         }
 
-        $line .= "<tr><td colspan=\"2\">";
-        $line .= "<button class=\"fg-button ui-state-default ui-corner-all\" type=\"submit\" id=\"button\" name=\"vh_id_pk\" value=\"" . $row['vh_id_pk'] . "\">" . ui_language::translate("Save Vhost") . "</button><button class=\"fg-button ui-state-default ui-corner-all type=\"button\" onclick=\"window.location.href='./?module=apache_admin';return false;\"><: Cancel :></button>";
-        $line .= "</td></tr>";
-        $line .= "</table>";
+        $line .= "<div class=\"control-group\"><div class=\"controls\">";
+        $line .= "<button class=\"btn load-button\" type=\"submit\" name=\"vh_id_pk\" value=\"" . $row['vh_id_pk'] . "\">" . ui_language::translate("Save Vhost") . "</button>&nbsp;&nbsp;&nbsp;<button class=\"btn\" onclick=\"window.location.href='./?module=apache_admin';return false;\"><: Cancel :></button>";
+        $line .= "</div></div>";
         $line .= runtime_csfr::Token();
         $line .= "</form>";
         return $line;
@@ -357,9 +344,7 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your settings have been saved successfully!"));
-        } else {
-            return ui_language::translate(ui_module::GetModuleDescription());
+            return ui_sysmessage::shout(ui_language::translate("Changes to your settings have been saved successfully!"), "alert-success");
         }
         return;
     }
@@ -373,6 +358,11 @@ class module_controller {
         global $controller;
         $module_icon = "./modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/icon.png";
         return $module_icon;
+    }
+
+    static function getModuleDesc() {
+        $module_desc = ui_language::translate(ui_module::GetModuleDescription());
+        return $module_desc;
     }
 
     static function SetWriteApacheConfigTrue() {

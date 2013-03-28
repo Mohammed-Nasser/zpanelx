@@ -1,24 +1,40 @@
-<div class="zmodule_header" id="zmodule_header_<@ ModuleName @>"><img src="<@ ModuleIcon @>" border="0"><@ ModuleName @></div>
-<div class="zmodule_content" id="zmodule_header_<@ ModuleName @>">
+<div class="module-header">
+  <h1 class="module-title">
+    <img src="<@ ModuleIcon @>">
+    <@ ModuleName @>
+  </h1>
+</div>
 
-    <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><p><@ ModuleDesc @></p></div>
+<div class="module-desc">
+  <@ ModuleDesc @>
+</div>
 
-    <div class="zform_wrapper">
-        <@ Services @>
+<div class="container-fluid module-content">
+
+  <div class="row-fluid">
+    <@ Services @>
+  </div>
+
+  <legend class="module-legend">
+    <: Daemon Status :>
+  </legend>
+
+  <div class="row-fluid">
+    <div class="pull-left">
+      <b><: Last Daemon Run :>:</b>
     </div>
-
-    <div class="zform_wrapper">
-        <h2><: Daemon Status :></h2>
-        <table class="zform">
-            <tr>
-                <th><: Last Daemon Run :>:</th>
-                <td><@ LastRunTime @></td>
-            </tr>
-            <tr>
-                <th><: Next Daemon Run :>:</th>
-                <td><@ NextRunTime @></td>
-            </tr>
-        </table>
+    <div class="pull-left">
+      &nbsp;&nbsp;&nbsp;<@ LastRunTime @>
     </div>
+  </div>
+  <br>
+  <div class="row-fluid">
+    <div class="pull-left">
+      <b><: Next Daemon Run :>:</b>
+    </div>
+    <div class="pull-left">
+      &nbsp;&nbsp;&nbsp;<@ NextRunTime @>
+    </div>
+  </div>
 
 </div>

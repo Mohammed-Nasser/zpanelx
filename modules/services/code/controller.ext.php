@@ -28,91 +28,62 @@ class module_controller {
 
     function getServices() {
         global $controller;
-        $line = "<h2>" . ui_language::translate("Checking status of services...") . "</h2>";
-        $line .= "<table>";
-        $line .= "<tr>";
-        $line .= "<th>HTTP</th>";
-        $line .= "<td>";
+        $line = "<legend class=\"module-legend\">" . ui_language::translate("Checking Status of Services...") . "</legend>";
+        $line .= "<div class=\"service-check\"><b>HTTP</b>";
 
         if (fs_director::CheckForEmptyValue(sys_monitoring::PortStatus(80))) {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\"></div>";
         } else {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\"></div>";
         }
 
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>FTP</th>";
-        $line .= "<td>";
+        $line .= "<div class=\"service-check\"><b>FTP</b>";
 
         if (fs_director::CheckForEmptyValue(sys_monitoring::PortStatus(21))) {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\"></div>";
         } else {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\"></div>";
         }
 
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>SMTP</th>";
-        $line .= "<td>";
+        $line .= "<div class=\"service-check\"><b>SMTP</b>";
 
         if (fs_director::CheckForEmptyValue(sys_monitoring::PortStatus(25))) {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\"></div>";
         } else {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\"></div>";
         }
 
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>POP3</th>";
-        $line .= "<td>";
+        $line .= "<div class=\"service-check\"><b>POP3</b>";
 
         if (fs_director::CheckForEmptyValue(sys_monitoring::PortStatus(110))) {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\"></div>";
         } else {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\"></div>";
         }
 
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>IMAP</th>";
-        $line .= "<td>";
+        $line .= "<div class=\"service-check\"><b>IMAP</b>";
 
         if (fs_director::CheckForEmptyValue(sys_monitoring::PortStatus(143))) {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\"></div>";
         } else {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\"></div>";
         }
 
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>MySQL</th>";
-        $line .= "<td>";
-        /* MySQL has to be on-line as you are viewing this page, we made this 'static' to save on port queries (saves time) amongst other reasons. */
-        $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\">";
+        $line .= "<div class=\"service-check\"><b>MySQL</b>";
 
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "<tr>";
-        $line .= "<th>DNS</th>";
-        $line .= "<td>";
+        /* MySQL has to be on-line as you are viewing this page, we made this 'static' to save on port queries (saves time) amongst other reasons. */
+        $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\"></div>";
+
+        $line .= "<div class=\"service-check\"><b>DNS</b>";
 
         if (fs_director::CheckForEmptyValue(sys_monitoring::PortStatus(53))) {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/down.gif\"></div>";
         } else {
-            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\">";
+            $line .= "<img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/up.gif\"></div>";
         }
 
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "</table>";
-        $line .= "<br><h2>" . ui_language::translate("Server Uptime") . "</h2>";
-        $line .= ui_language::translate("Uptime") . ": " . sys_monitoring::ServerUptime();
+        $line .= "<br><br><br><legend class=\"module-legend\">" . ui_language::translate("Server Uptime") . "</legend>";
+        $line .= "<div class=\"fluid-row\"><div class=\"pull-left\"><b>" . ui_language::translate("Uptime") . ":</b></div><div class=\"pull-left\">&nbsp;&nbsp;&nbsp;" . sys_monitoring::ServerUptime() . "</div></div><br><br><br>";
         return $line;
     }
 
