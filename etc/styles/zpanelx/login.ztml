@@ -115,6 +115,7 @@
             <div class="controls">
               <label class="checkbox">
                 <input type="checkbox" data-label="Remember Me" name="inRemember" value="1">
+                <input type="checkbox" data-label="Enable Session Security" name="inSessionSecuirty" checked>
               </label>
             </div>
           </div>
