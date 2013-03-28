@@ -2,7 +2,6 @@ var unsavedChanges = false;
 
 $(document).ready(function() {
 
-
     $('a[data-toggle="tab"]').on('shown', function(e){
         //save the latest tab using a cookie:
         $.cookie('last_tab', $(e.target).attr('href'));
@@ -31,8 +30,7 @@ $(document).ready(function() {
 		
         if ( $(this).parents("div.add").siblings().length > 2 ) {
             newRecord.find("label").remove();
-        }
-		
+        }	
 		
         $("input",newRecord).each(function() {
             var fieldName = $(this).attr("name").replace("proto_","");
