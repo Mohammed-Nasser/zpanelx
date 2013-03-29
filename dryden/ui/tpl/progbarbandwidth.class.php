@@ -18,12 +18,22 @@ class ui_tpl_progbarbandwidth {
         $bandwidthquota = $currentuser['bandwidthquota'];
         $bandwidth = ctrl_users::GetQuotaUsages('bandwidth', $currentuser['userid']);
         if ($bandwidthquota == 0) {
+<<<<<<< HEAD
             return "<img src=\"etc/lib/pChart2/zpanel/zProgress.php?percent=0\"/>";
         } else {
             if (fs_director::CheckForEmptyValue($bandwidth))
                 $bandwidth = 0;
             $percent = round(($bandwidth / $bandwidthquota) * 100, 0);
             return "<img src=\"etc/lib/pChart2/zpanel/zProgress.php?percent=" . $percent . "\"/>";
+=======
+            return ''; // no quota, it is desactivated
+        }
+        else {
+            if (fs_director::CheckForEmptyValue($bandwidth))
+                $bandwidth = 0;
+            $percent = round(($bandwidth / $bandwidthquota) * 100, 0);
+            return '<img src="etc/lib/pChart2/zpanel/zProgress.php?percent=$percent"/>';
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
         }
     }
 
