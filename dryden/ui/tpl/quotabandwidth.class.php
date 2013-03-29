@@ -16,9 +16,15 @@ class ui_tpl_quotabandwidth {
         $currentuser = ctrl_users::GetUserDetail();
         if ($currentuser['bandwidthquota'] == 0)
 <<<<<<< HEAD
+<<<<<<< HEAD
             $bandwidthquota = ui_language::translate('Unlimited');
         else
             $bandwidthquota = fs_director::ShowHumanFileSize($currentuser['bandwidthquota']);
+=======
+          $bandwidthquota = ui_language::translate('Illimited');
+        else
+          $bandwidthquota = fs_director::ShowHumanFileSize($currentuser['bandwidthquota']);
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
 =======
           $bandwidthquota = ui_language::translate('Illimited');
         else

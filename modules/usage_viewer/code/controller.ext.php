@@ -48,6 +48,7 @@ class module_controller {
     static $distrobutionlistsquota;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     static function getUsage() {
         if (file_exists('etc/lib/pChart2/class/pData.class.php')) {
             $display = self::DisplayUsagepChart();
@@ -128,6 +129,8 @@ class module_controller {
         }
         return $display;
 =======
+=======
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
     private function check_pChart($display) {
         return (file_exists('etc/lib/pChart2/class/pData.class.php')) ? $display : 'pChart Library Not Found.';
     }
@@ -167,6 +170,9 @@ class module_controller {
 
     static function getDistListUsage() {
         return self::check_pChart(self::DisplayDistListUsagepChart());
+<<<<<<< HEAD
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
+=======
 >>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
     }
 
@@ -176,6 +182,7 @@ class module_controller {
         global $zdbh;
         global $controller;
         $currentuser = ctrl_users::GetUserDetail();
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         self::$diskquota = $currentuser['diskquota'];
@@ -363,6 +370,8 @@ class module_controller {
         $line .= "<img src=\"etc/lib/pChart2/zpanel/z3DPie.php?score=" . $free . "::" . $used . "&labels=Free: " . $free . "::Used: " . $used . "&legendfont=verdana&legendfontsize=8&imagesize=240::190&chartsize=120::90&radius=100&legendsize=10::160\"/>";
         return $line;
 =======
+=======
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
         
         function empty_as_0($value) {
           return (empty($value)) ? 0 : $value ;
@@ -506,12 +515,16 @@ class module_controller {
 
     static function DisplayDistListUsagepChart() {
       return self::DisplayChart('Distribution List Usage', self::$distlists, self::$distrobutionlistsquota);
+<<<<<<< HEAD
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
+=======
 >>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
     }
 
     static function DisplaypBar($total, $quota) {
         global $controller;
         $currentuser = ctrl_users::GetUserDetail();
+<<<<<<< HEAD
 <<<<<<< HEAD
         $typequota = $currentuser['' . $quota . ''];
         $type = ctrl_users::GetQuotaUsages($total, $currentuser['userid']);
@@ -537,6 +550,8 @@ class module_controller {
         $module_name = ui_language::translate(ui_module::GetModuleName());
         return $module_name;
 =======
+=======
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
         $typequota = $currentuser[$quota];
         $type = ctrl_users::GetQuotaUsages($total, $currentuser['userid']);
         if ($typequota == 0)
@@ -554,14 +569,21 @@ class module_controller {
 
     static function getModuleName() {
         return ui_language::translate(ui_module::GetModuleName());
+<<<<<<< HEAD
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
+=======
 >>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
     }
 
     static function getModuleIcon() {
         global $controller;
 <<<<<<< HEAD
+<<<<<<< HEAD
         $module_icon = "modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/icon.png";
         return $module_icon;
+=======
+        return 'modules/' . $controller->GetControllerRequest('URL', 'module') . '/assets/icon.png';
+>>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
 =======
         return 'modules/' . $controller->GetControllerRequest('URL', 'module') . '/assets/icon.png';
 >>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
