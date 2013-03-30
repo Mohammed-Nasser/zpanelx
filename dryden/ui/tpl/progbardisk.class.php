@@ -18,17 +18,14 @@ class ui_tpl_progbardisk {
         $diskquota = $currentuser['diskquota'];
         $diskspace = ctrl_users::GetQuotaUsages('diskspace', $currentuser['userid']);
         if ($diskquota == 0) {
-<<<<<<< HEAD
-<<<<<<< HEAD
+
             return '<img src="etc/lib/pChart2/zpanel/zProgress.php?percent=0"/>';
         } else {
             if (fs_director::CheckForEmptyValue($diskspace))
                 $diskspace = 0;
             $percent = round(($diskspace / $diskquota) * 100, 0);
             return "<img src=\"etc/lib/pChart2/zpanel/zProgress.php?percent=" . $percent . "\"/>";
-=======
-=======
->>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
+
             $line = '[Illimited]'; // no quota, it is desactivated, 
             //to do : dislay a same size image for "Illimited" ?
         }
@@ -38,10 +35,7 @@ class ui_tpl_progbardisk {
               
             $percent = round(($diskspace / $diskquota) * 100, 0);
             return '<img src="etc/lib/pChart2/zpanel/zProgress.php?percent=' . $percent . '"/>';
-<<<<<<< HEAD
->>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
-=======
->>>>>>> ee7d29f... Enable Diskspace=0 and Bandwidth=0 as "Unlimited"
+
         }
     }
 
