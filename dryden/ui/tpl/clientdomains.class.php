@@ -15,7 +15,7 @@ class ui_tpl_clientdomains {
     public static function Template() {
         global $zdbh;
         $currentuser = ctrl_users::GetUserDetail();
-        $line = "<table  border=\"0\" cellSpacing=\"0\" cellPadding=\"2\" width=\"100%\">";
+        $line = "";
 
         $numrows = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk= :userid AND vh_type_in=1 AND vh_deleted_ts IS NULL ORDER BY vh_id_pk LIMIT 4");
         $numrows->bindParam(':userid', $currentuser['userid']);
@@ -26,33 +26,33 @@ class ui_tpl_clientdomains {
             $sql->bindParam(':userid', $currentuser['userid']);
             $sql->execute();
             $limit = 0;
-            $line .= "<tr><td nowrap=\"nowrap\"><img class=\"raquo\" src=\"<# ui_tpl_assetfolderpath #>/images/blank.png\" border=\"0\"><strong>Domains</strong></td><td></td></tr>";
+            $line .= "<div class=\"d_container\"><div class=\"d_content\"><div class=\"d_title\">Domains</div>";
             while ($rowdomains = $sql->fetch()) {
                 if ($rowdomains['vh_type_in'] == 1) {
                     $line .= "<tr>";
-                    $line .= "<td nowrap=\"nowrap\" width=\"100%\" style=\"text-indent:14px;\"><a href=\"http://" . $rowdomains['vh_name_vc'] . "\" target=\"_blank\">" . $rowdomains['vh_name_vc'] . "</a></td>";
-                    $line .= "<td nowrap=\"nowrap\" align=\"left\">";
+                    $line .= "<div class=\"d_domain\"><a href=\"http://" . $rowdomains['vh_name_vc'] . "\" target=\"_blank\">" . $rowdomains['vh_name_vc'] . "</a></div>";
+                    $line .= "<div class=\"d_status\">";
 
                     if ($rowdomains['vh_active_in'] == 1 && $rowdomains['vh_enabled_in'] == 1) {
-                        $line .= "<a href=\"#\" title=\"Live\"><img src=\"<# ui_tpl_assetfolderpath #>/images/live.png\"></a> </td></tr>";
+                        $line .= "<a href=\"#\" title=\"Live\"><img src=\"etc/styles/zpanelx/img/live.png\"></a></div>";
                     } elseif ($rowdomains['vh_active_in'] == 0 && $rowdomains['vh_enabled_in'] == 1) {
-                        $line .= "<a href=\"#\" title=\"Pending\"><img src=\"<# ui_tpl_assetfolderpath #>/images/pending.png\"></a> </td></tr>";
+                        $line .= "<a href=\"#\" title=\"Pending\"><img src=\"etc/styles/zpanelx/img/pending.png\"></a></div>";
                     } else {
                         $line .= "";
                     }
                     if ($rowdomains['vh_enabled_in'] == 0) {
-                        $line .= "<a href=\"#\" title=\"Disabled\"><img src=\"<# ui_tpl_assetfolderpath #>/images/disabled.png\"></a></td></tr> ";
+                        $line .= "<a href=\"#\" title=\"Disabled\"><img src=\"etc/styles/zpanelx/img/disabled.png\"></a></div> ";
                     }
                 }
                 $limit++;
             }
             if ($limit >= 4) {
-                $line .= "<tr><td>&nbsp;&nbsp;&nbsp;<a href=\"?module=domains\">(Show All)</a></td><td></td></tr>";
+                $line .= "<div class=\"d_domain\">&nbsp;&nbsp;&nbsp;<a href=\"?module=domains\">(Show All)</a></div>";
             }
+                $line .= "</div></div>";
         } else {
-            $line .= "<tr><td nowrap=\"nowrap\"><img class=\"raquo\" src=\"<# ui_tpl_assetfolderpath #>/images/blank.png\" border=\"0\"><strong>Domains</strong></td><td></td></tr>";
-            $line .= "<tr><td nowrap=\"nowrap\" style=\"text-indent:14px;\"><span class=\"Side_Info_None\">No Domains Found</span></td><td><a href=\"?module=domains\">CREATE</a></td></tr>";
-            //$line .= "<tr><td>&nbsp;</td><td></td></tr>";
+            $line .= "<div class=\"d_container\"><div class=\"d_content\"><div class=\"d_title\">Domains</strong></div>";
+            $line .= "<div class=\"d_domain\">None</div><div class=\"d_status\"><a href=\"?module=domains\">CREATE</a></div></div></div>";
         }
 
         $sql = "SELECT * FROM x_vhosts WHERE vh_acc_fk= :userid AND vh_type_in=2 AND vh_deleted_ts IS NULL ORDER BY vh_id_pk LIMIT 4";
@@ -66,33 +66,33 @@ class ui_tpl_clientdomains {
             $sql->bindParam(':userid', $currentuser['userid']);
             $sql->execute();
             $limit = 0;
-            $line .= "<tr><td nowrap=\"nowrap\"><img class=\"raquo\" src=\"<# ui_tpl_assetfolderpath #>/images/blank.png\" border=\"0\"><strong>Sub Domains</strong></td><td></td></tr>";
+            $line .= "<div class=\"d_container\"><div class=\"d_content\"><div class=\"d_title\">Sub Domains</div>";
             while ($rowdomains = $sql->fetch()) {
                 if ($rowdomains['vh_type_in'] == 2) {
                     $line .= "<tr>";
-                    $line .= "<td nowrap=\"nowrap\" width=\"100%\" style=\"text-indent:14px;\"><a href=\"http://" . $rowdomains['vh_name_vc'] . "\" target=\"_blank\">" . $rowdomains['vh_name_vc'] . "</a></td>";
-                    $line .= "<td nowrap=\"nowrap\" align=\"left\">";
+                    $line .= "<div class=\"d_domain\"><a href=\"http://" . $rowdomains['vh_name_vc'] . "\" target=\"_blank\">" . $rowdomains['vh_name_vc'] . "</a></div>";
+                    $line .= "<div class=\"d_status\">";
 
                     if ($rowdomains['vh_active_in'] == 1 && $rowdomains['vh_enabled_in'] == 1) {
-                        $line .= "<a href=\"#\" title=\"Live\"><img src=\"<# ui_tpl_assetfolderpath #>/images/live.png\"></a> </td></tr>";
+                        $line .= "<a href=\"#\" title=\"Live\"><img src=\"etc/styles/zpanelx/img/live.png\"></a></div>";
                     } elseif ($rowdomains['vh_active_in'] == 0 && $rowdomains['vh_enabled_in'] == 1) {
-                        $line .= "<a href=\"#\" title=\"Pending\"><img src=\"<# ui_tpl_assetfolderpath #>/images/pending.png\"></a> </td></tr>";
+                        $line .= "<a href=\"#\" title=\"Pending\"><img src=\"etc/styles/zpanelx/img/pending.png\"></a></div>";
                     } else {
                         $line .= "";
                     }
                     if ($rowdomains['vh_enabled_in'] == 0) {
-                        $line .= "<a href=\"#\" title=\"Disabled\"><img src=\"<# ui_tpl_assetfolderpath #>/images/disabled.png\"></a> </td></tr>";
+                        $line .= "<a href=\"#\" title=\"Disabled\"><img src=\"etc/styles/zpanelx/img/disabled.png\"></a></div>";
                     }
                 }
                 $limit++;
             }
             if ($limit >= 4) {
-                $line .= "<tr><td>&nbsp;&nbsp;&nbsp;<a href=\"?module=sub_domains\">(Show All)</a></td><td></td></tr>";
+                $line .= "<div class=\"d_domain\">&nbsp;&nbsp;&nbsp;<a href=\"?module=sub_domains\">(Show All)</a></div>";
             }
+                $line .= "</div></div>";
         } else {
-            $line .= "<tr><td nowrap=\"nowrap\"><img class=\"raquo\" src=\"<# ui_tpl_assetfolderpath #>/images/blank.png\" border=\"0\"><strong>Sub Domains</strong></td></td><td></tr>";
-            $line .= "<tr><td nowrap=\"nowrap\" style=\"text-indent:14px;\"><span class=\"Side_Info_None\">No Sub Domains Found</span></td><td><a href=\"?module=sub_domains\">CREATE</a></td></tr>";
-            //$line .= "<tr><td>&nbsp;</td><td></td></tr>";
+            $line .= "<div class=\"d_container\"><div class=\"d_content\"><div class=\"d_title\">Sub Domains</strong></div>";
+            $line .= "<div class=\"d_domain\">None</div><div class=\"d_status\"><a href=\"?module=sub_domains\">CREATE</a></div></div></div>";
         }
 
         $sql = "SELECT * FROM x_vhosts WHERE vh_acc_fk= :userid AND vh_type_in=3 AND vh_deleted_ts IS NULL ORDER BY vh_id_pk LIMIT 4";
@@ -106,38 +106,35 @@ class ui_tpl_clientdomains {
             $sql->bindParam(':userid', $currentuser['userid']);
             $sql->execute();
             $limit = 0;
-            $line .= "<tr><td nowrap=\"nowrap\"><img class=\"raquo\" src=\"<# ui_tpl_assetfolderpath #>/images/blank.png\" border=\"0\"><strong>Parked Domains</strong></td><td></td></tr>";
+            $line .= "<div class=\"d_container_last\"><div class=\"d_content_last\"><div class=\"d_title\">Parked Domains</div>";
             while ($rowdomains = $sql->fetch()) {
                 if ($rowdomains['vh_type_in'] == 3) {
-                    $line .= "<tr>";
-                    $line .= "<td nowrap=\"nowrap\" width=\"100%\" style=\"text-indent:14px;\"><a href=\"http://" . $rowdomains['vh_name_vc'] . "\" target=\"_blank\">" . $rowdomains['vh_name_vc'] . "</a></td>";
-                    $line .= "<td nowrap=\"nowrap\" align=\"left\">";
+                    $line .= "<div class=\"d_domain\"><a href=\"http://" . $rowdomains['vh_name_vc'] . "\" target=\"_blank\">" . $rowdomains['vh_name_vc'] . "</a></div>";
+                    $line .= "<div class=\"d_status\">";
 
                     if ($rowdomains['vh_active_in'] == 1 && $rowdomains['vh_enabled_in'] == 1) {
-                        $line .= "<a href=\"#\" title=\"Live\"><img src=\"<# ui_tpl_assetfolderpath #>/images/live.png\"></a> </td></tr>";
+                        $line .= "<a href=\"#\" title=\"Live\"><img src=\"etc/styles/zpanelx/img/live.png\"></a></div>";
                     } elseif ($rowdomains['vh_active_in'] == 0 && $rowdomains['vh_enabled_in'] == 1) {
-                        $line .= "<a href=\"#\" title=\"Pending\"><img src=\"<# ui_tpl_assetfolderpath #>/images/pending.png\"></a> </td></tr>";
+                        $line .= "<a href=\"#\" title=\"Pending\"><img src=\"etc/styles/zpanelx/img/pending.png\"></a></div>";
                     } else {
                         $line .= "";
                     }
                     if ($rowdomains['vh_enabled_in'] == 0) {
-                        $line .= "<a href=\"#\" title=\"Disabled\"><img src=\"<# ui_tpl_assetfolderpath #>/images/disabled.png\"></a> </td></tr>";
+                        $line .= "<a href=\"#\" title=\"Disabled\"><img src=\"etc/styles/zpanelx/img/disabled.png\"></a></div>";
                     }
                 }
                 $limit++;
             }
             if ($limit >= 4) {
-                $line .= "<tr><td>&nbsp;&nbsp;&nbsp;<a href=\"?module=parked_domains\">(Show All)</a></td><td></td></tr>";
+                $line .= "<div class=\"d_domain\">&nbsp;&nbsp;&nbsp;<a href=\"?module=parked_domains\">(Show All)</a></div>";
             }
+                $line .= "</div></div>";
         } else {
-            $line .= "<tr><td nowrap=\"nowrap\"><img class=\"raquo\" src=\"<# ui_tpl_assetfolderpath #>/images/blank.png\" border=\"0\"><strong>Parked Domains</strong></td></td><td></tr>";
-            $line .= "<tr><td nowrap=\"nowrap\" style=\"text-indent:14px;\"><span class=\"Side_Info_None\">No Parked Domains Found</span></td><td><a href=\"?module=parked_domains\">CREATE</a></td></tr>";
-            //$line .= "<tr><td>&nbsp;</td><td></td></tr>";
+            $line .= "<div class=\"d_container_last\"><div class=\"d_content_last\"><div class=\"d_title\">Parked Domains</strong></div>";
+            $line .= "<div class=\"d_domain\">None</div><div class=\"d_status\"><a href=\"?module=parked_domains\">CREATE</a></div></div></div>";
         }
 
-        $line .= "</td>";
-        $line .= "</tr>";
-        $line .= "</table>";
+        $line .= "</div>";
 
         return $line;
     }
