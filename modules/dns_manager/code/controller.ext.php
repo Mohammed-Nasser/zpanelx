@@ -94,8 +94,10 @@ class module_controller {
         $line .= "<div class=\"span11 dns-name\">";
         $line .= "" . ui_language::translate("Create Default DNS Records") . "";
         $line .= "</div>";
-        $line .= "<div class=\"span1 dns-actions\">";
-        $line .= "<a class=\"back\" href=\"./?module=" . $controller->GetControllerRequest('URL', 'module') . "\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/domains.png\"><br>Domain List</a>";
+        $line .= "<div class=\"span1 text-right dns-actions\">";
+        $line .= "<div class=\"a-dns-action\">";
+        $line .= "<a class=\"back\" href=\"./?module=" . $controller->GetControllerRequest('URL', 'module') . "\"><img src=\"modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/domains.png\"><br>" . ui_language::translate("Domain List") . "</a>";
+        $line .= "</div>";
         $line .= "</div>";
         $line .= "</div>";
         $line .= "</legend>";
@@ -1601,7 +1603,7 @@ class module_controller {
     }
 
     static function getModuleDesc() {
-        $message = ui_language::translate(ui_module::GetModuleDescription());
+        $message = ui_module::GetModuleDescription();
         return $message;
     }
 
