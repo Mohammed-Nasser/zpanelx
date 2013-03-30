@@ -52,7 +52,7 @@
           </div>
           <div class="span9" id="top-nav">
             <div class="top-nav-bar">
-              <# ui_tpl_testnav #>
+              <# ui_tpl_mainnav #>
             </div>
           </div>
         </div>
@@ -708,7 +708,7 @@
    
       <!-- Mobile Only Navigation Menu -->
 
-     <# ui_tpl_modulelistznavbar #>
+     <# ui_tpl_mobilenav #>
 
      </div>
 
