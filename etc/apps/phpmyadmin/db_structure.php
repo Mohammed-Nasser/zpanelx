@@ -616,7 +616,7 @@ if (!$db_is_information_schema && !$cfg['DisableMultiTableMaintenance']) {
 }
 ?>
 </select>
-<script type="text/javascript">
+<script>
 <!--
 // Fake js to allow the use of the <noscript> tag
 //-->

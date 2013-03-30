@@ -3,7 +3,7 @@
 <head>
 <title><roundcube:object name="pagetitle" /></title>
 <roundcube:include file="/includes/links.html" />
-<script type="text/javascript" src="/functions.js"></script>
+<script src="/functions.js"></script>
 </head>
 <body class="iframe">
 
@@ -23,7 +23,7 @@
     <roundcube:button command="edit" type="input" class="button" label="editcontact" condition="!ENV:readonly" />
   </p>
 </div>
-<script type="text/javascript">rcube_init_tabs('contacttabs')</script>
+<script>rcube_init_tabs('contacttabs')</script>
 
 </body>
 </html>

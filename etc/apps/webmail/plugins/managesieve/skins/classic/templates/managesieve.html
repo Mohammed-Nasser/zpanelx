@@ -4,8 +4,8 @@
 <title><roundcube:object name="pagetitle" /></title>
 <roundcube:include file="/includes/links.html" />
 <link rel="stylesheet" type="text/css" href="/this/managesieve.css" />
-<script type="text/javascript" src="/functions.js"></script>
-<script type="text/javascript" src="/splitter.js"></script>
+<script src="/functions.js"></script>
+<script src="/splitter.js"></script>
 
 <style type="text/css">
 #filterslistbox { width: <roundcube:exp expression="!empty(cookie:sieveviewsplitter) ? cookie:sieveviewsplitter-5 : 210" />px; }
@@ -50,7 +50,7 @@
 </div>
 </div>
 
-<script type="text/javascript">
+<script>
   var sieveviewsplit2 = new rcube_splitter({id:'sieveviewsplitter2', p1: 'filtersetslistbox', p2: 'filtersscreen', orientation: 'v', relative: true, start: 200});
   rcmail.add_onload('sieveviewsplit2.init()');
 

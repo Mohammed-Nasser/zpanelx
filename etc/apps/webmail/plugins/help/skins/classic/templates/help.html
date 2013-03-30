@@ -5,7 +5,7 @@
 <roundcube:include file="/includes/links.html" />
 <link rel="stylesheet" type="text/css" href="/this/help.css" />
 <link rel="stylesheet" type="text/css" href="/settings.css" />
-<script type="text/javascript">
+<script>
 function help_init_settings_tabs()
 {
     var action, tab = '#helptabdefault';
@@ -26,7 +26,7 @@ function help_init_settings_tabs()
 <span id="helptababout" class="tablink"><roundcube:button name="helpabout" href="?_task=help&_action=about" type="link" label="help.about" title="help.about" class="tablink" /></span>
 <span id="helptablicense" class="tablink"><roundcube:button name="helplicense" href="?_task=help&_action=license" type="link" label="help.license" title="help.license" class="tablink" /></span>
 <roundcube:container name="helptabs" id="helptabsbar" />
-<script type="text/javascript"> if (window.rcmail) rcmail.add_onload(help_init_settings_tabs);</script>
+<script> if (window.rcmail) rcmail.add_onload(help_init_settings_tabs);</script>
 </div>
 
 <div id="mainscreen" class="box help-box">

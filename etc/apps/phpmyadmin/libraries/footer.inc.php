@@ -65,7 +65,7 @@ if (! empty($_SESSION['debug'])) {
 
 if (!$GLOBALS['is_ajax_request']) {
 ?>
-<script type="text/javascript">
+<script>
 //<![CDATA[
 <?php
 if (empty($GLOBALS['error_message'])) {
@@ -149,7 +149,7 @@ if (PMA_getenv('SCRIPT_NAME') && empty($_POST) && !$GLOBALS['checked_special'] &
     echo '<div id="selflink" class="print_ignore">' . "\n";
     $url_params['target'] = basename(PMA_getenv('SCRIPT_NAME'));
     ?>
-<script type="text/javascript">
+<script>
 //<![CDATA[
 
 /* Store current location in hash part of URL to allow direct bookmarking */

@@ -683,7 +683,7 @@ if (!empty($asfile)) {
     echo '</div>' . "\n";
     echo "\n";
 ?>
-<script type="text/javascript">
+<script>
 //<![CDATA[
     var bodyWidth=null; var bodyHeight=null;
     if (document.getElementById('textSQLDUMP')) {

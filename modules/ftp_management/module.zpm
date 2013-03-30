@@ -247,11 +247,11 @@
 
 </div>
 
-<script type="text/javascript">
+<script>
 $('#input-password').html('test');
 </script>
 
-<script type="text/javascript">
+<script>
     <!--
     function show_div(id) {
         var e = document.getElementById(id);
@@ -260,7 +260,7 @@ $('#input-password').html('test');
     }
     //-->
 </script>
-<script type="text/javascript">
+<script>
     <!--
     function hide_div(id) {
         var e = document.getElementById(id);
@@ -270,7 +270,7 @@ $('#input-password').html('test');
     //-->
 </script>
 
-<script type="text/javascript">
+<script>
 $(window).load(function() {
     $.extend({
         password: function (length, special) {

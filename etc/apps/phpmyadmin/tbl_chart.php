@@ -113,7 +113,7 @@ $url_params['reload'] = 1;
  */
 // pma_token/url_query needed for chart export
 ?>
-<script type="text/javascript">
+<script>
 pma_token = '<?php echo $_SESSION[' PMA_token ']; ?>';
 url_query = '<?php echo $url_query;?>';
 </script>

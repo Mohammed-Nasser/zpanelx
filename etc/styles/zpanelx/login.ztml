@@ -26,7 +26,7 @@
     <script src="etc/styles/zpanelx/js/css3-mediaqueries.js"></script>
   <![endif]-->
 
-  <script type="text/javascript">
+  <script>
     document.write( '<style type="text/css">body {display:none;}<\/style>');
   </script>
 
@@ -223,7 +223,7 @@
 <script src="etc/styles/zpanelx/js/prettyCheckable.js" type="text/javascript"></script>
 
 <!-- Pretty Checkable @ https://github.com/arthurgouveia/prettyCheckable -->
-<script type="text/javascript">
+<script>
   $().ready(function(){
     $('input:checkbox').prettyCheckable({
       color: 'green',
@@ -233,7 +233,7 @@
 </script>
 
 <!-- Login Form Transitions -->
-<script type="text/javascript">
+<script>
   $('#forgotpw').click(function(){
     $('#frmZLogin').slideUp('slow', function(){
       $('#frmZForgot').slideDown("slow");
@@ -253,7 +253,7 @@
 
 <!-- Anti ClickJacking Protection! -->
 <style id="antiClickjack">body{display:none !important;}</style>
-<script type="text/javascript">
+<script>
   if (self === top) {
     var antiClickjack = document.getElementById("antiClickjack");
     antiClickjack.parentNode.removeChild(antiClickjack);
@@ -263,7 +263,7 @@
 </script>
 
 <!-- Page Fade In After Load -->
-<script type="text/javascript">
+<script>
   $(window).load(function() {
     $("body").fadeIn();
   });

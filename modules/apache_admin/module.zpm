@@ -33,7 +33,7 @@
   </fieldset>
   <% endif %>
 
-<script type="text/javascript">
+<script>
     <!--
     function show_div(id) {
       var e = document.getElementById(id);
@@ -42,7 +42,7 @@
     }
     //-->
 </script>
-<script type="text/javascript">
+<script>
     <!--
     function hide_div(id) {
       var e = document.getElementById(id);

@@ -1761,7 +1761,7 @@ function printMonitor()
         <br/>
     </div>
 
-    <script type="text/javascript">
+    <script>
         variableNames = [ <?php
             $i=0;
             foreach ($server_status as $name=>$value) {

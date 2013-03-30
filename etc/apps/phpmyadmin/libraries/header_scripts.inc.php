@@ -57,7 +57,7 @@ foreach ($GLOBALS['js_include'] as $js_script_file) {
 }
 // Below javascript Updates the title of the frameset if possible
 ?>
-<script type="text/javascript">
+<script>
 // <![CDATA[
 if (typeof(parent.document) != 'undefined' && typeof(parent.document) != 'unknown'
     && typeof(parent.document.title) == 'string') {

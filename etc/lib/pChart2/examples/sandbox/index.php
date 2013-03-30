@@ -599,7 +599,7 @@
                     <center><div id='result_area' style='font-size: 10px;'></div></center>
                 </td>
             </tr></table>
-        <script type="text/javascript">
+        <script>
             CurrentDiv = 1;
             URL        = "";
             Automatic  = true;

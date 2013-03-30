@@ -218,7 +218,7 @@ if ($error) {
     $error->display();
 }
 ?>
-<script type="text/javascript">
+<script>
 <?php
 PMA_printJsValue("PMA_messages['strSavedOn']", __('Saved on: @DATE@'));
 ?>

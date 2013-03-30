@@ -24,7 +24,7 @@ if (isset($GLOBALS['db'])) {
 }
 require_once './libraries/header_scripts.inc.php';
 ?>
-    <script type="text/javascript">
+    <script>
     // <![CDATA[
 <?php
 echo '

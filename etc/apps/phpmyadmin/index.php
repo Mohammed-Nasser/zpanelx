@@ -84,7 +84,7 @@ require './libraries/header_http.inc.php';
     <?php echo htmlspecialchars($HTTP_HOST); ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex,nofollow" />
-<script type="text/javascript">
+<script>
 // <![CDATA[
     // definitions used in common.js
     var common_query = '<?php echo PMA_escapeJsString(PMA_generate_common_url('', '', '&'));?>';

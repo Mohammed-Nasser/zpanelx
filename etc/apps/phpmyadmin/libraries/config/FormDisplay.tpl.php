@@ -422,7 +422,7 @@ function display_js($js_array)
         return;
     }
 ?>
-<script type="text/javascript">
+<script>
 <?php echo implode(";\n", $js_array) . ";\n" ?>
 </script>
 <?php

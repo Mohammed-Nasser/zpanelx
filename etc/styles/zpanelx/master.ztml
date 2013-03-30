@@ -29,11 +29,11 @@
   <!-- Ze Font -->
   <link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700' rel='stylesheet' type='text/css'>
 
-  <script type="text/javascript">
+  <script>
     document.write( '<style type="text/css">body {visibility:hidden;}<\/style>');
   </script>
 
-  <script type="text/javascript">
+  <script>
     function CleanLoader() { 
       document.body.style.visibility = "visible"; 
     }

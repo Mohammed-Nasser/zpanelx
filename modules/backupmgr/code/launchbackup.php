@@ -88,7 +88,7 @@ if ($_SESSION['zpuid'] == $userid) {
 
 <?php } ?>
 
-<script type="text/javascript">
+<script>
     $(document).ready(function() { 
         $("#BackupResult").hide();
         $("#SubmitBackup").click(function(){

@@ -88,7 +88,7 @@ if (is_array($foreignData['disp_row'])) {
 // includes everything asked for by libraries/common.inc.php
 require_once './libraries/header_scripts.inc.php';
 ?>
-    <script type="text/javascript">
+    <script>
     //<![CDATA[
     self.focus();
     function formupdate(fieldmd5, key) {

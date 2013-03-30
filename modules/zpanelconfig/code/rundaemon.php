@@ -75,7 +75,7 @@ if (isset($_SESSION['zpuid'])) {
 
     <?php } ?>
 
-<script type="text/javascript">
+<script>
     $(document).ready(function() { 
         $("#RunResult").hide();
         $("#SubmitRun").click(function(){

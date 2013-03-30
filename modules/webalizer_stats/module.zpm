@@ -54,4 +54,4 @@
 </div>
 
 
-<script type="text/javascript" src="modules/webalizer_stats/assets/jquery.autoheight.js"></script>
+<script src="modules/webalizer_stats/assets/jquery.autoheight.js"></script>

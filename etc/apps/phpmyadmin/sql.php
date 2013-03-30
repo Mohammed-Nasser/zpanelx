@@ -883,7 +883,7 @@ if ((0 == $num_rows && 0 == $unlim_num_rows) || $is_affected) {
     if (isset($profiling_results)) {
         // pma_token/url_query needed for chart export
 ?>
-<script type="text/javascript">
+<script>
 pma_token = '<?php echo $_SESSION[' PMA_token ']; ?>';
 url_query = '<?php echo isset($url_query)?$url_query:PMA_generate_common_url($db);?>';
 $(document).ready(makeProfilingChart);

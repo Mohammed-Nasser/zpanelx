@@ -3,8 +3,8 @@
 <head>
 <title><roundcube:object name="pagetitle" /></title>
 <roundcube:include file="/includes/links.html" />
-<script type="text/javascript" src="/splitter.js"></script>
-<script type="text/javascript" src="/functions.js"></script>
+<script src="/splitter.js"></script>
+<script src="/functions.js"></script>
 <style type="text/css">
 #addresslist { width: <roundcube:exp expression="!empty(cookie:addressviewsplitter) ? cookie:addressviewsplitter-5 : 245" />px; }
 #contacts-box { left: <roundcube:exp expression="!empty(cookie:addressviewsplitter) ? cookie:addressviewsplitter+5 : 255" />px;
@@ -80,7 +80,7 @@
 </div>
 </div>
 
-<script type="text/javascript">
+<script>
   var addrviewsplit = new rcube_splitter({id:'addressviewsplitter', p1: 'addresslist', p2: 'contacts-box', orientation: 'v', relative: true, start: 250});
   rcmail.add_onload('addrviewsplit.init()');
 

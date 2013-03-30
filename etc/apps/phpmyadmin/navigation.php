@@ -113,7 +113,7 @@ require_once './libraries/header_http.inc.php';
     // Append the theme id to this url to invalidate the cache on a theme change
     echo PMA_includeJS('get_image.js.php?theme=' . urlencode($_SESSION['PMA_Theme']->getId()));
     ?>
-    <script type="text/javascript">
+    <script>
     // <![CDATA[
     // INIT PMA_setFrameSize
     var onloadCnt = 0;

@@ -1603,7 +1603,7 @@ class module_controller {
     }
 
     static function getModuleDesc() {
-        $message = ui_module::GetModuleDescription();
+        $message = ui_language::translate(ui_module::GetModuleDescription());
         return $message;
     }
 

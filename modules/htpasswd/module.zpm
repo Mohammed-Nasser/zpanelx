@@ -325,13 +325,13 @@
 </div>
 
 <link rel="stylesheet" type="text/css" href="modules/htpasswd/assets/js/jqueryFileTree.css" media="screen">
-<script type="text/javascript" src="modules/htpasswd/assets/js/jqueryFileTree.js"></SCRIPT>
-<script type="text/javascript">
+<script src="modules/htpasswd/assets/js/jqueryFileTree.js"></SCRIPT>
+<script>
     $(document).ready( function() {	
         $('#htfileTree').fileTree({ root: '<@ RootPath @>', script: 'modules/htpasswd/assets/js/connectors/jqueryFileTree.php' });				
     });
 </script>
-<script type="text/javascript" language="javascript">
+<script language="javascript">
     function appendText($folderlink, fieldID) {
         w=document.getElementById('filetreeinner');
         x=document.getElementById('inFolder');

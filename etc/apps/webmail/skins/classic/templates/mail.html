@@ -3,8 +3,8 @@
 <head>
 <title><roundcube:object name="pagetitle" /></title>
 <roundcube:include file="/includes/links.html" />
-<script type="text/javascript" src="/splitter.js"></script>
-<script type="text/javascript" src="/functions.js"></script>
+<script src="/splitter.js"></script>
+<script src="/functions.js"></script>
 <style type="text/css">
 <roundcube:if condition="config:preview_pane == true" />
 #mailcontframe { height: <roundcube:exp expression="!empty(cookie:mailviewsplitter) ? cookie:mailviewsplitter-5 : 195" />px; }
@@ -42,7 +42,7 @@
 </div>
 </div>
 
-<script type="text/javascript">
+<script>
   var mailviewsplitv = new rcube_splitter({id:'mailviewsplitterv', p1: 'mailleftcontainer', p2: 'mailrightcontainer', orientation: 'v', relative: true, start: 165, callback: rcube_render_mailboxlist });
   rcmail.add_onload('mailviewsplitv.init()');
 </script>
@@ -91,7 +91,7 @@
 </div>
 </div>
 
-<script type="text/javascript">
+<script>
   var mailviewsplit = new rcube_splitter({id:'mailviewsplitter', p1: 'mailcontframe', p2: 'mailpreviewframe', orientation: 'h', relative: true, start: 205});
 <roundcube:if condition="config:preview_pane == true" />
   rcmail.add_onload('mailviewsplit.init()');

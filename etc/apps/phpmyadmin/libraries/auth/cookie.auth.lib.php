@@ -139,7 +139,7 @@ function PMA_auth()
     // if $page_title is set, this script uses it as the title:
     include './libraries/header_scripts.inc.php';
     ?>
-<script type="text/javascript">
+<script>
 //<![CDATA[
 // show login form in top frame
 if (top != self) {

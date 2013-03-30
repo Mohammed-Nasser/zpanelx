@@ -139,7 +139,7 @@ function PMA_sqlQueryForm($query = true, $display_tab = false, $delimiter = ';')
     echo '</form>' . "\n";
     if ($is_querywindow) {
         ?>
-        <script type="text/javascript">
+        <script>
         //<![CDATA[
             if (window.opener) {
                 window.opener.parent.insertQuery();
@@ -324,7 +324,7 @@ function PMA_sqlQueryFormInsert($query = '', $is_querywindow = false, $delimiter
     echo '<div class="formelement">' . "\n";
     if ($is_querywindow) {
         ?>
-        <script type="text/javascript">
+        <script>
         //<![CDATA[
             document.writeln(' <input type="checkbox" name="LockFromUpdate" checked="checked" tabindex="120" id="checkbox_lock" /> <label for="checkbox_lock"><?php echo __('Do not overwrite this query from outside the window'); ?></label> ');
         //]]>

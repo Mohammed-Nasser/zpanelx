@@ -111,7 +111,7 @@
 
 </div>
 
-<script type="text/javascript">
+<script>
     <!--
     function toggle_visibility(id) {
         var e = document.getElementById(id);

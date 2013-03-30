@@ -215,7 +215,7 @@ function Swekey_login($input_name, $input_go)
     }
 
     if (isset($_SESSION['SWEKEY']) && $_SESSION['SWEKEY']['ENABLED']) {
-        echo '<script type="text/javascript">';
+        echo '<script>';
         if (empty($_SESSION['SWEKEY']['FORCE_USER'])) {
             echo 'var user = null;';
         } else {

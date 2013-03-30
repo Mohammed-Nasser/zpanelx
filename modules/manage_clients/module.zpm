@@ -430,7 +430,7 @@
 
 </div>
 
-<script type="text/javascript">
+<script>
     <!--
     function hide_div(id) {
         var e = document.getElementById(id);
