@@ -178,6 +178,10 @@ $myPicture->setFontProperties(array("FontName" => "../fonts/" . $Font . ".ttf", 
 /* Create the pPie object */
 $PieChart = new pPie($myPicture, $MyData);
 
+/* Define the slice color */
+$PieChart->setSliceColor(0,array("R"=>200,"G"=>200,"B"=>200));
+$PieChart->setSliceColor(1,array("R"=>48,"G"=>128,"B"=>20));
+
 /* Enable shadow computing */
 $myPicture->setShadow(TRUE, array("X" => 3, "Y" => 3, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
 
