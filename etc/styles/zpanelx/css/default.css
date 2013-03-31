@@ -150,6 +150,10 @@ ul.dropdown-menu{
   background-color: #669934;
   background-image: none;
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#669934 ',endColorstr='#669934 ',GradientType=0);
+  -webkit-transition: background-color 0.2s linear;
+  -moz-transition: background-color 0.2s linear;
+  -o-transition: background-color 0.2s linear;
+  transition: background-color 0.2s linear;
 }
 .navbar .dropdown-menu a:hover {
   background: none;
