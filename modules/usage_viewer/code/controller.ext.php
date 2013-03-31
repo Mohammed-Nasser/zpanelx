@@ -405,7 +405,11 @@ class module_controller {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self::$distrobutionlistsquota = $currentuser['distrobutionlistsquota'];
+=======
+        self::$distlistsquota = $currentuser['distlistsquota'];
+>>>>>>> a3e8ac4... Fixed a few issues from the last commit, also removed the HTML output of used domains when the quota is 'unlimited' as in my opinion there is no need to output  graph/used as the pie graphs are there to give a graphical representation of used/avaliable. As the numeric values of the used and avaliable are printed at the top of the Usage module anyways, I thought it looked cleaner to remove the orphaned HTML. I also fixed up some issues with HTML errors in Usage Viewer module. - Added new Unlimited image too!
 =======
         self::$distlistsquota = $currentuser['distlistsquota'];
 >>>>>>> a3e8ac4... Fixed a few issues from the last commit, also removed the HTML output of used domains when the quota is 'unlimited' as in my opinion there is no need to output  graph/used as the pie graphs are there to give a graphical representation of used/avaliable. As the numeric values of the used and avaliable are printed at the top of the Usage module anyways, I thought it looked cleaner to remove the orphaned HTML. I also fixed up some issues with HTML errors in Usage Viewer module. - Added new Unlimited image too!
@@ -428,6 +432,7 @@ class module_controller {
             $freeLabel = fs_director::ShowHumanFileSize($free);
         }
         $usedLabel = fs_director::ShowHumanFileSize($used);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
        
@@ -455,6 +460,11 @@ class module_controller {
 
 
         function build_row_usage($name, $used, $quota, $human = false) {
+=======
+
+
+        function build_row_usage($name, $used, $quota, $human = false) {
+>>>>>>> a3e8ac4... Fixed a few issues from the last commit, also removed the HTML output of used domains when the quota is 'unlimited' as in my opinion there is no need to output  graph/used as the pie graphs are there to give a graphical representation of used/avaliable. As the numeric values of the used and avaliable are printed at the top of the Usage module anyways, I thought it looked cleaner to remove the orphaned HTML. I also fixed up some issues with HTML errors in Usage Viewer module. - Added new Unlimited image too!
 =======
 
 
