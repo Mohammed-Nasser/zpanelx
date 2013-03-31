@@ -115,7 +115,7 @@
             <div class="controls">
               <label class="checkbox">
                 <input type="checkbox" data-label="Remember Me" name="inRemember" value="1">
-                <input type="checkbox" data-label="Enable Session Security" name="inSessionSecuirty" checked>
+                <input type="checkbox" data-label="Enable Session Security" name="inSessionSecurity" checked>
               </label>
             </div>
           </div>
@@ -204,13 +204,13 @@
         Your password has been reset!
       </div>';
     }
-    if (runtime_sessionsecurity::checkProxy()) {
-      echo '
-      <div class="alert alert-info fade in logalert">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        It seems you are behind a proxy or on a webserver. Try disabling Session Security and logging in again.
-      </div>';
-    }
+    //if (runtime_sessionsecurity::checkProxy()) {
+    //  echo '
+    //  <div class="alert alert-info fade in logalert">
+    //    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    //    It seems you are behind a proxy or on a webserver. Try disabling Session Security and logging in again.
+    //  </div>';
+    //}
     ?>
 
   </div>
