@@ -403,7 +403,11 @@ class module_controller {
         self::$forwardersquota = empty_as_0($currentuser['forwardersquota']);
         self::$forwarders = ctrl_users::GetQuotaUsages('forwarders', $currentuser['userid']);
 
+<<<<<<< HEAD
         self::$distrobutionlistsquota = $currentuser['distrobutionlistsquota'];
+=======
+        self::$distlistsquota = $currentuser['distlistsquota'];
+>>>>>>> a3e8ac4... Fixed a few issues from the last commit, also removed the HTML output of used domains when the quota is 'unlimited' as in my opinion there is no need to output  graph/used as the pie graphs are there to give a graphical representation of used/avaliable. As the numeric values of the used and avaliable are printed at the top of the Usage module anyways, I thought it looked cleaner to remove the orphaned HTML. I also fixed up some issues with HTML errors in Usage Viewer module. - Added new Unlimited image too!
         self::$distlists = empty_as_0(ctrl_users::GetQuotaUsages('distlists', $currentuser['userid']));
 
         $total = self::$diskquota;
@@ -420,6 +424,7 @@ class module_controller {
             $freeLabel = fs_director::ShowHumanFileSize($free);
         }
         $usedLabel = fs_director::ShowHumanFileSize($used);
+<<<<<<< HEAD
        
         function pbar($used, $quota) {
           if ($quota == 0) 
@@ -441,8 +446,21 @@ class module_controller {
                 '<td nowrap="nowrap">' . (($human) ? fs_director::ShowHumanFileSize($used) : $used) . ' / ' . (($human) ? fs_director::ShowHumanFileSize($quota) : $quota) . '</td>' .
                 '<td>' . pBar($used, $quota) . '</td>' .
               '</tr>';
+=======
+
+
+        function build_row_usage($name, $used, $quota, $human = false) {
+            $res = '<tr><th nowrap="nowrap">' . ui_language::translate($name) . ':</th><td nowrap="nowrap">' . (($human) ? fs_director::ShowHumanFileSize($used) : $used);
+            if ($quota < 0) {
+                $res .= '</td><td style="text-align:center">&#8734; ' . ui_language::translate('Unlimited') . ' &#8734;</td>';
+            } else {
+                $res .= ' / ' . (($human) ? fs_director::ShowHumanFileSize($quota) : $quota) . '</td><td><img src="etc/lib/pChart2/zpanel/zProgress.php?percent=' . (($quota == 0 or $used == $quota) ? 100 : round($used / $quota * 100, 0)) . '"/>';
+            }
+            return $res . '</td></tr>';
+>>>>>>> a3e8ac4... Fixed a few issues from the last commit, also removed the HTML output of used domains when the quota is 'unlimited' as in my opinion there is no need to output  graph/used as the pie graphs are there to give a graphical representation of used/avaliable. As the numeric values of the used and avaliable are printed at the top of the Usage module anyways, I thought it looked cleaner to remove the orphaned HTML. I also fixed up some issues with HTML errors in Usage Viewer module. - Added new Unlimited image too!
         }
 
+<<<<<<< HEAD
         $line  = 
 '<table class="none" cellpadding="0" cellspacing="0">'.
   '<tr>' .
@@ -474,6 +492,20 @@ class module_controller {
 '</table>';
 //$line  = "<img src=\"etc/lib/pChart2/charts/z3DPie.php?used=alot\"/>";
        return $line;
+=======
+    private function DisplayChart($name, $used, $maximum) {
+        if ($maximum < 0) { //-1 = unlimited
+            $res = '<img src="' . ui_tpl_assetfolderpath::Template() . 'images/unlimited.png" alt="' . ui_language::translate('Unlimited') . '"/>';
+        } else {
+            $free = max($maximum - $used, 0);
+            $res = '<img src="etc/lib/pChart2/zpanel/z3DPie.php?score=' . $free . '::' . $used
+                    . '&amp;imagesize=240::190&amp;chartsize=120::90&amp;radius=100'
+                    . '&amp;labels=Free: ' . $free . '::Used: ' . $used
+                    . '&amp;legendfont=verdana&amp;legendfontsize=8&amp;legendsize=10::160"'
+                    . ' alt="' . ui_language::translate('Pie chart') . '"/>';
+        }
+        return '<h2>' . ui_language::translate($name) . '</h2>' . $res;
+>>>>>>> a3e8ac4... Fixed a few issues from the last commit, also removed the HTML output of used domains when the quota is 'unlimited' as in my opinion there is no need to output  graph/used as the pie graphs are there to give a graphical representation of used/avaliable. As the numeric values of the used and avaliable are printed at the top of the Usage module anyways, I thought it looked cleaner to remove the orphaned HTML. I also fixed up some issues with HTML errors in Usage Viewer module. - Added new Unlimited image too!
     }
 
     private function DisplayChart($name, $used, $total) {
