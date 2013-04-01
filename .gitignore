@@ -24,10 +24,6 @@ nbproject
 *.sublime-project
 *.sublime-workspace
 
-# Komodo
-*.komodoproject
-.komodotools
-
 # Files to ignore
 log.txt
 cnf/db.php
