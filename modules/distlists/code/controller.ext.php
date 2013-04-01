@@ -509,7 +509,7 @@ class module_controller {
         global $controller;
         $urlvars = $controller->GetAllControllerRequests('URL');
         if (isset($urlvars['status']) && $urlvars['status'] == 'ok') {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your distribution lists have been saved successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your distribution lists have been saved successfully!"), "alert-success");
         }
     }
 
