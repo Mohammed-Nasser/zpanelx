@@ -515,16 +515,16 @@ class module_controller {
 
     static function getResult() {
         if (!fs_director::CheckForEmptyValue(self::$alreadyexists)) {
-            return ui_sysmessage::shout(ui_language::translate("A mailbox, alias, forwarder or distribution list already exists with that name."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("A mailbox, alias, forwarder or distribution list already exists with that name."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$validemail)) {
-            return ui_sysmessage::shout(ui_language::translate("Your email address is not valid."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your email address is not valid."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$noaddress)) {
-            return ui_sysmessage::shout(ui_language::translate("Your email address cannot be blank."), "zannounceerror");
+            return ui_sysmessage::shout(ui_language::translate("Your email address cannot be blank."), "alert-error");
         }
         if (!fs_director::CheckForEmptyValue(self::$ok)) {
-            return ui_sysmessage::shout(ui_language::translate("Changes to your distrubution lists have been saved successfully!"), "zannounceok");
+            return ui_sysmessage::shout(ui_language::translate("Changes to your distrubution lists have been saved successfully!"), "alert-success");
         } else {
             return NULL;
         }
