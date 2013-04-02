@@ -89,7 +89,7 @@
       </div>
 
       <div class="control-group">
-        <label class="control-label" for="inPackage>
+        <label class="control-label" for="inPackage">
           <: Package :>:
         </label>
         <div class="controls">
@@ -151,7 +151,7 @@
           <: Reset Password :>:
         </label>
         <div class="controls">
-          <input required name="inNewPassword" type="text" id="inNewPassword" placeholder="New Password">
+          <input name="inNewPassword" type="text" id="inNewPassword" placeholder="New Password">
           <p class="help-block">
             <a href="#" class="link-password" id="generate"><: Generate Password :></a>
           </p>
@@ -159,14 +159,14 @@
       </div>
 
       <div class="control-group">
-        <% loop CheckEnabledHTML %>
         <div class="controls">
-          <input type="radio" data-label="Enable Account" name="inEnabled" value="1" <& echecked &>> 
+          <% loop CheckEnabledHTML %>
+          <input type="radio" id="enable-acc" data-label="Enable Account" name="inEnabled" value="1" <& echecked &>> 
         </div>
         <div class="controls">
-          <input type="radio" data-label="Disable Account" name="inEnabled" value="0" <& dchecked &>>
+          <input type="radio" id="disable-acc" data-label="Disable Account" name="inEnabled" value="0" <& dchecked &>>
+          <% endloop %>
         </div>
-        <% endloop %>
       </div>
 
       <div class="control-group">
