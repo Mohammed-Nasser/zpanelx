@@ -384,7 +384,7 @@
           <: Postal Code :>:
         </label>
         <div class="controls">
-          <input type="text" id="inNewPostCode" name="inNewPostCode" placeholder="Postal Code">
+          <input required type="text" id="inNewPostCode" name="inNewPostCode" placeholder="Postal Code">
         </div>
       </div>
 
