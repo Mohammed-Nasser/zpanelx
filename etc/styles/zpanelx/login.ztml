@@ -216,6 +216,7 @@
 <script>window.jQuery || document.write('<script src="<# ui_tpl_assetfolderpath #>css/assets/bootstrap.min.js">\x3C<\/script>')</script>
 <script src="etc/styles/zpanelx/js/respond,min.js"></script>
 <script src="etc/styles/zpanelx/js/prettyCheckable.js"></script>
+<script src="etc/styles/zpanelx/js/jquery.h5validate.js"></script>
 
 <!-- Pretty Checkable @ https://github.com/arthurgouveia/prettyCheckable -->
 <script>
@@ -262,7 +263,14 @@
   $(window).load(function() {
     $("body").fadeIn();
   });
-</script> 
+</script>
+
+<!-- HTML5 Form Validation in IE -->
+<script>
+  $(document).ready(function () {
+    $('form').h5Validate();
+  });
+</script>
 
 </body>
 </html>

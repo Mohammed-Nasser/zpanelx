@@ -76,4 +76,7 @@ $(document).ready(function(){
     });
   });
 
+  //HTML5 Form Validaion in IE and Older Browsers
+  $('form').h5Validate();
+
 });
