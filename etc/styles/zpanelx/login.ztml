@@ -1,16 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
+
   <meta charset="utf-8">
   <title>ZPanel 10</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width">
   <meta name="robots" content="noindex, nofollow">
-  <link rel="shortcut icon" type="image/x-icon" href="etc/styles/zpanelx/img/favicon16.ico">
-  <link rel="icon" type="image/png" href="etc/styles/zpanelx/img/favicon32.png" />
-  <link rel="apple-touch-icon" href="etc/styles/zpanelx/img/touch-icon-iphone.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="etc/styles/zpanelx/img/touch-icon-ipad.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="etc/styles/zpanelx/img/touch-icon-iphone-retina.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="etc/styles/zpanelx/img/touch-icon-ipad-retina.png">
 
   <!-- Stylesheets --> 
   <link href="etc/styles/zpanelx/css/assets/bootstrap.min.css" rel="stylesheet" type="text/css" />
