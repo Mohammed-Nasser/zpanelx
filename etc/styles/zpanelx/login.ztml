@@ -214,7 +214,7 @@
 <script>window.jQuery || document.write('<script src="<# ui_tpl_assetfolderpath #>js/jquery-1.9.1.min.js">\x3C<\/script>')</script>
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
 <script>window.jQuery || document.write('<script src="<# ui_tpl_assetfolderpath #>css/assets/bootstrap.min.js">\x3C<\/script>')</script>
-<script src="etc/styles/zpanelx/js/respond,min.js"></script>
+<script src="etc/styles/zpanelx/js/respond.min.js"></script>
 <script src="etc/styles/zpanelx/js/prettyCheckable.js"></script>
 <script src="etc/styles/zpanelx/js/jquery.h5validate.js"></script>
 
