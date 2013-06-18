@@ -87,7 +87,7 @@
 
         <fieldset>
 
-          <legend class="module-legend">
+          <legend class="module-legend fix-module-align">
             <: Create a New Domain :>
           </legend>
 

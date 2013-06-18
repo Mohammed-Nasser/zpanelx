@@ -85,7 +85,7 @@
 
         <fieldset>
 
-          <legend class="module-legend">
+          <legend class="module-legend fix-module-align">
             <: Create a New MySQL&reg Database :>
           </legend>
 

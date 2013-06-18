@@ -237,6 +237,9 @@ h1.module-title img{
   background: #333;
   box-shadow:0 2px 0 #333, 0px 5px 3px rgba(51,51,51,0.4);
 }
+.fix-module-align+.control-group {
+  margin-top:0;
+}
 /*
 .module-header {
   background: #ffffff;
